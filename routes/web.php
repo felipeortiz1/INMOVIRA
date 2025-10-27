@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BarrioController;
+use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\InmuebleController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\TipoInmuebleController;
 use App\Http\Controllers\UsuarioController;
@@ -41,3 +43,19 @@ Route::post('/barrio/store', [BarrioController::class, 'store'])->name('barrios.
 Route::get('/barrio/edit/{id}', [BarrioController::class, 'edit'])->name('barrios.edit');
 Route::post('/barrio/update/{id}', [BarrioController::class, 'update'])->name('barrios.update');
 Route::post('/barrio/destroy/{id}', [BarrioController::class, 'destroy'])->name('barrios.destroy');
+
+// Inmuebles
+Route::get('/inmueble/index', [InmuebleController::class, 'index'])->name('inmuebles.index');
+Route::get('/inmueble/create', [InmuebleController::class, 'create'])->name('inmuebles.create');
+Route::post('/inmueble/store', [InmuebleController::class, 'store'])->name('inmuebles.store');
+Route::get('/inmueble/edit/{id}', [InmuebleController::class, 'edit'])->name('inmuebles.edit');
+Route::post('/inmueble/update/{id}', [InmuebleController::class, 'update'])->name('inmuebles.update');
+Route::post('/inmueble/destroy/{id}', [InmuebleController::class, 'destroy'])->name('inmuebles.destroy');
+
+// Imágenes
+Route::get('/imagen/index', [ImagenController::class, 'index'])->name('imagenes.index');
+Route::get('/imagen/create', [ImagenController::class, 'create'])->name('imagenes.create');
+Route::post('/imagen/store', [ImagenController::class, 'store'])->name('imagenes.store');
+Route::get('/imagen/edit/{id}', [ImagenController::class, 'edit'])->name('imagenes.edit');
+Route::post('/imagen/update/{id}', [ImagenController::class, 'update'])->name('imagenes.update');
+Route::post('/imagen/destroy/{id}', [ImagenController::class, 'destroy'])->name('imagenes.destroy');

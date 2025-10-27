@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('nombreEmpresa', 50)->nullable();
             $table->timestamp('fechaRegistro')->useCurrent();
             $table->timestamps(); // created_at, updated_at
+
         });
     }
 

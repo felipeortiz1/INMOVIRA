@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barrio;
 use App\Models\Inmueble;
 use Illuminate\Http\Request;
 
 class InmuebleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Mostrar lista de inmuebles
     public function index()
     {
-        //
+        $inmuebles = Inmueble::with('barrio')->paginate(10);
+        return view('inmuebles.index', compact('inmuebles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Mostrar formulario de creación
     public function create()
     {
-        //
+        $barrios = Barrio::all();
+        return view('inmuebles.create', compact('barrios'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Guardar nuevo inmueble
     public function store(Request $request)
     {
-        //
+        Inmueble::create($request->validated());
+
+        return redirect()->route('inmuebles.index')
+            ->with('success', 'Inmueble registrado correctamente.');
     }
 
     /**
@@ -39,27 +39,32 @@ class InmuebleController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Inmueble $inmueble)
+    // Mostrar formulario de edición
+    public function edit($id)
     {
-        //
+        $inmueble = Inmueble::findOrFail($id);
+        $barrios = Barrio::all();
+
+        return view('inmuebles.edit', compact('inmueble', 'barrios'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Inmueble $inmueble)
+    // Actualizar inmueble existente
+    public function update(Request $request, $id)
     {
-        //
+        $inmueble = Inmueble::findOrFail($id);
+        $inmueble->update($request->validated());
+
+        return redirect()->route('inmuebles.index')
+            ->with('success', 'Inmueble actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Inmueble $inmueble)
+    // Eliminar inmueble
+    public function destroy($id)
     {
-        //
+        $inmueble = Inmueble::findOrFail($id);
+        $inmueble->delete();
+
+        return redirect()->route('inmuebles.index')
+            ->with('success', 'Inmueble eliminado correctamente.');
     }
 }

@@ -3,32 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Imagen;
+use App\Models\Inmueble;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ImagenController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Mostrar lista de imágenes
     public function index()
     {
-        //
+        $imagenes = Imagen::with('inmueble')->paginate(10);
+        return view('imagenes.index', compact('imagenes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Mostrar formulario de creación
     public function create()
     {
-        //
+        $inmuebles = Inmueble::all();
+        return view('imagenes.create', compact('inmuebles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Guardar nueva imagen
     public function store(Request $request)
     {
-        //
+        $data = $request->validated();
+
+        // Subir imagen si existe archivo
+        if ($request->hasFile('ruta')) {
+            $data['ruta'] = $request->file('ruta')->store('imagenes', 'public');
+        }
+
+        Imagen::create($data);
+
+        return redirect()->route('imagenes.index')
+            ->with('success', 'Imagen guardada correctamente.');
     }
 
     /**
@@ -39,27 +47,47 @@ class ImagenController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Imagen $imagen)
+    // Mostrar formulario de edición
+    public function edit($id)
     {
-        //
+        $imagen = Imagen::findOrFail($id);
+        $inmuebles = Inmueble::all();
+
+        return view('imagenes.edit', compact('imagen', 'inmuebles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Imagen $imagen)
+    // Actualizar imagen existente
+    public function update(Request $request, $id)
     {
-        //
+        $imagen = Imagen::findOrFail($id);
+        $data = $request->validated();
+
+        // Reemplazar imagen si se sube una nueva
+        if ($request->hasFile('ruta')) {
+            if ($imagen->ruta && Storage::disk('public')->exists($imagen->ruta)) {
+                Storage::disk('public')->delete($imagen->ruta);
+            }
+            $data['ruta'] = $request->file('ruta')->store('imagenes', 'public');
+        }
+
+        $imagen->update($data);
+
+        return redirect()->route('imagenes.index')
+            ->with('success', 'Imagen actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Imagen $imagen)
+    // Eliminar imagen
+    public function destroy($id)
     {
-        //
+        $imagen = Imagen::findOrFail($id);
+
+        if ($imagen->ruta && Storage::disk('public')->exists($imagen->ruta)) {
+            Storage::disk('public')->delete($imagen->ruta);
+        }
+
+        $imagen->delete();
+
+        return redirect()->route('imagenes.index')
+            ->with('success', 'Imagen eliminada correctamente.');
     }
 }

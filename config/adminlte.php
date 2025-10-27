@@ -313,6 +313,11 @@ return [
 
         //['header' => 'account_settings'],
         [
+            'text' => 'Dashboard',
+            'url' => '/',
+            'icon' => 'fa-solid fa-house',
+        ],
+        [
             'text' => 'Municipios',
             'url' => '/municipio/index',
             'icon' => 'fa-solid fa-mountain-city',
@@ -320,11 +325,23 @@ return [
         [
             'text' => 'Tipo de inmueble',
             'url' => '/tipoInmueble/index',
-            'icon' => 'fas fa-fw fa-home',
+            'icon' => 'fa-solid fa-warehouse',
         ],
         [
             'text' => 'Usuarios',
             'url' => '/usuario/index',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            
+            'text' => 'Barrios',
+            'url' => '/barrio/index',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            
+            'text' => 'Imuebles',
+            'url' => '/barrio/index',
             'icon' => 'fas fa-fw fa-user',
         ],
         [

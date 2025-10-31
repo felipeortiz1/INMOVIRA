@@ -25,29 +25,29 @@ class Inmueble extends Model
         'fechaPublicacion',
         'estadoPublicacion',
         'fechaCreacion',
-        'id_usuario',
-        'id_barrio',
-        'id_tipo'
+        'idusuario',
+        'idbarrio',
+        'idtipoInmueble'
     ];
 
     // Relaciones
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario');
+        return $this->belongsTo(Usuario::class, 'idusuario');
     }
 
     public function barrio()
     {
-        return $this->belongsTo(Barrio::class, 'id_barrio');
+        return $this->belongsTo(Barrio::class, 'idbarrio');
     }
 
     public function tipoInmueble()
     {
-        return $this->belongsTo(TipoInmueble::class, 'id_tipo');
+        return $this->belongsTo(TipoInmueble::class, 'idtipoInmueble');
     }
 
     public function imagenes()
     {
-        return $this->hasMany(Imagen::class, 'id_inmueble');
+        return $this->hasMany(Imagen::class, 'idinmueble');
     }
 }

@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('url_imagen', 255);
 
             // Si se elimina un inmueble, se eliminan sus imágenes
-            $table->foreignId('id_inmueble')
-                ->constrained('inmuebles')
-                ->onDelete('cascade');
-
+            $table->unsignedBigInteger('idinmueble');
+            $table->foreign('idinmueble')->references('id')->on('inmuebles')->onDelete('cascade');
             $table->timestamps();
         });
     }

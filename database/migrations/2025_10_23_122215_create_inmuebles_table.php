@@ -30,17 +30,15 @@ return new class extends Migration
             $table->timestamp('fechaCreacion')->useCurrent();
 
             // Relaciones
-            $table->foreignId('id_usuario')
-                ->constrained('usuarios')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('idusuario');
+            $table->foreign('idusuario')->references('id')->on('usuarios')->onDelete('cascade');
 
-            $table->foreignId('id_barrio')
-                ->constrained('barrios')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('idbarrio');
+            $table->foreign('idbarrio')->references('id')->on('barrios')->onDelete('cascade');
 
-            $table->foreignId('id_tipo')
-                ->constrained('tipo_inmuebles')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('idtipoInmueble');
+            $table->foreign('idtipoInmueble')->references('id')->on('tipo_inmuebles')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

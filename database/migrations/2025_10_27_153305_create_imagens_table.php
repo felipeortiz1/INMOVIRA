@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('imagens', function (Blueprint $table) {
             $table->id();
+            $table->string('ruta'); // ruta en storage/app/public/inmuebles
             $table->string('url_imagen', 255);
 
             // Si se elimina un inmueble, se eliminan sus imágenes

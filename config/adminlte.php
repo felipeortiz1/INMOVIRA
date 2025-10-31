@@ -341,13 +341,7 @@ return [
         [
             
             'text' => 'Imuebles',
-            'url' => '/barrio/index',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            
-            'text' => 'Barrios',
-            'url' => '/barrio/index',
+            'url' => '/inmueble/index',
             'icon' => 'fas fa-fw fa-user',
         ],
         [

@@ -11,7 +11,7 @@ Administrar Localidades
 
 @section('content')
 <div>
-    <a href="{{ route('municipios.create') }}" class="btn btn-primary mb-3"> + Crear Localidad </a>
+    <a href="{{ route('municipios.create') }}" class="btn btn-primary mb-3"> + Crear Municipio </a>
     <div>
         <table class="table table-bordered text-center align-middle table-hover">
             <thead class="table-dark">

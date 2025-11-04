@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre');
 
             // Relación con municipios (elimina los barrios si se elimina el municipio)
-            $table->foreignId('id_municipio')
+            $table->foreignId('idMunicipio')
                     ->constrained('municipios')
                     ->onDelete('cascade');
 

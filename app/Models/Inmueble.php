@@ -16,39 +16,39 @@ class Inmueble extends Model
         'precio',
         'precioAdministracion',
         'area',
-        'n_habitaciones',
-        'n_baños',
-        'n_parqueaderos',
-        'n_piso',
+        'nHabitaciones',
+        'nBaños',
+        'nParqueaderos',
+        'nPiso',
         'pisoNumero',
         'descripcion',
         'fechaPublicacion',
         'estadoPublicacion',
         'fechaCreacion',
-        'idusuario',
-        'idbarrio',
-        'idtipoInmueble'
+        'idUsuario',
+        'idBarrio',
+        'idTipoInmueble'
     ];
 
     // Relaciones
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'idusuario');
+        return $this->belongsTo(Usuario::class, 'idUsuario');
     }
 
     public function barrio()
     {
-        return $this->belongsTo(Barrio::class, 'idbarrio');
+        return $this->belongsTo(Barrio::class, 'idBarrio');
     }
 
     public function tipoInmueble()
     {
-        return $this->belongsTo(TipoInmueble::class, 'idtipoInmueble');
+        return $this->belongsTo(TipoInmueble::class, 'idTipoInmueble');
     }
 
     public function imagenes()
     {
-        return $this->hasMany(Imagen::class, 'idinmueble');
+        return $this->hasMany(Imagen::class, 'idInmueble');
     }
 
     protected $casts = [

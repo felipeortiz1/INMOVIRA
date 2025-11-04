@@ -19,10 +19,10 @@ return new class extends Migration
             $table->decimal('precio', 15, 2)->nullable();
             $table->decimal('precioAdministracion', 15, 2)->nullable();
             $table->decimal('area', 10, 2)->nullable();
-            $table->integer('n_habitaciones')->nullable();
-            $table->integer('n_baños')->nullable();
-            $table->integer('n_parqueaderos')->nullable();
-            $table->integer('n_piso')->nullable();
+            $table->integer('nHabitaciones')->nullable();
+            $table->integer('nBaños')->nullable();
+            $table->integer('nParqueaderos')->nullable();
+            $table->integer('nPiso')->nullable();
             $table->integer('pisoNumero')->nullable();
             $table->text('descripcion')->nullable();
             $table->timestamp('fechaPublicacion')->useCurrent();
@@ -30,14 +30,14 @@ return new class extends Migration
             $table->timestamp('fechaCreacion')->useCurrent();
 
             // Relaciones
-            $table->unsignedBigInteger('idusuario');
-            $table->foreign('idusuario')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->unsignedBigInteger('idUsuario');
+            $table->foreign('idUsuario')->references('id')->on('usuarios')->onDelete('cascade');
 
-            $table->unsignedBigInteger('idbarrio');
-            $table->foreign('idbarrio')->references('id')->on('barrios')->restrictOnDelete();
+            $table->unsignedBigInteger('idBarrio');
+            $table->foreign('idBarrio')->references('id')->on('barrios')->restrictOnDelete();
 
-            $table->unsignedBigInteger('idtipoInmueble');
-            $table->foreign('idtipoInmueble')->references('id')->on('tipoinmuebles')->onDelete('cascade');
+            $table->unsignedBigInteger('idTipoInmueble');
+            $table->foreign('idTipoInmueble')->references('id')->on('tipoinmuebles')->onDelete('cascade');
 
             $table->timestamps();
         });

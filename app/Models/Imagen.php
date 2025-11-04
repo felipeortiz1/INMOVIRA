@@ -10,11 +10,11 @@ class Imagen extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'url_imagen',
-        'id_inmueble'
+        'idInmueble'
     ];
 
     public function inmueble()
     {
-        return $this->belongsTo(Inmueble::class, 'idinmueble');
+        return $this->belongsTo(Inmueble::class, 'idInmueble');
     }
 }

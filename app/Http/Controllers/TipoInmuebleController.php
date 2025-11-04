@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipoInmueble;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class TipoInmuebleController extends Controller
@@ -66,8 +67,19 @@ class TipoInmuebleController extends Controller
      */
     public function destroy($id)
     {
-        $tipoInmueble = TipoInmueble::findOrfail($id);
-        $tipoInmueble->delete();
-        return redirect()->route('tipoInmueble.index')->with('success','Tipo de Inmueble Eliminado exitosamente');
+        try{$tipoInmueble = TipoInmueble::findOrfail($id);
+            $tipoInmueble->delete();
+            return redirect()->route('tipoInmueble.index')
+            ->with('success','Tipo de Inmueble Eliminado exitosamente');
+        
+        }catch(QueryException $e){
+            if ($e->getCode() === '23000') { // Violación de restricción
+            return redirect()->route('inmuebles.index')
+                ->with('error', 'No se puede eliminar este Tipo de Inmueble porque está asociado a otros registros.');
+        }
+
+        return redirect()->route('TipoInmueble.index')
+            ->with('error', 'Error al eliminar el Tipo de Inmueble.');
+        }
     }
 }

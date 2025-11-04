@@ -7,6 +7,7 @@ use App\Models\Inmueble;
 use Illuminate\Http\Request;
 use App\Models\TipoInmueble;
 use App\Http\Requests\InmuebleRequest;
+use App\Models\Usuario;
 
 class InmuebleController extends Controller
 {
@@ -22,16 +23,14 @@ class InmuebleController extends Controller
     {
         $barrios = Barrio::all();
         $tipos = TipoInmueble::all();
-        return view('inmuebles.create', compact('barrios', 'tipos'));
+        $usuarios = Usuario::all(); 
+        return view('inmuebles.create', compact('barrios', 'tipos', 'usuarios'));
     }
 
     // Guardar nuevo inmueble
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['id_usuario'] = 1;
-
-        Inmueble::create($data); 
+        Inmueble::create($request->all()); 
 
         return redirect()->route('inmuebles.index')
             ->with('success', 'Inmueble registrado correctamente.');
@@ -52,8 +51,9 @@ class InmuebleController extends Controller
         $inmueble = Inmueble::findOrFail($id);
         $barrios = Barrio::all();
         $tipos = TipoInmueble::all();
+        $usuarios = Usuario::all(); 
 
-        return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos'));
+        return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos', 'usuarios'));
     }
 
     // Actualizar inmueble existente

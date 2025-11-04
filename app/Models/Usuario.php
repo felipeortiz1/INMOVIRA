@@ -26,4 +26,9 @@ class Usuario extends Model
         }
     }
 
+    public function Inmuebles()
+    {
+        return $this->hasMany(Inmueble::class);
+    }
+
 }

@@ -8,11 +8,13 @@ class Inmueble extends Model
 {
 
     protected $table = 'inmuebles';
-    protected $primaryKey = 'id';
     protected $fillable = [
-        'direccion',
         'titulo',
+        'direccion',
         'tipoOferta',
+        'idTipoInmueble',
+        'idBarrio',
+        'idUsuario',
         'precio',
         'precioAdministracion',
         'area',
@@ -22,12 +24,7 @@ class Inmueble extends Model
         'nPiso',
         'pisoNumero',
         'descripcion',
-        'fechaPublicacion',
         'estadoPublicacion',
-        'fechaCreacion',
-        'idUsuario',
-        'idBarrio',
-        'idTipoInmueble'
     ];
 
     // Relaciones
@@ -48,11 +45,10 @@ class Inmueble extends Model
 
     public function imagenes()
     {
-        return $this->hasMany(Imagen::class, 'idInmueble');
+        return $this->hasMany(Imagen::class);
     }
 
     protected $casts = [
-    'fechaPublicacion' => 'datetime',
-];
-
+        'fechaPublicacion' => 'datetime',
+    ];
 }

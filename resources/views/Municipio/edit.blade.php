@@ -20,7 +20,7 @@
             <div class="mb-3">
                 <label for="codigoPostal" class="form-label">Codigo postaal</label>
                 <input type="text" class="form-control" id="codigoPostal" name="codigoPostal"
-                    value="{{ $municipio->codigoPostal }}"
+                    value="{{ $municipio->codigoPostal }}">
             </div>
 
             <div class="d-flex justify-content-end">

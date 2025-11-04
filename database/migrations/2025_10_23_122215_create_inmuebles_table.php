@@ -37,7 +37,7 @@ return new class extends Migration
             $table->foreign('idBarrio')->references('id')->on('barrios')->restrictOnDelete();
 
             $table->unsignedBigInteger('idTipoInmueble');
-            $table->foreign('idTipoInmueble')->references('id')->on('tipoinmuebles')->onDelete('cascade');
+            $table->foreign('idTipoInmueble')->references('id')->on('tipo_inmuebles')->restrictOnDelete();
 
             $table->timestamps();
         });

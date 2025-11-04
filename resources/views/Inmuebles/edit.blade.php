@@ -32,7 +32,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Tipo de inmueble</label>
-                    <select class="form-select" name="id_tipo" required>
+                    <select class="form-select" name="idTipo" required>
                         @foreach($tipos as $tipo)
                             <option value="{{ $tipo->id }}" {{ $tipo->id == $inmueble->id_tipo ? 'selected' : '' }}>{{ $tipo->nombre }}</option>
                         @endforeach
@@ -41,7 +41,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Barrio</label>
-                    <select class="form-select" name="id_barrio" required>
+                    <select class="form-select" name="idBarrio" required>
                         @foreach($barrios as $barrio)
                             <option value="{{ $barrio->id }}" {{ $barrio->id == $inmueble->id_barrio ? 'selected' : '' }}>{{ $barrio->nombre }}</option>
                         @endforeach
@@ -65,22 +65,22 @@
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Habitaciones</label>
-                    <input type="number" name="n_habitaciones" class="form-control" value="{{ $inmueble->n_habitaciones }}">
+                    <input type="number" name="nHabitaciones" class="form-control" value="{{ $inmueble->n_habitaciones }}">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Baños</label>
-                    <input type="number" name="n_baños" class="form-control" value="{{ $inmueble->n_baños }}">
+                    <input type="number" name="nBaños" class="form-control" value="{{ $inmueble->n_baños }}">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Parqueaderos</label>
-                    <input type="number" name="n_parqueaderos" class="form-control" value="{{ $inmueble->n_parqueaderos }}">
+                    <input type="number" name="nParqueaderos" class="form-control" value="{{ $inmueble->n_parqueaderos }}">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Piso</label>
-                    <input type="number" name="n_piso" class="form-control" value="{{ $inmueble->n_piso }}">
+                    <input type="number" name="nPiso" class="form-control" value="{{ $inmueble->n_piso }}">
                 </div>
 
                 <div class="col-md-2 mb-3">

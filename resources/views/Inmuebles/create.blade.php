@@ -23,6 +23,16 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" name="idUsuario" required>
+                        <option value="">Seleccione...</option>
+                        @foreach($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
                     <label class="form-label">Tipo de oferta</label>
                     <select class="form-select" name="tipoOferta" required>
                         <option value="">Seleccione...</option>
@@ -34,20 +44,20 @@
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Tipo de inmueble</label>
-                    <select class="form-select" name="id_tipo" required>
+                    <select class="form-select" name="idTipoInmueble" required>
                         <option value="">Seleccione...</option>
                         @foreach($tipos as $tipo)
-                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Barrio</label>
-                    <select class="form-select" name="id_barrio" required>
+                    <select class="form-select" name="idBarrio" required>
                         <option value="">Seleccione...</option>
                         @foreach($barrios as $barrio)
-                            <option value="{{ $barrio->id }}">{{ $barrio->nombre }}</option>
+                        <option value="{{ $barrio->id }}">{{ $barrio->nombre }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -69,22 +79,22 @@
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Habitaciones</label>
-                    <input type="number" name="n_habitaciones" class="form-control" min="0">
+                    <input type="number" name="nHabitaciones" class="form-control" min="0">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Baños</label>
-                    <input type="number" name="n_baños" class="form-control" min="0">
+                    <input type="number" name="nBaños" class="form-control" min="0">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Parqueaderos</label>
-                    <input type="number" name="n_parqueaderos" class="form-control" min="0">
+                    <input type="number" name="nParqueaderos" class="form-control" min="0">
                 </div>
 
                 <div class="col-md-2 mb-3">
                     <label class="form-label">Piso</label>
-                    <input type="number" name="n_piso" class="form-control" min="0">
+                    <input type="number" name="nPiso" class="form-control" min="0">
                 </div>
 
                 <div class="col-md-2 mb-3">

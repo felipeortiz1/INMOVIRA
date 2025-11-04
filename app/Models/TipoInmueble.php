@@ -12,6 +12,6 @@ class TipoInmueble extends Model
     ];
 
     public function inmuebles(){
-        return $this->hasMany(Inmueble::class, 'idTipoImueble');
+        return $this->hasMany(Inmueble::class);
     }
 }

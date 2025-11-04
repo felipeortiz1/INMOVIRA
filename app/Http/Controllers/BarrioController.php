@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barrio;
 use App\Models\Municipio;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class BarrioController extends Controller
@@ -70,9 +71,20 @@ class BarrioController extends Controller
      */
     public function destroy($id)
     {
-        $barrio = Barrio::findOrfail($id);
-        $barrio->delete();
+        try{
+            $barrio = Barrio::findOrfail($id);
+            $barrio->delete();
+            return redirect()->route('barrios.index')
+            ->with('success','Barrio eliminado exitosamente');
+    
+        }catch(QueryException $e){
+            if ($e->getCode() === '23000') { // Violación de restricción
+            return redirect()->route('inmuebles.index')
+                ->with('error', 'No se puede eliminar este barrio porque está asociado a otros registros.');
+        }
+
         return redirect()->route('barrios.index')
-        ->with('success','Barrio eliminado exitosamente');
+            ->with('error', 'Error al eliminar el barrio.');
+        }
     }
 }

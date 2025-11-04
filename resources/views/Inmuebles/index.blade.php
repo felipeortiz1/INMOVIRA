@@ -44,9 +44,9 @@ Administrar Inmuebles
                         @endif
                     </td>
                     <td>{{ $inmueble->area ?? '—' }}</td>
-                    <td>{{ $inmueble->n_habitaciones ?? '—' }}</td>
-                    <td>{{ $inmueble->n_baños ?? '—' }}</td>
-                    <td>{{ $inmueble->n_parqueaderos ?? '—' }}</td>
+                    <td>{{ $inmueble->nHabitaciones ?? '—' }}</td>
+                    <td>{{ $inmueble->nBaños ?? '—' }}</td>
+                    <td>{{ $inmueble->nParqueaderos ?? '—' }}</td>
                     <td>
                         <span class="badge 
                             @if($inmueble->estadoPublicacion == 'activa') bg-success 

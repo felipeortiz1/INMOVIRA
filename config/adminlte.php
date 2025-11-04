@@ -345,6 +345,12 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            
+            'text' => 'Imagenes',
+            'url' => '',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [

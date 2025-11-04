@@ -50,4 +50,9 @@ class Inmueble extends Model
     {
         return $this->hasMany(Imagen::class, 'idinmueble');
     }
+
+    protected $casts = [
+    'fechaPublicacion' => 'datetime',
+];
+
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Barrio;
 use App\Models\Inmueble;
 use Illuminate\Http\Request;
+use App\Models\TipoInmueble;
+use App\Http\Requests\InmuebleRequest;
 
 class InmuebleController extends Controller
 {
@@ -19,17 +21,22 @@ class InmuebleController extends Controller
     public function create()
     {
         $barrios = Barrio::all();
-        return view('inmuebles.create', compact('barrios'));
+        $tipos = TipoInmueble::all();
+        return view('inmuebles.create', compact('barrios', 'tipos'));
     }
 
     // Guardar nuevo inmueble
     public function store(Request $request)
     {
-        Inmueble::create($request->validated());
+        $data = $request->all();
+        $data['id_usuario'] = 1;
+
+        Inmueble::create($data); 
 
         return redirect()->route('inmuebles.index')
             ->with('success', 'Inmueble registrado correctamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -44,15 +51,16 @@ class InmuebleController extends Controller
     {
         $inmueble = Inmueble::findOrFail($id);
         $barrios = Barrio::all();
+        $tipos = TipoInmueble::all();
 
-        return view('inmuebles.edit', compact('inmueble', 'barrios'));
+        return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos'));
     }
 
     // Actualizar inmueble existente
     public function update(Request $request, $id)
     {
         $inmueble = Inmueble::findOrFail($id);
-        $inmueble->update($request->validated());
+        $inmueble->update($request->all());
 
         return redirect()->route('inmuebles.index')
             ->with('success', 'Inmueble actualizado correctamente.');

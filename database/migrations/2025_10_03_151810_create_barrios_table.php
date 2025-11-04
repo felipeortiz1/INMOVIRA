@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('nombre');
 
             // Relación con municipios (elimina los barrios si se elimina el municipio)
-            $table->unsignedBigInteger('idmunicipio');
-            $table->foreign('idmunicipio')->references('id')->on('municipios')->onDelete('cascade');
-            
+            $table->foreignId('id_municipio')
+                    ->constrained('municipios')
+                    ->onDelete('cascade');
+
             $table->timestamps();
-        
         });
     }
 

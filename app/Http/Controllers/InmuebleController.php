@@ -59,7 +59,8 @@ class InmuebleController extends Controller
     // Actualizar inmueble existente
     public function update(Request $request, $id)
     {
-        Inmueble::findOrFail($id)->update($request->validated());
+        $inmueble = Inmueble::findOrFail($id);
+        $inmueble->update($request->all());
 
         return redirect()->route('inmuebles.index')
             ->with('success', 'Inmueble actualizado correctamente.');

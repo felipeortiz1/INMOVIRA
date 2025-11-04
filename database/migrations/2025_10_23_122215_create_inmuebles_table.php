@@ -34,10 +34,10 @@ return new class extends Migration
             $table->foreign('idusuario')->references('id')->on('usuarios')->onDelete('cascade');
 
             $table->unsignedBigInteger('idbarrio');
-            $table->foreign('idbarrio')->references('id')->on('barrios')->onDelete('cascade');
+            $table->foreign('idbarrio')->references('id')->on('barrios')->restrictOnDelete();
 
             $table->unsignedBigInteger('idtipoInmueble');
-            $table->foreign('idtipoInmueble')->references('id')->on('tipo_inmuebles')->onDelete('cascade');
+            $table->foreign('idtipoInmueble')->references('id')->on('tipoinmuebles')->onDelete('cascade');
 
             $table->timestamps();
         });

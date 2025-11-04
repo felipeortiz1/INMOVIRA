@@ -19,7 +19,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Municipio</label>
-                <select class="form-select" name="idMunicipio" id="idMunicipio">
+                <select class="form-select" name="id_municipio" id="id_municipio">
                     <option value="">Seleccione...</option>
                     @foreach($municipios as $municipio)
                         <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>

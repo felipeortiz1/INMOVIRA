@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('id_municipio')
                     ->constrained('municipios')
                     ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

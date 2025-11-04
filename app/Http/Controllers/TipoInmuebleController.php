@@ -30,7 +30,8 @@ class TipoInmuebleController extends Controller
     public function store(Request $request)
     {
         TipoInmueble::create($request->all());
-        return redirect()->route('tipoInmueble.index')->with('success','Tipo de Inmueble Creado exitosamente');
+        return redirect()->route('tipoInmueble.index')
+        ->with('success','Tipo de Inmueble Creado exitosamente');
     }
 
     /**

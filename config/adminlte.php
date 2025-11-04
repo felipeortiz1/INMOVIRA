@@ -336,19 +336,19 @@ return [
             
             'text' => 'Barrios',
             'url' => '/barrio/index',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fa-solid fa-map-pin',
         ],
         [
             
             'text' => 'Imuebles',
             'url' => '/inmueble/index',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fa-solid fa-shop',
         ],
         [
             
             'text' => 'Imagenes',
             'url' => '',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fa-solid fa-image',
         ],
         [
             'text' => 'multilevel',

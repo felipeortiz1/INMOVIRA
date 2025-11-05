@@ -9,9 +9,10 @@ use App\Http\Controllers\TipoInmuebleController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
+//ruta inicial redirige a login
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    return redirect()->route('login');
+});
 
 
 Route::get('/login', [AuthController::class, 'verlogin'])->name('login');

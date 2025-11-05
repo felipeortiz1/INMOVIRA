@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function verlogin(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->route('welcome');
+            return redirect()->route('dashboard');
         }
         return view('auth.login');
     }
@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('welcome')
+            return redirect()->route('dashboard')
                 ->with('success', 'Has iniciado sesión correctamente.');
         }
 

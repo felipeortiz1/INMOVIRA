@@ -72,7 +72,7 @@ Administrar Inmuebles
     </div>
 
     <div class="col-12 text-center my-3">
-        <a href="{{ route('welcome') }}" class="btn btn-secondary mt-3">Volver</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary mt-3">Volver</a>
     </div>
 </div>
 @endsection

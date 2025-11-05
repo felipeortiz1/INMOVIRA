@@ -19,6 +19,10 @@ Route::get('/login', [AuthController::class, 'verlogin'])->name('login');
 Route::post('/loginsubmit', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/dashboard', function () {
+return view(view: 'welcome');
+})->name('dashboard');
+
 //Rutas de municipios
 Route::get('/municipio/index', [MunicipioController::class, 'index'])->name('municipios.index');
 Route::get('/municipio/create', [MunicipioController::class, 'create'])->name('municipios.create');

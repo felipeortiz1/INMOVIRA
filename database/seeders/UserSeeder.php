@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             ['email' => 'admin@example.com'], // evita duplicados
             [
                 'name' => 'Administrador',
-                'email' => 'admin@cronosena.com',
+                'email' => 'admin@adso.com',
                 'password' => Hash::make('password'), 
             ]
         );

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarrioController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\InmuebleController;
@@ -11,6 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+
+
+Route::get('/login', [AuthController::class, 'verlogin'])->name('login');
+Route::post('/loginsubmit', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //Rutas de municipios
 Route::get('/municipio/index', [MunicipioController::class, 'index'])->name('municipios.index');
@@ -59,3 +65,6 @@ Route::post('/imagen/store', [ImagenController::class, 'store'])->name('imagenes
 Route::get('/imagen/edit/{id}', [ImagenController::class, 'edit'])->name('imagenes.edit');
 Route::post('/imagen/update/{id}', [ImagenController::class, 'update'])->name('imagenes.update');
 Route::post('/imagen/destroy/{id}', [ImagenController::class, 'destroy'])->name('imagenes.destroy');
+
+
+

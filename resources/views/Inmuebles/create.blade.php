@@ -1,28 +1,69 @@
 @extends('layout.app')
 
-@section('titulo', 'Crear Inmueble')
+@section('title', 'Crear Inmueble')
 
 @section('content')
 <div class="card shadow-sm">
     <div class="card-header bg-success text-white">
-        <i class="bi bi-plus-circle"></i> Crear nuevo inmueble
+        <i class="bi bi-plus-circle"></i> Crear nuevo Inmueble
     </div>
     <div class="card-body">
-        <form action="{{ route('inmuebles.store') }}" method="POST">
+        <form action="{{ route('inmuebles.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            {{-- Tipo de inmueble --}}
+            <div class="mb-3">
+                <label for="tipoInmueble" class="form-label">Tipo de Inmueble</label>
+                <select name="tipoInmueble" id="tipoInmueble" class="form-select" required>
+                    <option value="">Seleccione...</option>
+                    @foreach($tipos as $tipo)
+                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Campos comunes --}}
+            <div class="mb-3">
+                <label class="form-label">Título</label>
+                <input type="text" name="titulo" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección</label>
+                <input type="text" name="direccion" class="form-control" required>
+            </div>
+
+            {{-- Sección dinámica --}}
+            <div id="campos-dinamicos">
+                {{-- Aquí se mostrarán los campos según el tipo --}}
+            </div>
+
+            {{-- Imágenes --}}
+            <div class="mb-3">
+                <label class="form-label">Imágenes</label>
+                <input type="file" name="imagenes[]" multiple class="form-control" id="imagenes">
+                <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    // Script para mostrar campos según el tipo de inmueble
+    document.getElementById('tipoInmueble').addEventListener('change', function() {
+        const tipo = this.options[this.selectedIndex].text.toLowerCase();
+        const contenedor = document.getElementById('campos-dinamicos');
+        contenedor.innerHTML = ''; // Limpiamos lo anterior
+
+
+        // 🏠 Casa o Apartamento
+        if (tipo === 'casa' || tipo === 'apartamento') {
+            contenedor.innerHTML = `
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Título</label>
-                    <input type="text" name="titulo" class="form-control" placeholder="Ej: Apartamento en el centro" required>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Dirección</label>
-                    <input type="text" name="direccion" class="form-control" placeholder="Ej: Calle 45 #12-30" required>
-                </div>
-
-                <div class="col-md-4 mb-3">
                     <label class="form-label">Usuario</label>
                     <select class="form-select" name="idUsuario" required>
                         <option value="">Seleccione...</option>
@@ -32,7 +73,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 mb-3">
                     <label class="form-label">Tipo de oferta</label>
                     <select class="form-select" name="tipoOferta" required>
                         <option value="">Seleccione...</option>
@@ -41,128 +82,139 @@
                         <option value="venta y arriendo">Venta y Arriendo</option>
                     </select>
                 </div>
+            </div>
 
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Tipo de inmueble</label>
-                    <select class="form-select" name="idTipoInmueble" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($tipos as $tipo)
-                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Barrio</label>
-                    <select class="form-select" name="idBarrio" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($barrios as $barrio)
-                        <option value="{{ $barrio->id }}">{{ $barrio->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Precio</label>
-                    <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Precio Administración</label>
-                    <input type="number" name="precioAdministracion" step="0.01" class="form-control" placeholder="Ej: 150000">
-                </div>
-
+            <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Área (m²)</label>
-                    <input type="number" name="area" step="0.01" class="form-control" placeholder="Ej: 90.5">
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Habitaciones</label>
-                    <input type="number" name="nHabitaciones" class="form-control" min="0">
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Baños</label>
-                    <input type="number" name="nBaños" class="form-control" min="0">
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Parqueaderos</label>
-                    <input type="number" name="nParqueaderos" class="form-control" min="0">
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Piso</label>
-                    <input type="number" name="nPiso" class="form-control" min="0">
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Número de piso</label>
-                    <input type="number" name="pisoNumero" class="form-control" min="0">
-                </div>
-
-                <div class="col-md-12 mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+                    <input type="number" name="area" class="form-control" required>
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Estado de publicación</label>
-                    <select class="form-select" name="estadoPublicacion" required>
-                        <option value="activa">Activa</option>
-                        <option value="inactiva">Inactiva</option>
-                        <option value="vendida">Vendida</option>
+                    <label class="form-label">Baños</label>
+                    <input type="number" name="banos" class="form-control" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Habitaciones</label>
+                    <input type="number" name="habitaciones" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
+        `;
+
+            if (tipo === 'apartamento') {
+                contenedor.innerHTML += `
+                <div class="mb-3">
+                    <label class="form-label">Piso</label>
+                    <input type="number" name="piso" class="form-control" required>
+                </div>
+            `;
+            }
+        }
+
+        // 🌾 Finca o Lote
+        else if (tipo === 'finca' || tipo === 'lote') {
+            contenedor.innerHTML = `
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" name="idUsuario" required>
+                        <option value="">Seleccione...</option>
+                        @foreach($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tipo de oferta</label>
+                    <select class="form-select" name="tipoOferta" required>
+                        <option value="">Seleccione...</option>
+                        <option value="venta">Venta</option>
+                        <option value="arriendo">Arriendo</option>
+                        <option value="venta y arriendo">Venta y Arriendo</option>
                     </select>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label>Imágenes</label>
-                <input type="file" name="imagenes[]" id="imagenes" class="form-control" multiple accept="image/*">
+                <label class="form-label">Área (m²)</label>
+                <input type="number" name="area" class="form-control" required>
             </div>
 
-            <div id="preview" class="d-flex flex-wrap gap-2 mt-2"></div>
-
-            <div class="d-flex justify-content-end">
-                <a href="{{ route('inmuebles.index') }}" class="btn btn-secondary me-2">
-                    <i class="bi bi-arrow-left"></i> Cancelar
-                </a>
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-check-circle"></i> Guardar
-                </button>
+            <div class="col-md-12 mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
             </div>
-        </form>
-    </div>
-</div>
-@endsection
+        `;
+        }
 
+        // 🏢 Local
+        else if (tipo === 'local comercial') {
+            contenedor.innerHTML = `
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" name="idUsuario" required>
+                        <option value="">Seleccione...</option>
+                        @foreach($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-<script>
-document.getElementById('imagenes').addEventListener('change', function (e) {
-    const preview = document.getElementById('preview');
-    preview.innerHTML = '';
-    Array.from(e.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = ev => {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('position-relative');
-            wrapper.style.width = '110px';
-            wrapper.style.height = '110px';
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tipo de oferta</label>
+                    <select class="form-select" name="tipoOferta" required>
+                        <option value="">Seleccione...</option>
+                        <option value="venta">Venta</option>
+                        <option value="arriendo">Arriendo</option>
+                        <option value="venta y arriendo">Venta y Arriendo</option>
+                    </select>
+                </div>
+            </div>
 
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.classList.add('rounded','shadow');
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Área (m²)</label>
+                    <input type="number" name="area" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Baño disponible</label>
+                    <select name="banos" class="form-select" required>
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+            </div>
 
-            wrapper.appendChild(img);
-            preview.appendChild(wrapper);
-        };
-        reader.readAsDataURL(file);
+            <div class="col-md-12 mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
+        `;
+        }
     });
-});
+
+    // Preview imágenes
+    document.getElementById('imagenes').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview');
+        preview.innerHTML = '';
+        [...event.target.files].forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('rounded', 'shadow', 'p-1');
+                img.style.width = '120px';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
 </script>
-
-
+@endsection

@@ -1,12 +1,10 @@
 @extends('layout.app')
 
-@section('title')
-Inmuebles
-@endsection
+@section('title', 'Inmuebles')
 
-@section('titleContent')
-Administrar Inmuebles
-@endsection
+@section('titleContent', 'Administrar Inmuebles')
+
+@include('inmuebles.partials.show-modal')
 
 @section('content')
 <div>
@@ -21,11 +19,8 @@ Administrar Inmuebles
                     <th>Tipo Oferta</th>
                     <th>Precio</th>
                     <th>Área (m²)</th>
-                    <th>Habitaciones</th>
-                    <th>Baños</th>
-                    <th>Parqueaderos</th>
                     <th>Estado</th>
-                    <th>Fecha Publicación</th>
+                    <th>Imágenes</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -44,9 +39,6 @@ Administrar Inmuebles
                         @endif
                     </td>
                     <td>{{ $inmueble->area ?? '—' }}</td>
-                    <td>{{ $inmueble->nHabitaciones ?? '—' }}</td>
-                    <td>{{ $inmueble->nBaños ?? '—' }}</td>
-                    <td>{{ $inmueble->nParqueaderos ?? '—' }}</td>
                     <td>
                         <span class="badge 
                             @if($inmueble->estadoPublicacion == 'activa') bg-success 
@@ -55,7 +47,17 @@ Administrar Inmuebles
                             {{ ucfirst($inmueble->estadoPublicacion) }}
                         </span>
                     </td>
-                    <td>{{ $inmueble->fechaPublicacion ? $inmueble->fechaPublicacion->format('d/m/Y') : '—' }}</td>
+
+                    <td>
+                        @if($inmueble->imagenes->count() > 0)
+                            <button class="btn btn-info btn-sm" onclick="mostrarImagenes({{ $inmueble->id }})">
+                                Ver ({{ $inmueble->imagenes->count() }})
+                            </button>
+                        @else
+                            <span class="text-muted">Sin imágenes</span>
+                        @endif
+                    </td>
+
                     <td>
                         <a href="{{ route('inmuebles.edit', $inmueble->id) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('inmuebles.destroy', $inmueble->id) }}" method="POST" style="display:inline;">
@@ -92,23 +94,44 @@ Administrar Inmuebles
 @endif
 
 <script>
-    function confirmarEliminacion(event) {
-        event.preventDefault();
-        const form = event.target.closest('form');
+function confirmarEliminacion(event) {
+    event.preventDefault();
+    const form = event.target.closest('form');
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡Esta acción eliminará el inmueble de forma permanente!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) form.submit();
+    });
+}
 
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¡Esta acción eliminará el inmueble de forma permanente!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
+// Mostrar imágenes en el modal
+function mostrarImagenes(inmuebleId) {
+    fetch(`/inmuebles/${inmuebleId}/imagenes`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('imagenesContainer');
+            container.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(img => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `/storage/${img.ruta}`;
+                    imgElement.className = "img-thumbnail";
+                    imgElement.style.width = "180px";
+                    imgElement.style.height = "140px";
+                    container.appendChild(imgElement);
+                });
+            } else {
+                container.innerHTML = '<p class="text-muted">Este inmueble no tiene imágenes.</p>';
             }
+            const modal = new bootstrap.Modal(document.getElementById('imagenesModal'));
+            modal.show();
         });
-    }
+}
 </script>

@@ -48,6 +48,11 @@ class Inmueble extends Model
         return $this->hasMany(Imagen::class);
     }
 
+    public function interacciones()
+    {
+        return $this->hasMany(Interaccion::class);
+    }
+
     protected $casts = [
         'fechaPublicacion' => 'datetime',
     ];

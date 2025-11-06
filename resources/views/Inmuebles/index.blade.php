@@ -16,11 +16,9 @@
                     <th>ID</th>
                     <th>Título</th>
                     <th>Dirección</th>
-                    <th>Tipo Oferta</th>
-                    <th>Precio</th>
-                    <th>Área (m²)</th>
-                    <th>Estado</th>
-                    <th>Imágenes</th>
+                    <th>Usuario</th>
+                    <th>Tipo de Oferta</th>
+                    <th>Imagenes</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -30,27 +28,11 @@
                     <td>{{ $inmueble->id }}</td>
                     <td>{{ $inmueble->titulo }}</td>
                     <td>{{ $inmueble->direccion }}</td>
+                    <td>{{ $inmueble->usuario }}</td>
                     <td>{{ ucfirst($inmueble->tipoOferta) }}</td>
                     <td>
-                        @if($inmueble->precio)
-                            ${{ number_format($inmueble->precio, 2, ',', '.') }}
-                        @else
-                            <span class="text-muted">No aplica</span>
-                        @endif
-                    </td>
-                    <td>{{ $inmueble->area ?? '—' }}</td>
-                    <td>
-                        <span class="badge 
-                            @if($inmueble->estadoPublicacion == 'activa') bg-success 
-                            @elseif($inmueble->estadoPublicacion == 'inactiva') bg-secondary 
-                            @else bg-danger @endif">
-                            {{ ucfirst($inmueble->estadoPublicacion) }}
-                        </span>
-                    </td>
-
-                    <td>
                         @if($inmueble->imagenes->count() > 0)
-                            <button class="btn btn-info btn-sm" onclick="mostrarImagenes({{ $inmueble->id }})">
+                            <button class="btn btn-info btn-sm" onclick="mostrarImagenes({{ $inmueble -> id }})">
                                 Ver ({{ $inmueble->imagenes->count() }})
                             </button>
                         @else

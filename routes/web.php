@@ -62,6 +62,7 @@ Route::post('/inmueble/store', [InmuebleController::class, 'store'])->name('inmu
 Route::get('/inmueble/edit/{id}', [InmuebleController::class, 'edit'])->name('inmuebles.edit');
 Route::post('/inmueble/update/{id}', [InmuebleController::class, 'update'])->name('inmuebles.update');
 Route::post('/inmueble/destroy/{id}', [InmuebleController::class, 'destroy'])->name('inmuebles.destroy');
+Route::get('/inmuebles/{id}/imagenes', [InmuebleController::class, 'getImagenes']);
 
 // Imágenes
 Route::get('/imagen/index', [ImagenController::class, 'index'])->name('imagenes.index');

@@ -117,6 +117,13 @@
                 </div>
             </div>
 
+            <div class="mb-3">
+                <label>Imágenes</label>
+                <input type="file" name="imagenes[]" id="imagenes" class="form-control" multiple accept="image/*">
+            </div>
+
+            <div id="preview" class="d-flex flex-wrap gap-2 mt-2"></div>
+
             <div class="d-flex justify-content-end">
                 <a href="{{ route('inmuebles.index') }}" class="btn btn-secondary me-2">
                     <i class="bi bi-arrow-left"></i> Cancelar
@@ -129,3 +136,33 @@
     </div>
 </div>
 @endsection
+
+
+<script>
+document.getElementById('imagenes').addEventListener('change', function (e) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = '';
+    Array.from(e.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('position-relative');
+            wrapper.style.width = '110px';
+            wrapper.style.height = '110px';
+
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.classList.add('rounded','shadow');
+
+            wrapper.appendChild(img);
+            preview.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+

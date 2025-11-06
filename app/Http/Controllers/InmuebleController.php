@@ -37,10 +37,10 @@ class InmuebleController extends Controller
 
         // Guardar imágenes
         if ($request->hasFile('imagenes')) {
-            foreach ($request->file('imagens') as $imagen) {
+            foreach ($request->file('imagenes') as $imagen) {
                 $path = $imagen->store('inmuebles', 'public');
                 Imagen::create([
-                    'id_inmueble' => $inmueble->id_inmueble,
+                    'id_inmueble' => $inmueble->idInmueble,
                     'url_imagen' => $path
                 ]);
             }

@@ -31,4 +31,9 @@ class Usuario extends Model
         return $this->hasMany(Inmueble::class);
     }
 
+    public function Interacciones()
+    {
+        return $this->hasMany(Interaccion::class);
+    }
+
 }

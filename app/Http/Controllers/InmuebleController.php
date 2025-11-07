@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\TipoInmueble;
 use App\Http\Requests\InmuebleRequest;
 use App\Models\Imagen;
+use App\Models\Municipio;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,10 +24,11 @@ class InmuebleController extends Controller
     // Mostrar formulario de creación
     public function create()
     {
+        $municipios = Municipio::all();
         $barrios = Barrio::all();
         $tipos = TipoInmueble::all();
         $usuarios = Usuario::all();
-        return view('inmuebles.create', compact('barrios', 'tipos', 'usuarios'));
+        return view('inmuebles.create', compact('barrios', 'tipos', 'usuarios', 'municipios'));
     }
 
     // Guardar nuevo inmueble
@@ -40,7 +42,7 @@ class InmuebleController extends Controller
             foreach ($request->file('imagenes') as $imagen) {
                 $path = $imagen->store('inmuebles', 'public');
                 Imagen::create([
-                    'id_inmueble' => $inmueble->idInmueble,
+                    'idInmueble' => $inmueble->idInmueble,
                     'url_imagen' => $path
                 ]);
             }
@@ -62,11 +64,12 @@ class InmuebleController extends Controller
     public function edit($id)
     {
         $inmueble = Inmueble::with('imagens')->findOrFail($id);
+        $municipios = Municipio::all();
         $barrios = Barrio::all();
         $tipos = TipoInmueble::all();
         $usuarios = Usuario::all();
 
-        return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos', 'usuarios'));
+        return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos', 'usuarios', 'municipios'));
     }
 
     // Actualizar inmueble existente

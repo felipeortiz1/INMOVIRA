@@ -25,6 +25,8 @@ class Inmueble extends Model
         'pisoNumero',
         'descripcion',
         'estadoPublicacion',
+        'fechaPublicacion',
+        'fechaCreacion'
     ];
 
     // Relaciones
@@ -43,17 +45,14 @@ class Inmueble extends Model
         return $this->belongsTo(TipoInmueble::class, 'idTipoInmueble');
     }
 
-    public function imagenes()
+    public function imagens()
     {
         return $this->hasMany(Imagen::class);
     }
 
-    public function interacciones()
+    public function interaccions()
     {
         return $this->hasMany(Interaccion::class);
     }
 
-    protected $casts = [
-        'fechaPublicacion' => 'datetime',
-    ];
 }

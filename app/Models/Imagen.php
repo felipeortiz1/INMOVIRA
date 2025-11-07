@@ -9,6 +9,7 @@ class Imagen extends Model
     protected $table = 'imagens';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'ruta',
         'url_imagen',
         'idInmueble'
     ];

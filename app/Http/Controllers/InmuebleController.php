@@ -42,8 +42,9 @@ class InmuebleController extends Controller
             foreach ($request->file('imagenes') as $imagen) {
                 $path = $imagen->store('inmuebles', 'public');
                 Imagen::create([
-                    'idInmueble' => $inmueble->idInmueble,
-                    'url_imagen' => $path
+                    'idInmueble' => $inmueble->id,
+                    'ruta' => $path,
+                    'url_imagen' => asset('storage/' . $path)
                 ]);
             }
         }
@@ -76,14 +77,15 @@ class InmuebleController extends Controller
     public function update(InmuebleRequest $request, $id)
     {
         $inmueble = Inmueble::findOrFail($id);
-        $inmueble->update($request->validated());
+        $inmueble->update($request->all());
 
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagens') as $imagen) {
                 $path = $imagen->store('inmuebles', 'public');
                 Imagen::create([
-                    'id_inmueble' => $inmueble->id_inmueble,
-                    'url_imagen' => $path
+                    'id_inmueble' => $inmueble->id,
+                    'ruta' => $path,
+                    'url_imagen' => asset('storage/' . $path)
                 ]);
             }
         }
@@ -97,8 +99,8 @@ class InmuebleController extends Controller
         $inmueble = Inmueble::with('imagenes')->findOrFail($id);
 
         // eliminar archivos físicos y registros de imagen
-        foreach ($inmueble->imagenes as $imagen) {
-            Storage::disk('public')->delete($imagen->url_imagen);
+        foreach ($inmueble->imagens as $imagen) {
+            Storage::disk('public')->delete($imagen->ruta);
             $imagen->delete();
         }
 

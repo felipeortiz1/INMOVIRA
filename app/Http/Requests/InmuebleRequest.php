@@ -26,7 +26,7 @@ class InmuebleRequest extends FormRequest
             'idBarrio' => 'required|exists:barrios,idBarrio',
             'titulo' => 'required|string|max:150',
             'direccion' => 'required|string|max:255',
-            'tipo_oferta' => 'required',
+            'tipoOferta' => 'required',
             'idTipoInmueble' => 'required|exists:tipos_inmueble,idTipoInmueble',
             'precio' => 'nullable|numeric',
             'precioAdministracion' => 'nullable|numeric',

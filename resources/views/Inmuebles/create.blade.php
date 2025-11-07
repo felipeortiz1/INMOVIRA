@@ -14,8 +14,8 @@
 
             {{-- Tipo de inmueble --}}
             <div class="mb-3">
-                <label for="tipoInmueble" class="form-label">Tipo de Inmueble</label>
-                <select name="tipoInmueble" id="tipoInmueble" class="form-select" required>
+                <label for="idTipoInmueble" class="form-label">Tipo de Inmueble</label>
+                <select name="idTipoInmueble" id="idTipoInmueble" class="form-select" required>
                     <option value="">Seleccione...</option>
                     @foreach($tipos as $tipo)
                     <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
@@ -42,7 +42,7 @@
 
 <script>
     // Script para mostrar campos según el tipo de inmueble
-    document.getElementById('tipoInmueble').addEventListener('change', function() {
+    document.getElementById('idTipoInmueble').addEventListener('change', function() {
         const tipo = this.options[this.selectedIndex].text.toLowerCase();
         const contenedor = document.getElementById('campos-dinamicos');
         contenedor.innerHTML = ''; // Limpiamos lo anterior
@@ -120,13 +120,15 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Baños</label>
-                    <input type="number" name="banos" class="form-control" required>
-                </div>
-                <div class="col-md-4 mb-3">
                     <label class="form-label">Habitaciones</label>
                     <input type="number" name="habitaciones" class="form-control" required>
                 </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Baños</label>
+                    <input type="number" name="banos" class="form-control" required>
+                </div>
+                
             </div>
         `;
 
@@ -225,7 +227,7 @@
             <div class="mb-3">
                 <label class="form-label">Dirección</label>
                 <input type="text" name="direccion" class="form-control" required>
-            </div>|
+            </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">

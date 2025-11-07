@@ -8,6 +8,7 @@ use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\TipoInmuebleController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
 
     // Ruta inicial -> redirige siempre al login
     Route::get('/', function () {
@@ -20,14 +21,8 @@ use Illuminate\Support\Facades\Route;
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Registro de usuarios
-    use App\Http\Controllers\Auth\RegisterController;
-
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
-
-
-    // Rutas protegidas por autenticación
-    Route::middleware('auth')->group(function () {
 
     // Dashboard (pantalla principal después del login)
     Route::get('/dashboard', function () {
@@ -82,4 +77,3 @@ use Illuminate\Support\Facades\Route;
     Route::get('/imagen/edit/{id}', [ImagenController::class, 'edit'])->name('imagenes.edit');
     Route::post('/imagen/update/{id}', [ImagenController::class, 'update'])->name('imagenes.update');
     Route::post('/imagen/destroy/{id}', [ImagenController::class, 'destroy'])->name('imagenes.destroy');
-});

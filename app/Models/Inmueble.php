@@ -47,7 +47,7 @@ class Inmueble extends Model
 
     public function imagens()
     {
-        return $this->hasMany(Imagen::class);
+        return $this->hasMany(Imagen::class, 'idInmueble');
     }
 
     public function interaccions()

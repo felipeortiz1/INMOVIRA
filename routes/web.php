@@ -66,14 +66,9 @@ use App\Http\Controllers\Auth\RegisterController;
     Route::get('/inmueble/create', [InmuebleController::class, 'create'])->name('inmuebles.create');
     Route::post('/inmueble/store', [InmuebleController::class, 'store'])->name('inmuebles.store');
     Route::get('/inmueble/edit/{id}', [InmuebleController::class, 'edit'])->name('inmuebles.edit');
-    Route::post('/inmueble/update/{id}', [InmuebleController::class, 'update'])->name('inmuebles.update');
+    Route::put('/inmueble/update/{id}', [InmuebleController::class, 'update'])->name('inmuebles.update');
     Route::post('/inmueble/destroy/{id}', [InmuebleController::class, 'destroy'])->name('inmuebles.destroy');
-    Route::get('/inmuebles/{id}/imagenes', [InmuebleController::class, 'getImagenes']);
+    Route::get('/inmueble/{id}/imagenes', [InmuebleController::class, 'obtenerImagenes']);
+    Route::get('/inmueble/{id}/detalles', [InmuebleController::class, 'obtenerDetalles']);
 
-    // Imágenes
-    Route::get('/imagen/index', [ImagenController::class, 'index'])->name('imagenes.index');
-    Route::get('/imagen/create', [ImagenController::class, 'create'])->name('imagenes.create');
-    Route::post('/imagen/store', [ImagenController::class, 'store'])->name('imagenes.store');
-    Route::get('/imagen/edit/{id}', [ImagenController::class, 'edit'])->name('imagenes.edit');
-    Route::post('/imagen/update/{id}', [ImagenController::class, 'update'])->name('imagenes.update');
-    Route::post('/imagen/destroy/{id}', [ImagenController::class, 'destroy'])->name('imagenes.destroy');
+

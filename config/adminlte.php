@@ -299,7 +299,7 @@ return [
     */
 
     'menu' => [
-        
+
         // Navbar items:
         [
             'type' => 'navbar-search',
@@ -333,76 +333,16 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            
+
             'text' => 'Barrios',
             'url' => '/barrio/index',
             'icon' => 'fa-solid fa-map-pin',
         ],
         [
-            
+
             'text' => 'Imuebles',
             'url' => '/inmueble/index',
             'icon' => 'fa-solid fa-shop',
-        ],
-        [
-            
-            'text' => 'Imagenes',
-            'url' => '',
-            'icon' => 'fa-solid fa-image',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
         ],
     ],
 

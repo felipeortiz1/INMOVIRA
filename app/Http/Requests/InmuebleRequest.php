@@ -22,16 +22,56 @@ class InmuebleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'idUsuario' => 'required|exists:usuarios,idUsuario',
-            'idBarrio' => 'required|exists:barrios,idBarrio',
             'titulo' => 'required|string|max:150',
             'direccion' => 'required|string|max:255',
-            'tipoOferta' => 'required',
-            'idTipoInmueble' => 'required|exists:tipos_inmueble,idTipoInmueble',
-            'precio' => 'nullable|numeric',
-            'precioAdministracion' => 'nullable|numeric',
-            'area' => 'nullable|numeric',
-            'imagenes.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'tipoOferta' => 'required|string|max:50',
+
+            // Relaciones (ajustadas según tu modelo)
+            'idTipoInmueble' => 'required|exists:tipo_inmuebles,id',
+            'idBarrio' => 'required|exists:barrios,id',
+            'idUsuario' => 'required|exists:usuarios,id',
+
+            // Campos numéricos opcionales
+            'precio' => 'nullable|numeric|min:0',
+            'precioAdministracion' => 'nullable|numeric|min:0',
+            'area' => 'nullable|numeric|min:0',
+
+            // Campos enteros opcionales
+            'nHabitaciones' => 'nullable|integer|min:0',
+            'nBaños' => 'nullable|integer|min:0',
+            'nParqueaderos' => 'nullable|integer|min:0',
+            'nPiso' => 'nullable|integer|min:0',
+            'pisoNumero' => 'nullable|integer|min:0',
+
+            // Campos de texto
+            'descripcion' => 'nullable|string|max:1000',
+            'estadoPublicacion' => 'required|string|max:50',
+
+            // Fechas
+            'fechaPublicacion' => 'required|date',
+
+            // Imágenes
+            'imagenes.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+
+    /**
+     * Mensajes personalizados para los errores de validación.
+     */
+    public function messages(): array
+    {
+        return [
+            'titulo.required' => 'El título es obligatorio.',
+            'direccion.required' => 'La dirección es obligatoria.',
+            'tipoOferta.required' => 'Debe seleccionar un tipo de oferta.',
+            'idTipoInmueble.exists' => 'El tipo de inmueble seleccionado no existe.',
+            'idBarrio.exists' => 'El barrio seleccionado no existe.',
+            'idUsuario.exists' => 'El usuario seleccionado no existe.',
+            'estadoPublicacion.required' => 'Debe seleccionar un estado para la publicación.',
+            'fechaPublicacion.required' => 'Debe ingresar una fecha de publicación.',
+            'fechaPublicacion.date' => 'La fecha de publicación no es válida.',
+            'imagenes.*.image' => 'Cada archivo debe ser una imagen válida.',
+            'imagenes.*.max' => 'Las imágenes no deben superar los 2 MB.',
         ];
     }
 }

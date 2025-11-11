@@ -42,11 +42,13 @@
 
 <script>
     // Script para mostrar campos según el tipo de inmueble
-    document.getElementById('idTipoInmueble').addEventListener('change', function() {
-        const tipo = this.options[this.selectedIndex].text.toLowerCase();
-        const contenedor = document.getElementById('campos-dinamicos');
-        contenedor.innerHTML = ''; // Limpiamos lo anterior
+    document.addEventListener('DOMContentLoaded', function () {
+    const tipoInmueble = document.getElementById('idTipoInmueble');
+    const contenedor = document.getElementById('campos-dinamicos');
 
+    tipoInmueble.addEventListener('change', function () {
+        const tipo = this.options[this.selectedIndex].text.toLowerCase();
+        contenedor.innerHTML = ''; // limpiar contenido anterior
 
         // 🏠 Casa o Apartamento
         if (tipo === 'casa' || tipo === 'apartamento') {
@@ -54,27 +56,29 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Título</label>
-                    <input type="text" name="titulo" class="form-control" required>
+                    <input type="text" name="titulo" class="form-control" >
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Dirección</label>
-                    <input type="text" name="direccion" class="form-control" required>
+                    <input type="text" name="direccion" class="form-control" >
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Usuario</label>
-                    <select class="form-select" name="idUsuario" required>
+                    <select class="form-select" name="idUsuario" >
                         <option value="">Seleccione...</option>
                         @foreach($usuarios as $usuario)
                         <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                         @endforeach
                     </select>
                 </div>
+            </div>
 
-                <div class="col-md-4 mb-3">
+            <div class="row">
+                <div class="col-md-3 mb-3">
                     <label class="form-label">Tipo de oferta</label>
-                    <select class="form-select" name="tipoOferta" required>
+                    <select class="form-select" name="tipoOferta" >
                         <option value="">Seleccione...</option>
                         <option value="venta">Venta</option>
                         <option value="arriendo">Arriendo</option>
@@ -82,9 +86,9 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label class="form-label">Municipio</label>
-                    <select class="form-select" name="idMunicipio" id="idMunicipio" required>
+                    <select class="form-select" name="idMunicipio" id="idMunicipio" >
                         <option value="">Seleccione...</option>
                         @foreach($municipios as $municipio)
                         <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
@@ -92,10 +96,14 @@
                     </select>
                 </div>
 
-                <div id="campo-barrio" class="col-md-2 mb-3">
+                <div id="campo-barrio" class="col-md-3 mb-3">
+                    <label class="form-label">Barrio</label>
+                    <select class="form-select" name="idBarrio" id="idBarrio" >
+                        <option value="">Seleccione un barrio</option>
+                    </select>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label class="form-label">Precio</label>
                     <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
                 </div>
@@ -104,49 +112,60 @@
 
             if (tipo === 'apartamento') {
                 contenedor.innerHTML += `
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Precio Administración</label>
-                    <input type="number" name="precioAdministracion" step="0.01" class="form-control" placeholder="Ej: 150000">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Precio Administración</label>
+                        <input type="number" name="precioAdministracion" step="0.01" class="form-control" placeholder="Ej: 150000">
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Piso</label>
+                        <input type="number" name="pisoNumero" class="form-control" >
+                    </div>
                 </div>
-            `;
+                `;
             }
-
 
             contenedor.innerHTML += `
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Área (m²)</label>
-                    <input type="number" name="area" class="form-control" required>
+                    <input type="number" name="area" class="form-control" >
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Habitaciones</label>
-                    <input type="number" name="habitaciones" class="form-control" required>
+                    <input type="number" name="nhabitaciones" class="form-control">
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Baños</label>
-                    <input type="number" name="banos" class="form-control" required>
+                    <input type="number" name="nBaños" class="form-control" >
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" name="estadoPublicacion" >
+                        <option value="">Seleccione...</option>
+                        <option value="disponible">Disponible</option>
+                        <option value="arrendado">Arrendado</option>
+                        <option value="vendido">Vendido</option>
+                        <option value="reservado">Reservado</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
                 </div>
                 
-            </div>
-        `;
-
-            if (tipo === 'apartamento') {
-                contenedor.innerHTML += `
-                <div class="mb-3">
-                    <label class="form-label">Piso</label>
-                    <input type="number" name="piso" class="form-control" required>
+                <div class="col-md-4 mb-3">
+                    <label for="fechaPublicacion" class="form-label">Fecha de publicación</label>
+                    <input type="date" name="fechaPublicacion" 
+                            id="fechaPublicacion" class="form-control" 
                 </div>
-            `;
-            }
-
-            contenedor.innerHTML += `
-            <div class="col-md-12 mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
-            </div>
-            `;
+            </div>`;
         }
 
         // 🌾 Finca o Lote
@@ -155,128 +174,150 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Título</label>
-                    <input type="text" name="titulo" class="form-control" required>
+                    <input type="text" name="titulo" class="form-control">
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Dirección</label>
-                    <input type="text" name="direccion" class="form-control" required>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Usuario</label>
-                    <select class="form-select" name="idUsuario" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($usuarios as $usuario)
-                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Tipo de oferta</label>
-                    <select class="form-select" name="tipoOferta" required>
-                        <option value="">Seleccione...</option>
-                        <option value="venta">Venta</option>
-                        <option value="arriendo">Arriendo</option>
-                        <option value="venta y arriendo">Venta y Arriendo</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Municipio</label>
-                    <select class="form-select" name="idMunicipio" id="idMunicipio" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($municipios as $municipio)
-                        <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div id="campo-barrio" class="col-md-2 mb-3">
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Precio</label>
-                    <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Área (m²)</label>
-                <input type="number" name="area" class="form-control" required>
-            </div>
-
-            <div class="col-md-12 mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
-            </div>
-        `;
-        }
-
-        // 🏢 Local
-        else if (tipo === 'local comercial') {
-            contenedor.innerHTML = `
-            <div class="mb-3">
-                <label class="form-label">Título</label>
-                <input type="text" name="titulo" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Dirección</label>
-                <input type="text" name="direccion" class="form-control" required>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Usuario</label>
-                    <select class="form-select" name="idUsuario" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($usuarios as $usuario)
-                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Tipo de oferta</label>
-                    <select class="form-select" name="tipoOferta" required>
-                        <option value="">Seleccione...</option>
-                        <option value="venta">Venta</option>
-                        <option value="arriendo">Arriendo</option>
-                        <option value="venta y arriendo">Venta y Arriendo</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Municipio</label>
-                    <select class="form-select" name="idMunicipio" id="idMunicipio" required>
-                        <option value="">Seleccione...</option>
-                        @foreach($municipios as $municipio)
-                        <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div id="campo-barrio" class="col-md-2 mb-3">
+                    <input type="text" name="direccion" class="form-control" >
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Precio</label>
-                    <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" name="idUsuario" >
+                        <option value="">Seleccione...</option>
+                        @foreach($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Área (m²)</label>
-                    <input type="number" name="area" class="form-control" required>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Tipo de oferta</label>
+                    <select class="form-select" name="tipoOferta" >
+                        <option value="">Seleccione...</option>
+                        <option value="venta">Venta</option>
+                        <option value="arriendo">Arriendo</option>
+                        <option value="venta y arriendo">Venta y Arriendo</option>
+                    </select>
                 </div>
-                <div class="col-md-6 mb-3">
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Municipio</label>
+                    <select class="form-select" name="idMunicipio" id="idMunicipio" >
+                        <option value="">Seleccione...</option>
+                        @foreach($municipios as $municipio)
+                        <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Precio</label>
+                    <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Área (m²)</label>
+                    <input type="number" name="area" class="form-control" >
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" name="estadoPublicacion" >
+                        <option value="">Seleccione...</option>
+                        <option value="disponible">Disponible</option>
+                        <option value="arrendado">Arrendado</option>
+                        <option value="vendido">Vendido</option>
+                        <option value="reservado">Reservado</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="fechaPublicacion" class="form-label">Fecha de publicación</label>
+                    <input type="date" name="fechaPublicacion" 
+                            id="fechaPublicacion" class="form-control" 
+                </div>
+            </div>`;
+        }
+
+        // 🏢 Local comercial
+        else if (tipo === 'local comercial') {
+            contenedor.innerHTML = `
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Título</label>
+                    <input type="text" name="titulo" class="form-control" >
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" name="direccion" class="form-control" >
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" name="idUsuario" >
+                        <option value="">Seleccione...</option>
+                        @foreach($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Tipo de oferta</label>
+                    <select class="form-select" name="tipoOferta" >
+                        <option value="">Seleccione...</option>
+                        <option value="venta">Venta</option>
+                        <option value="arriendo">Arriendo</option>
+                        <option value="venta y arriendo">Venta y Arriendo</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Municipio</label>
+                    <select class="form-select" name="idMunicipio" id="idMunicipio" >
+                        <option value="">Seleccione...</option>
+                        @foreach($municipios as $municipio)
+                        <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div id="campo-barrio" class="col-md-2 mb-3">
+                    <label class="form-label">Barrio</label>
+                    <select class="form-select" name="idBarrio" id="idBarrio" >
+                        <option value="">Seleccione un barrio</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Precio</label>
+                    <input type="number" name="precio" step="0.01" class="form-control" placeholder="Ej: 250000000">
+                </div>
+            
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Área (m²)</label>
+                    <input type="number" name="area" class="form-control" >
+                </div>
+
+                <div class="col-md-2 mb-3">
                     <label class="form-label">Baño disponible</label>
-                    <select name="banos" class="form-select" required>
+                    <select name="banos" class="form-select" >
                         <option value="0">No</option>
                         <option value="1">Sí</option>
                     </select>
@@ -284,35 +325,55 @@
             </div>
 
             <div class="col-md-12 mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" rows="3" placeholder="Escribe una breve descripción..."></textarea>
             </div>
-        `;
-        }
-
-        document.getElementById('idMunicipio').addEventListener('change', function() {
-            const tipo = this.options[this.selectedIndex].text.toLowerCase();
-            const contenedor = document.getElementById('campo-barrio');
-            contenedor.innerHTML = ''; // Limpiamos lo anterior
-
-
-            contenedor.innerHTML = `
-                <div>
-                    <label class="form-label">Barrio</label>
-                    <select class="form-select" name="idBarrio" required>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" name="estadoPublicacion" >
                         <option value="">Seleccione...</option>
-                        @foreach($barrios as $barrio)
-                        <option value="{{ $barrio->id }}">{{ $barrio->nombre }}</option>
-                        @endforeach
+                        <option value="disponible">Disponible</option>
+                        <option value="arrendado">Arrendado</option>
+                        <option value="vendido">Vendido</option>
+                        <option value="reservado">Reservado</option>
+                        <option value="inactivo">Inactivo</option>
                     </select>
                 </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label for="fechaPublicacion" class="form-label">Fecha de publicación</label>
+                    <input type="date" name="fechaPublicacion" 
+                            id="fechaPublicacion" class="form-control" 
+                </div>
+            </div>
             `;
+        }
 
-        });
+        // --- Lógica de filtrado de barrios por municipio ---
+        setTimeout(() => {
+            const municipioSelect = document.getElementById('idMunicipio');
+            const barrioSelect = document.getElementById('idBarrio');
 
+            if (municipioSelect && barrioSelect) {
+                municipioSelect.addEventListener('change', function () {
+                    const municipioId = this.value;
+                    barrioSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
+
+                    @foreach($barrios as $barrio)
+                        if ({{ $barrio->idMunicipio }} == municipioId) {
+                            const opt = document.createElement('option');
+                            opt.value = '{{ $barrio->id }}';
+                            opt.textContent = '{{ $barrio->nombre }}';
+                            barrioSelect.appendChild(opt);
+                        }
+                    @endforeach
+                });
+            }
+        }, 100);
     });
-
-
+});
 
     // Preview imágenes
     document.getElementById('imagenes').addEventListener('change', function(event) {

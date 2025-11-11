@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('pisoNumero')->nullable();
             $table->text('descripcion')->nullable();
             $table->timestamp('fechaPublicacion')->useCurrent();
-            $table->enum('estadoPublicacion', ['activa', 'inactiva', 'vendida'])->default('activa');
+            $table->enum('estadoPublicacion', ['disponible','arrendado','vendido','reservado','inactivo'])->default('activa');
             $table->timestamp('fechaCreacion')->useCurrent();
 
             // Relaciones

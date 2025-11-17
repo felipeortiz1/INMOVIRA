@@ -137,7 +137,7 @@ class InmuebleController extends Controller
     // Eliminar inmueble
     public function destroy($id)
     {
-        $inmueble = Inmueble::with('imagenes')->findOrFail($id);
+        $inmueble = Inmueble::with('imagens')->findOrFail($id);
 
         // eliminar archivos físicos y registros de imagen
         foreach ($inmueble->imagens as $imagen) {

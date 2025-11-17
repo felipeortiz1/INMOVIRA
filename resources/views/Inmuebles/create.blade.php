@@ -31,7 +31,7 @@
             {{-- Imágenes --}}
             <div class="mb-3">
                 <label class="form-label">Imágenes</label>
-                <input type="file" name="imagenes[]" multiple class="form-control" id="imagenes">
+                <input type="file" name="imagenes[]" multiple accept="image/*" class="form-control" id="imagenes">
                 <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
             </div>
 

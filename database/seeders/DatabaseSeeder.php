@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             MunicipioSeeder::class,
             TipoInmueblesSeeder::class,
             BarriosSeeder::class,
+            InmueblesSeeder::class,
         ]);
     }
 }

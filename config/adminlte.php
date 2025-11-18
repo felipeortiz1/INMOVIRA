@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Inmobi</b>Rovira',
+    'logo' => '<a href="/pagina-principal" style="color: #fff; font-weight:600; text-decoration:none;"><b>Inmobi</b>Rovira</a>',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,

@@ -10,9 +10,10 @@ use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 
+
     // Ruta inicial -> redirige siempre al login
     Route::get('/', function () {
-        return redirect()->route('login');
+        return redirect()->route('pagina.principal');
     });
 
     // Rutas públicas (sin autenticación)
@@ -70,5 +71,13 @@ use App\Http\Controllers\Auth\RegisterController;
     Route::post('/inmueble/destroy/{id}', [InmuebleController::class, 'destroy'])->name('inmuebles.destroy');
     Route::get('/inmueble/{id}/imagenes', [InmuebleController::class, 'obtenerImagenes']);
     Route::get('/inmueble/{id}/detalles', [InmuebleController::class, 'obtenerDetalles']);
+
+
+    // ruta para la vista principal
+
+    Route::get('/pagina-principal', function () {
+        return view('PaginaPrincipal.Vista');
+    })->name('pagina.principal');
+
 
 

@@ -203,6 +203,7 @@
             });
     }
 
+    // Mostrar detalles del inmueble en el modal
     function mostrarDetalles(inmuebleId) {
         const contenedor = document.getElementById('contenedorDetalles');
         contenedor.innerHTML = '<p class="text-muted">Cargando detalles...</p>';

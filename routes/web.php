@@ -78,6 +78,20 @@ use App\Http\Controllers\Auth\RegisterController;
     Route::get('/pagina-principal', function () {
         return view('PaginaPrincipal.Vista');
     })->name('pagina.principal');
+    
+
+    // Página pública: Arriendo
+    Route::get('/arriendo', [App\Http\Controllers\InmuebleController::class, 'vistaArriendo'])
+        ->name('vista.arriendo');
+
+    // Página pública: Venta
+    Route::get('/venta', [App\Http\Controllers\InmuebleController::class, 'vistaVenta'])
+        ->name('vista.venta');
+
+    // Página pública: Inmobiliarias (tú decides contenido)
+    Route::get('/inmobiliarias', function () {
+        return view('paginaPrincipal.inmobiliarias'); 
+    })->name('vista.inmobiliarias');
 
 
 

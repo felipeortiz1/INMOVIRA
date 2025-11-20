@@ -274,10 +274,11 @@ footer {
 
     <!-- Barra de navegación -->
     <nav class="nav-custom">
-        <a href="#">Arriendo</a>
-        <a href="#">Venta</a>
-        <a href="#">Inmobiliarias</a>
+        <a href="{{ route('vista.arriendo') }}">Arriendo</a>
+        <a href="{{ route('vista.venta') }}">Venta</a>
+        <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
     </nav>
+
 
     <!-- Botón de inicio de sesión -->
     <a href="{{ route('login') }}" class="btn-login">Iniciar sesión</a>

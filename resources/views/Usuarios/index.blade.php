@@ -11,7 +11,7 @@ Administrar Usuarios
 
 @section('content')
 <div>
-    <a href="{{ route('usuario.create') }}" class="btn btn-primary mb-3"> + Crear tipo de inmueble </a>
+    <a href="{{ route('usuario.create') }}" class="btn btn-primary mb-3"> + Crear Usuario </a>
     <div>
         <table class="table table-bordered text-center align-middle table-hover">
             <thead class="table-dark">

@@ -180,5 +180,20 @@ class InmuebleController extends Controller
         ]);
     }
 
+    public function vistaArriendo()
+    {
+        $inmuebles = Inmueble::where('tipoOferta', 'arriendo')->get();
+
+        return view('inmuebles.public.listado', compact('inmuebles'));
+    }
+
+    public function vistaVenta()
+    {
+        $inmuebles = Inmueble::where('tipoOferta', 'venta')->get();
+
+        return view('inmuebles.public.listado', compact('inmuebles'));
+    }
+
+
 
 }

@@ -1,7 +1,6 @@
 @extends('layout.app')
 
 @section('title', 'Inmuebles')
-
 @section('titleContent', 'Administrar Inmuebles')
 
 @include('inmuebles.partials.show-modal')
@@ -9,7 +8,9 @@
 @section('content')
     <div class="container mt-4 animate-fade">
         <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+
+            <div class="card-header text-white rounded-top-4"
+                style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
                 <h5 class="mb-0 fw-bold"><i class="fa-solid fa-shop"></i> Lista de Inmuebles</h5>
             </div>
 
@@ -26,7 +27,7 @@
                     </a>
                 </div>
 
-                {{-- Tabla de Inmuebles --}}
+                {{-- Tabla --}}
                 <div class="table-responsive">
                     <table class="table table-hover align-middle text-center shadow-sm">
                         <thead class="table-primary">
@@ -36,11 +37,12 @@
                                 <th>Dirección</th>
                                 <th>Usuario</th>
                                 <th>Tipo de Oferta</th>
-                                <th>Imagenes</th>
+                                <th>Imágenes</th>
                                 <th>Detalles</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($inmuebles as $inmueble)
                                 <tr>
@@ -49,17 +51,23 @@
                                     <td>{{ $inmueble->direccion }}</td>
                                     <td>{{ $inmueble->usuario->nombre }}</td>
                                     <td>{{ ucfirst($inmueble->tipoOferta) }}</td>
+
                                     <td>
                                         @if ($inmueble->imagens && $inmueble->imagens->count() > 0)
-                                            <button class="btn btn-info btn-sm rounded-pill shadow-sm me-1" data-bs-toggle="modal" data-bs-target="#modalImagenes">
+                                            <button
+                                                class="btn btn-info btn-sm rounded-pill shadow-sm me-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalImagenes"
+                                                onclick="cargarImagenes({{ $inmueble->id }})"
+                                            >
                                                 <i class="fa-solid fa-eye"></i> Ver ({{ $inmueble->imagens->count() }})
                                             </button>
                                         @else
                                             <span class="text-muted">Sin imágenes</span>
                                         @endif
                                     </td>
+
                                     <td>
-                                        <!-- Botón para ver detalles -->
                                         <button class="btn btn-primary btn-sm rounded-pill shadow-sm me-1"
                                             onclick="mostrarDetalles({{ $inmueble->id }})">
                                             <i class="fa-solid fa-eye"></i> Ver detalles
@@ -72,8 +80,8 @@
                                             <i class="fas fa-edit"></i> Editar
                                         </a>
 
-                                        <form action="{{ route('inmuebles.destroy', $inmueble->id) }}" method="POST"
-                                            class="d-inline">
+                                        <form action="{{ route('inmuebles.destroy', $inmueble->id) }}"
+                                            method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-danger rounded-pill shadow-sm"
                                                 onclick="confirmarEliminacion(event)">
@@ -84,14 +92,15 @@
                                 </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
 
-
-    {{-- Estilos personalizados --}}
+    {{-- Estilos --}}
     <style>
         .card {
             background-color: #fff;
@@ -99,128 +108,55 @@
             overflow: hidden;
             transition: all 0.3s ease-in-out;
         }
-
         .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-
-        table thead tr {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         table tbody tr:hover {
             background-color: #f9fafc;
         }
-
-        th,
-        td {
-            padding: 1rem 1.2rem !important;
-            vertical-align: middle !important;
-        }
-
-        .btn-outline-warning:hover {
-            background-color: #ffc107;
-            color: white;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-outline-warning,
-        .btn-outline-danger {
-            border-radius: 30px;
-            font-weight: 500;
-        }
-
-        /*Flechas del carrusel del modal imagenes*/
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            filter: invert(0) brightness(0);
-            /* Vuelve las flechas negras */
+        th, td {
+            padding: 1rem !important;
         }
     </style>
 
-
-    <!-- Modal de imágenes -->
+    <!-- Modal de imágenes (Dinámico por JS) -->
     <div class="modal fade" id="modalImagenes" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
 
-                <!-- Encabezado -->
                 <div class="modal-header">
                     <h5 class="modal-title">Imágenes del Inmueble</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <!-- Cuerpo -->
                 <div class="modal-body">
 
-                    <!-- Carrusel -->
                     <div id="carouselInmueble" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-
-                            @foreach ($inmueble->imagens as $key => $img)
-                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                    <img src="{{ asset('storage/' . $img->ruta) }}" class="d-block mx-auto rounded"
-                                        style="width: 100%; max-height: 450px; object-fit: contain;">
-                                </div>
-                            @endforeach
-
+                        <div class="carousel-inner" id="carouselInner">
+                            <!-- JS INSERTA AQUÍ -->
                         </div>
 
-                        <!-- Flechas -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselInmueble"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"
-                                style="filter: invert(70%) sepia(90%) saturate(500%) hue-rotate(10deg) brightness(1.2);">
-                            </span>
+                        <button class="carousel-control-prev" type="button"
+                            data-bs-target="#carouselInmueble" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
                         </button>
 
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselInmueble"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon"
-                                style="filter: invert(70%) sepia(90%) saturate(500%) hue-rotate(10deg) brightness(1.2);">
-                            </span>
+                        <button class="carousel-control-next" type="button"
+                            data-bs-target="#carouselInmueble" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
                         </button>
+
                     </div>
 
-                    <!-- Contador dinámico -->
-                    <div id="contadorImagenes" class="text-center mt-3 fs-5 fw-bold"></div>
+                    <div id="contadorImagenes"
+                        class="text-center mt-3 fs-5 fw-bold"></div>
 
                 </div>
 
             </div>
         </div>
     </div>
-
-
-
-
-    <!-- Modal para ver detalles del inmueble -->
-    <div class="modal fade" id="modalVerDetalles" tabindex="-1" aria-labelledby="modalVerDetallesLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalVerDetallesLabel">Detalles del Inmueble</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="contenedorDetalles" class="px-3 py-2">
-                        <p class="text-muted">Cargando detalles...</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
 @endsection
 
@@ -242,78 +178,97 @@
     function confirmarEliminacion(event) {
         event.preventDefault();
         const form = event.target.closest('form');
+
         Swal.fire({
             title: '¿Estás seguro?',
-            text: "¡Esta acción eliminará el inmueble de forma permanente!",
+            text: "Esta acción eliminará el inmueble de forma permanente.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) form.submit();
+        }).then(res => {
+            if (res.isConfirmed) form.submit();
         });
     }
 
-
-    // Actualizar el contador de imágenes en el carrusel
-    document.addEventListener('DOMContentLoaded', function() {
-        const carrusel = document.getElementById('carouselInmueble'); // ID del carrusel
+    /* ======================================================
+    CARGAR IMÁGENES DINÁMICAMENTE
+    ====================================================== */
+    async function cargarImagenes(inmuebleId) {
+        const carouselInner = document.getElementById('carouselInner');
         const contador = document.getElementById('contadorImagenes');
 
-        if (carrusel && contador) {
-            // Total de imágenes
-            const total = carrusel.querySelectorAll('.carousel-item').length;
+        carouselInner.innerHTML = '';
+        contador.textContent = '';
 
-            // Función para actualizar contador
-            function actualizarContador() {
-                const activa = carrusel.querySelector('.carousel-item.active');
+        try {
+            const res = await fetch(`/inmueble/${inmuebleId}/imagenes`);
+            const imagenes = await res.json();
+
+            if (!imagenes.length) {
+                carouselInner.innerHTML =
+                    '<p class="text-center text-muted py-4">No hay imágenes disponibles.</p>';
+                return;
+            }
+
+            imagenes.forEach((img, i) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item' + (i === 0 ? ' active' : '');
+                item.innerHTML = `
+                    <img src="/storage/${img.ruta}" class="d-block mx-auto rounded"
+                        style="width:100%; max-height:450px; object-fit:contain;">
+                `;
+                carouselInner.appendChild(item);
+            });
+
+            const total = imagenes.length;
+
+            function actualizar() {
+                const activa = document.querySelector('#carouselInmueble .carousel-item.active');
                 const index = Array.from(activa.parentNode.children).indexOf(activa) + 1;
                 contador.textContent = `${index} / ${total}`;
             }
 
-            // Inicializar contador
-            actualizarContador();
+            setTimeout(() => {
+                actualizar();
+                document.getElementById('carouselInmueble')
+                    .addEventListener('slid.bs.carousel', actualizar);
+            }, 200);
 
-            // Escuchar cambio de slide
-            carrusel.addEventListener('slid.bs.carousel', actualizarContador);
+        } catch (err) {
+            carouselInner.innerHTML =
+                '<p class="text-danger text-center py-4">Error al cargar imágenes.</p>';
         }
-    });
+    }
 
-
-
-    // Mostrar detalles del inmueble en el modal
-    function mostrarDetalles(inmuebleId) {
+    /* ======================================================
+    DETALLES DEL INMUEBLE
+    ====================================================== */
+    function mostrarDetalles(id) {
         const contenedor = document.getElementById('contenedorDetalles');
         contenedor.innerHTML = '<p class="text-muted">Cargando detalles...</p>';
 
-        fetch(`/inmueble/${inmuebleId}/detalles`)
-            .then(response => response.json())
+        fetch(`/inmueble/${id}/detalles`)
+            .then(r => r.json())
             .then(data => {
                 contenedor.innerHTML = `
                     <h5 class="fw-bold text-center mb-3">${data.titulo}</h5>
                     <ul class="list-group">
                         <li class="list-group-item"><strong>Dirección:</strong> ${data.direccion}</li>
                         <li class="list-group-item"><strong>Tipo de oferta:</strong> ${data.tipoOferta}</li>
-                        <li class="list-group-item"><strong>Tipo de inmueble:</strong> ${data.tipo_inmueble?.nombre || 'N/A'}</li>
-                        <li class="list-group-item"><strong>Barrio:</strong> ${data.barrio?.nombre || 'N/A'}</li>
-                        <li class="list-group-item"><strong>Usuario:</strong> ${data.usuario?.nombre || 'N/A'}</li>
-                        <li class="list-group-item"><strong>Precio:</strong> $${parseFloat(data.precio).toLocaleString()}</li>
+                        <li class="list-group-item"><strong>Tipo de inmueble:</strong> ${data.tipo_inmueble?.nombre ?? 'N/A'}</li>
+                        <li class="list-group-item"><strong>Barrio:</strong> ${data.barrio?.nombre ?? 'N/A'}</li>
+                        <li class="list-group-item"><strong>Usuario:</strong> ${data.usuario?.nombre ?? 'N/A'}</li>
+                        <li class="list-group-item"><strong>Precio:</strong> $${Number(data.precio).toLocaleString()}</li>
                         <li class="list-group-item"><strong>Área:</strong> ${data.area} m²</li>
                         <li class="list-group-item"><strong>Baños:</strong> ${data.nBaños}</li>
-                        <li class="list-group-item"><strong>Estado de publicación:</strong> ${data.estadoPublicacion}</li>
-                        <li class="list-group-item"><strong>Fecha de publicación:</strong> ${data.fechaPublicacion}</li>
+                        <li class="list-group-item"><strong>Estado publicación:</strong> ${data.estadoPublicacion}</li>
+                        <li class="list-group-item"><strong>Fecha publicación:</strong> ${data.fechaPublicacion}</li>
                         <li class="list-group-item"><strong>Descripción:</strong><br>${data.descripcion}</li>
                     </ul>
                 `;
 
-                const modal = new bootstrap.Modal(document.getElementById('modalVerDetalles'));
-                modal.show();
-            })
-            .catch(error => {
-                console.error('Error al cargar detalles:', error);
-                contenedor.innerHTML = '<p class="text-danger">No se pudieron cargar los detalles.</p>';
+                new bootstrap.Modal(document.getElementById('modalVerDetalles')).show();
             });
     }
 </script>

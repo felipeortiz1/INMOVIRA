@@ -9,7 +9,7 @@ use App\Http\Controllers\TipoInmuebleController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
-
+use App\Http\Controllers\BuscadorController;
 
     // Ruta inicial -> redirige siempre al login
     Route::get('/', function () {
@@ -88,10 +88,16 @@ use App\Http\Controllers\Auth\RegisterController;
     Route::get('/venta', [App\Http\Controllers\InmuebleController::class, 'vistaVenta'])
         ->name('vista.venta');
 
-    // Página pública: Inmobiliarias (tú decides contenido)
+    // Página pública: Inmobiliarias 
     Route::get('/inmobiliarias', function () {
         return view('paginaPrincipal.inmobiliarias'); 
     })->name('vista.inmobiliarias');
+
+
+    //Ruta para filtros
+    Route::get('/buscar', [BuscadorController::class, 'buscar'])
+    ->name('buscador.inmuebles');
+
 
 
 

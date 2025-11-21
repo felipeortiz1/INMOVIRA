@@ -3,107 +3,118 @@
 @section('titulo', 'Crear Municipio')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card border-0 shadow-lg rounded-4 animate__animated animate__fadeIn">
-        <div class="card-header bg-gradient bg-success text-white py-3 rounded-top-4 d-flex align-items-center">
-            <i class="bi bi-plus-circle me-2 fs-5"></i>
-            <h4 class="mb-0">Crear Nuevo Municipio</h4>
-        </div>
+    <div class="container mt-4 animate-fade">
+        <div class="card border-0 shadow-lg rounded-4">
+            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #198754, #157347);">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fa-solid fa-mountain-city"></i> Crear Nuevo Municipio
+                </h5>
+            </div>
 
-        <div class="card-body p-4">
-            <form action="{{ route('municipios.store') }}" method="POST" class="needs-validation" novalidate>
-                @csrf
+            <div class="card-body p-4">
+                <form action="{{ route('municipios.store') }}" method="POST" class="needs-validation" novalidate>
+                    @csrf
 
-                <div class="mb-4">
-                    <label for="nombre" class="form-label fw-semibold">Nombre del Municipio</label>
-                    <input 
-                        type="text" 
-                        class="form-control form-control-lg border-success-subtle shadow-sm" 
-                        id="nombre" 
-                        name="nombre"
-                        placeholder="Ej: Málaga" 
-                        required
-                    >
-                    <div class="invalid-feedback">
-                        Por favor, ingrese el nombre del municipio.
+                    <div class="mb-4">
+                        <label for="nombre" class="form-label fw-semibold">Nombre del Municipio</label>
+                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm"
+                            id="nombre" name="nombre" placeholder="Ej: Málaga" required>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese el nombre del municipio.
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-4">
-                    <label for="codigoPostal" class="form-label fw-semibold">Código Postal</label>
-                    <input 
-                        type="text" 
-                        class="form-control form-control-lg border-success-subtle shadow-sm" 
-                        id="codigoPostal" 
-                        name="codigoPostal"
-                        placeholder="Ej: 2536" 
-                        required
-                    >
-                    <div class="invalid-feedback">
-                        El código postal es obligatorio.
+                    <div class="mb-4">
+                        <label for="codigoPostal" class="form-label fw-semibold">Código Postal</label>
+                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm"
+                            id="codigoPostal" name="codigoPostal" placeholder="Ej: 2536" required>
+                        <div class="invalid-feedback">
+                            El código postal es obligatorio.
+                        </div>
                     </div>
-                </div>
 
-                <div class="d-flex justify-content-end mt-4">
-                    <a href="{{ route('municipios.index') }}" class="btn btn-outline-secondary btn-lg me-2 shadow-sm">
-                        <i class="bi bi-arrow-left"></i> Cancelar
-                    </a>
-                    <button type="submit" class="btn btn-success btn-lg shadow-sm">
-                        <i class="bi bi-check-circle"></i> Guardar
-                    </button>
-                </div>
-            </form>
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{{ route('municipios.index') }}" 
+                            class="btn btn-outline-secondary rounded-pill px-4 me-2 shadow-sm">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-{{-- Estilos personalizados --}}
-<style>
-    .form-control:focus {
-        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
-        border-color: #198754;
-    }
+    {{-- Estilos personalizados --}}
+    <style>
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
 
-    .btn-success {
-        transition: all 0.3s ease;
-    }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
 
-    .btn-success:hover {
-        background-color: #157347;
-        transform: translateY(-2px);
-    }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+            border-color: #198754;
+        }
 
-    .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: #fff;
-        transform: translateY(-2px);
-    }
+        .btn-success,
+        .btn-outline-secondary {
+            font-weight: 500;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
 
-    /* Animación alternativa si no usas animate.css */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(15px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+        .btn-success:hover {
+            background-color: #157347;
+            transform: translateY(-2px);
+        }
 
-    .animate__fadeIn {
-        animation: fadeIn 0.4s ease-in-out;
-    }
-</style>
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+            transform: translateY(-2px);
+        }
 
-{{-- Validación visual con Bootstrap --}}
-<script>
-    (() => {
-        'use strict';
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-</script>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+
+    {{-- Validación visual con Bootstrap --}}
+    <script>
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 @endsection

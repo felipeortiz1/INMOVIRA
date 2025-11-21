@@ -3,13 +3,13 @@
 @section('titulo', 'Crear Barrio')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card border-0 shadow-lg rounded-4">
-        <div class="card-header bg-gradient text-white d-flex align-items-center" 
-             style="background: linear-gradient(135deg, #198754, #28a745);">
-            <i class="fas fa-plus-circle me-2"></i>
-            <h5 class="mb-0 fw-bold">Registrar nuevo barrio</h5>
-        </div>
+<div class="container mt-4 animate-fade">
+        <div class="card border-0 shadow-lg rounded-4">
+            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #198754, #157347);">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fa-solid fa-map-pin"></i> Crear Nuevo Barrio
+                </h5>
+            </div>
 
         <div class="card-body p-4">
             <form action="{{ route('barrios.store')}}" method="POST" class="needs-validation" novalidate>
@@ -41,7 +41,7 @@
                         <i class="fas fa-arrow-left"></i> Cancelar
                     </a>
                     <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm">
-                        <i class="fas fa-save"></i> Guardar
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar
                     </button>
                 </div>
             </form>
@@ -49,40 +49,59 @@
     </div>
 </div>
 
-<style>
-    .card {
-        animation: fadeIn 0.4s ease-in-out;
-    }
+    {{-- Estilos personalizados --}}
+    <style>
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
 
-    .card-header {
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-    }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
 
-    input:focus, select:focus {
-        box-shadow: 0 0 0 0.2rem rgba(25,135,84,0.25);
-        border-color: #198754;
-    }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+            border-color: #198754;
+        }
 
-    .btn-success {
-        transition: all 0.3s ease;
-    }
+        .btn-success,
+        .btn-outline-secondary {
+            font-weight: 500;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
 
-    .btn-success:hover {
-        background-color: #157347;
-        transform: translateY(-2px);
-    }
+        .btn-success:hover {
+            background-color: #157347;
+            transform: translateY(-2px);
+        }
 
-    .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: #fff;
-    }
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+            transform: translateY(-2px);
+        }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(15px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
 
 <script>
     // Validación visual con Bootstrap

@@ -153,8 +153,8 @@ class InmuebleController extends Controller
     // Obtener imagenes de un inmueble
     public function obtenerImagenes($id)
     {
-        $inmueble = Inmueble::with('imagens')->findOrFail($id);
-        return response()->json($inmueble->imagens);
+        $imagenes = Imagen::where('idInmueble', $id)->get();
+        return response()->json($imagenes);
     }
 
     // Obtener detalles del inmueble

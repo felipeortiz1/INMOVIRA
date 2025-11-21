@@ -4,55 +4,123 @@
 
 @section('content')
 
-<div class="card shadow-sm">
-    <div class="card-header bg-success text-white">
-        <i class="bi bi-plus-circle"></i> Crear nuevo Inmueble
+    <div class="container mt-4 animate-fade">
+        <div class="card border-0 shadow-lg rounded-4">
+            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #198754, #157347);">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fa-solid fa-shop"></i> Crear Nuevo Inmueble
+                </h5>
+            </div>
+
+            <div class="card-body p-4">
+                <form action="{{ route('inmuebles.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    {{-- Tipo de inmueble --}}
+                    <div class="mb-3">
+                        <label for="idTipoInmueble" class="form-label">Tipo de Inmueble</label>
+                        <select name="idTipoInmueble" id="idTipoInmueble" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                            @foreach ($tipos as $tipo)
+                                <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Sección dinámica --}}
+                    <div id="campos-dinamicos">
+                        {{-- Aquí se mostrarán los campos según el tipo --}}
+                    </div>
+
+                    {{-- Imágenes --}}
+                    <div class="mb-3">
+                        <label class="form-label">Imágenes</label>
+                        <input type="file" name="imagenes[]" multiple accept="image/*" class="form-control"
+                            id="imagenes">
+                        <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{{ route('inmuebles.index') }}"
+                            class="btn btn-outline-secondary rounded-pill px-4 me-2 shadow-sm">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <form action="{{ route('inmuebles.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
 
-            {{-- Tipo de inmueble --}}
-            <div class="mb-3">
-                <label for="idTipoInmueble" class="form-label">Tipo de Inmueble</label>
-                <select name="idTipoInmueble" id="idTipoInmueble" class="form-select" required>
-                    <option value="">Seleccione...</option>
-                    @foreach($tipos as $tipo)
-                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
+    {{-- Estilos personalizados --}}
+    <style>
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
 
-            {{-- Sección dinámica --}}
-            <div id="campos-dinamicos">
-                {{-- Aquí se mostrarán los campos según el tipo --}}
-            </div>
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
 
-            {{-- Imágenes --}}
-            <div class="mb-3">
-                <label class="form-label">Imágenes</label>
-                <input type="file" name="imagenes[]" multiple accept="image/*" class="form-control" id="imagenes">
-                <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
-            </div>
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+            border-color: #198754;
+        }
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-    </div>
-</div>
+        .btn-success,
+        .btn-outline-secondary {
+            font-weight: 500;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
 
-<script>
-    // Script para mostrar campos según el tipo de inmueble
-    document.addEventListener('DOMContentLoaded', function () {
-    const tipoInmueble = document.getElementById('idTipoInmueble');
-    const contenedor = document.getElementById('campos-dinamicos');
+        .btn-success:hover {
+            background-color: #157347;
+            transform: translateY(-2px);
+        }
 
-    tipoInmueble.addEventListener('change', function () {
-        const tipo = this.options[this.selectedIndex].text.toLowerCase();
-        contenedor.innerHTML = ''; // limpiar contenido anterior
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+            transform: translateY(-2px);
+        }
 
-        // 🏠 Casa o Apartamento
-        if (tipo === 'casa' || tipo === 'apartamento') {
-            contenedor.innerHTML = `
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+
+    <script>
+        // Script para mostrar campos según el tipo de inmueble
+        document.addEventListener('DOMContentLoaded', function() {
+            const tipoInmueble = document.getElementById('idTipoInmueble');
+            const contenedor = document.getElementById('campos-dinamicos');
+
+            tipoInmueble.addEventListener('change', function() {
+                const tipo = this.options[this.selectedIndex].text.toLowerCase();
+                contenedor.innerHTML = ''; // limpiar contenido anterior
+
+                // 🏠 Casa o Apartamento
+                if (tipo === 'casa' || tipo === 'apartamento') {
+                    contenedor.innerHTML = `
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Título</label>
@@ -68,7 +136,7 @@
                     <label class="form-label">Usuario</label>
                     <select class="form-select" name="idUsuario" >
                         <option value="">Seleccione...</option>
-                        @foreach($usuarios as $usuario)
+                        @foreach ($usuarios as $usuario)
                         <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                         @endforeach
                     </select>
@@ -90,7 +158,7 @@
                     <label class="form-label">Municipio</label>
                     <select class="form-select" name="idMunicipio" id="idMunicipio" >
                         <option value="">Seleccione...</option>
-                        @foreach($municipios as $municipio)
+                        @foreach ($municipios as $municipio)
                         <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
                         @endforeach
                     </select>
@@ -110,8 +178,8 @@
             </div>
             `;
 
-            if (tipo === 'apartamento') {
-                contenedor.innerHTML += `
+                    if (tipo === 'apartamento') {
+                        contenedor.innerHTML += `
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Precio Administración</label>
@@ -124,9 +192,9 @@
                     </div>
                 </div>
                 `;
-            }
+                    }
 
-            contenedor.innerHTML += `
+                    contenedor.innerHTML += `
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Área (m²)</label>
@@ -166,11 +234,11 @@
                             id="fechaPublicacion" class="form-control" 
                 </div>
             </div>`;
-        }
+                }
 
-        // 🌾 Finca o Lote
-        else if (tipo === 'finca' || tipo === 'lote') {
-            contenedor.innerHTML = `
+                // 🌾 Finca o Lote
+                else if (tipo === 'finca' || tipo === 'lote') {
+                    contenedor.innerHTML = `
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Título</label>
@@ -186,7 +254,7 @@
                     <label class="form-label">Usuario</label>
                     <select class="form-select" name="idUsuario" >
                         <option value="">Seleccione...</option>
-                        @foreach($usuarios as $usuario)
+                        @foreach ($usuarios as $usuario)
                         <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                         @endforeach
                     </select>
@@ -208,7 +276,7 @@
                     <label class="form-label">Municipio</label>
                     <select class="form-select" name="idMunicipio" id="idMunicipio" >
                         <option value="">Seleccione...</option>
-                        @foreach($municipios as $municipio)
+                        @foreach ($municipios as $municipio)
                         <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
                         @endforeach
                     </select>
@@ -249,11 +317,11 @@
                             id="fechaPublicacion" class="form-control" 
                 </div>
             </div>`;
-        }
+                }
 
-        // 🏢 Local comercial
-        else if (tipo === 'local comercial') {
-            contenedor.innerHTML = `
+                // 🏢 Local comercial
+                else if (tipo === 'local comercial') {
+                    contenedor.innerHTML = `
 
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -270,7 +338,7 @@
                     <label class="form-label">Usuario</label>
                     <select class="form-select" name="idUsuario" >
                         <option value="">Seleccione...</option>
-                        @foreach($usuarios as $usuario)
+                        @foreach ($usuarios as $usuario)
                         <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                         @endforeach
                     </select>
@@ -292,7 +360,7 @@
                     <label class="form-label">Municipio</label>
                     <select class="form-select" name="idMunicipio" id="idMunicipio" >
                         <option value="">Seleccione...</option>
-                        @foreach($municipios as $municipio)
+                        @foreach ($municipios as $municipio)
                         <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
                         @endforeach
                     </select>
@@ -349,47 +417,48 @@
                 </div>
             </div>
             `;
-        }
+                }
 
-        // --- Lógica de filtrado de barrios por municipio ---
-        setTimeout(() => {
-            const municipioSelect = document.getElementById('idMunicipio');
-            const barrioSelect = document.getElementById('idBarrio');
+                // --- Lógica de filtrado de barrios por municipio ---
+                setTimeout(() => {
+                    const municipioSelect = document.getElementById('idMunicipio');
+                    const barrioSelect = document.getElementById('idBarrio');
 
-            if (municipioSelect && barrioSelect) {
-                municipioSelect.addEventListener('change', function () {
-                    const municipioId = this.value;
-                    barrioSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
+                    if (municipioSelect && barrioSelect) {
+                        municipioSelect.addEventListener('change', function() {
+                            const municipioId = this.value;
+                            barrioSelect.innerHTML =
+                                '<option value="">Seleccione un barrio</option>';
 
-                    @foreach($barrios as $barrio)
-                        if ({{ $barrio->idMunicipio }} == municipioId) {
-                            const opt = document.createElement('option');
-                            opt.value = '{{ $barrio->id }}';
-                            opt.textContent = '{{ $barrio->nombre }}';
-                            barrioSelect.appendChild(opt);
-                        }
-                    @endforeach
-                });
-            }
-        }, 100);
-    });
-});
-
-    // Preview imágenes
-    document.getElementById('imagenes').addEventListener('change', function(event) {
-        const preview = document.getElementById('preview');
-        preview.innerHTML = '';
-        [...event.target.files].forEach(file => {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('rounded', 'shadow', 'p-1');
-                img.style.width = '120px';
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+                            @foreach ($barrios as $barrio)
+                                if ({{ $barrio->idMunicipio }} == municipioId) {
+                                    const opt = document.createElement('option');
+                                    opt.value = '{{ $barrio->id }}';
+                                    opt.textContent = '{{ $barrio->nombre }}';
+                                    barrioSelect.appendChild(opt);
+                                }
+                            @endforeach
+                        });
+                    }
+                }, 100);
+            });
         });
-    });
-</script>
+
+        // Preview imágenes
+        document.getElementById('imagenes').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';
+            [...event.target.files].forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('rounded', 'shadow', 'p-1');
+                    img.style.width = '120px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 @endsection

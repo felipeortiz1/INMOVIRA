@@ -44,7 +44,7 @@ use App\Http\Controllers\Auth\RegisterController;
     Route::post('/tipoInmueble/store', [TipoInmuebleController::class, 'store'])->name('tipoInmueble.store');
     Route::get('/tipoInmueble/edit/{id}', [TipoInmuebleController::class, 'edit'])->name('tipoInmueble.edit');
     Route::post('/tipoInmueble/update/{id}', [TipoInmuebleController::class, 'update'])->name('tipoInmueble.update');
-    Route::post('/tipoInmueble/destroy/{id}', [TipoInmuebleController::class, 'destroy'])->name('tipoInmueble.destroy');
+    Route::delete('/tipoInmueble/destroy/{id}', [TipoInmuebleController::class, 'destroy'])->name('tipoInmueble.destroy');
 
     // Usuarios
     Route::get('/usuario/index', [UsuarioController::class, 'index'])->name('usuario.index');

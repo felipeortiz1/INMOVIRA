@@ -314,7 +314,7 @@ return [
         //['header' => 'account_settings'],
         [
             'text' => 'Dashboard',
-            'url' => '/',
+            'url' => '/dashboard',
             'icon' => 'fa-solid fa-house',
         ],
         [

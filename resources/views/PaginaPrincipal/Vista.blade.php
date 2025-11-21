@@ -279,7 +279,6 @@ footer {
         <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
     </nav>
 
-
     <!-- Botón de inicio de sesión -->
     <a href="{{ route('login') }}" class="btn-login">Iniciar sesión</a>
 
@@ -287,16 +286,33 @@ footer {
     <section class="hero">
         <div class="hero-content">
             <h1 class="fw-bold display-5">Lo mejor de buscar es encontrar</h1>
-            <div class="search-box">
-                <select>
-                    <option>Casa</option>
-                    <option>Apartamento</option>
-                    <option>Lote</option>
-                    <option>Oficina</option>
+
+            <!-- FORMULARIO CORREGIDO -->
+            <form action="{{ route('buscador.inmuebles') }}" method="GET" class="search-box">
+
+                <!-- Filtro por tipo de inmueble -->
+                <select name="tipo">
+                    <option value="">Tipo de inmueble</option>
+                    <option value="Casa" {{ request('tipo') == 'Casa' ? 'selected' : '' }}>Casa</option>
+                    <option value="Apartamento" {{ request('tipo') == 'Apartamento' ? 'selected' : '' }}>Apartamento</option>
+                    <option value="Lote" {{ request('tipo') == 'Lote' ? 'selected' : '' }}>Lote</option>
+                    <option value="Oficina" {{ request('tipo') == 'Oficina' ? 'selected' : '' }}>Oficina</option>
                 </select>
-                <input type="text" placeholder="Busca por ubicación o palabra clave">
-                <button><i class="fas fa-search"></i> Buscar</button>
-            </div>
+
+                <!-- Palabras clave -->
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Busca por ubicación, barrio, título o palabra clave"
+                    value="{{ request('q') }}"
+                >
+
+                <!-- Botón -->
+                <button type="submit">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </form>
+
         </div>
     </section>
 
@@ -349,23 +365,18 @@ footer {
     const hero = document.querySelector('.hero');
     if(!hero) return;
 
-    // porcentaje actual (0 - 100)
     let pos = 0;
-    // cuanto se desplaza por "tick" (ajusta si quieres más/menos sensibilidad)
     const STEP = 4;
 
-    // inicializa posición
     hero.style.backgroundPosition = `center ${pos}%`;
 
-    // rueda del mouse — bloqueamos el scroll del documento cuando estamos sobre el hero
     hero.addEventListener('wheel', function(e){
-        e.preventDefault(); // evita scroll de la página
+        e.preventDefault();
         pos += (e.deltaY > 0) ? STEP : -STEP;
         pos = Math.max(0, Math.min(100, pos));
         hero.style.backgroundPosition = `center ${pos}%`;
     }, { passive: false });
 
-    // soporte táctil — para móviles: arrastrar verticalmente
     let startY = null;
     hero.addEventListener('touchstart', function(e){
         startY = e.touches[0].clientY;
@@ -375,17 +386,16 @@ footer {
         if(startY === null) return;
         const currentY = e.touches[0].clientY;
         const diff = startY - currentY;
-        // solo si el movimiento es significativo
+
         if(Math.abs(diff) > 8){
-        pos += (diff > 0) ? STEP : -STEP;
-        pos = Math.max(0, Math.min(100, pos));
-        hero.style.backgroundPosition = `center ${pos}%`;
-        startY = currentY;
+            pos += (diff > 0) ? STEP : -STEP;
+            pos = Math.max(0, Math.min(100, pos));
+            hero.style.backgroundPosition = `center ${pos}%`;
+            startY = currentY;
         }
         e.preventDefault();
     }, { passive: false });
 
-    // opcional: permitir control por teclas flecha arriba/abajo
     window.addEventListener('keydown', function(e){
         if(e.key === 'ArrowDown'){ pos = Math.min(100, pos + STEP); hero.style.backgroundPosition = `center ${pos}%`; }
         if(e.key === 'ArrowUp'){ pos = Math.max(0, pos - STEP); hero.style.backgroundPosition = `center ${pos}%`; }

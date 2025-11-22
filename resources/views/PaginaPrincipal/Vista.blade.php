@@ -276,7 +276,7 @@ footer {
     <nav class="nav-custom">
         <a href="{{ route('vista.arriendo') }}">Arriendo</a>
         <a href="{{ route('vista.venta') }}">Venta</a>
-        <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
+        <a href="">Inmobiliarias</a>
     </nav>
 
     <!-- Botón de inicio de sesión -->

@@ -81,11 +81,11 @@ use App\Http\Controllers\BuscadorController;
     
 
     // Página pública: Arriendo
-    Route::get('/arriendo', [App\Http\Controllers\InmuebleController::class, 'vistaArriendo'])
+    Route::get('/arriendo', [InmuebleController::class, 'vistaArriendo'])
         ->name('vista.arriendo');
 
     // Página pública: Venta
-    Route::get('/venta', [App\Http\Controllers\InmuebleController::class, 'vistaVenta'])
+    Route::get('/venta', [InmuebleController::class, 'vistaVenta'])
         ->name('vista.venta');
 
     // Página pública: Inmobiliarias 

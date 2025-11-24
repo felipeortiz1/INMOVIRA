@@ -34,7 +34,7 @@
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Tipo de Usuario</label>
                         <select name="tipoUsuario" class="form-select">
-                            <option value="">-- Seleccionar --</option>
+                            <option value=""> Seleccionar </option>
                             <option value="persona" {{ request('tipoUsuario') == 'persona' ? 'selected' : '' }}>Persona
                             </option>
                             <option value="inmobiliaria" {{ request('tipoUsuario') == 'inmobiliaria' ? 'selected' : '' }}>
@@ -259,7 +259,7 @@
                 return;
             }
 
-            fetch("{{ route('usuario.buscar') }}?q=" + query)
+            fetch("" + query)
                 .then(response => response.json())
                 .then(data => {
                     box.innerHTML = "";

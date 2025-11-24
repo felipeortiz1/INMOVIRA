@@ -92,17 +92,18 @@ Route::get('/pagina-principal', function () {
 
 
 // Página pública: Arriendo
-Route::get('/arriendo', [InmuebleController::class, 'vistaArriendo'])
+Route::get('/arriendo', [InmuebleController::class, 'vistaArriendoPublic'])
     ->name('vista.arriendo');
 
-// Página pública: Venta
-Route::get('/venta', [InmuebleController::class, 'vistaVenta'])
+Route::get('/venta', [InmuebleController::class, 'vistaVentaPublic'])
     ->name('vista.venta');
 
+
 // Página pública: Inmobiliarias 
-Route::get('/inmobiliarias', function () {
-    return view('paginaPrincipal.inmobiliarias');
-})->name('vista.inmobiliarias');
+Route::get('/inmobiliarias', [UsuarioController::class, 'inmobiliariasVista'])
+    ->name('vista.inmobiliarias');
+
+
 
 
 //Ruta para filtros

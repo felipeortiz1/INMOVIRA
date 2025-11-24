@@ -129,4 +129,12 @@ class UsuarioController extends Controller
         return redirect()->route('usuario.index')
             ->with('success', 'Usuario eliminado correctamente');
     }
+
+    public function inmobiliariasVista()
+    {
+        $inmobiliarias = Usuario::where('tipoUsuario', 'inmobiliaria')->get();
+        return view('inmobiliarias.vista', compact('inmobiliarias'));
+    }
+
+
 }

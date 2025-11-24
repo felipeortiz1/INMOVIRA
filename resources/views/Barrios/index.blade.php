@@ -30,7 +30,7 @@
                         <div class="col-md-3">
                             <label class="form-label fw-bold">Municipio</label>
                             <select name="municipio" class="form-select">
-                                <option value="">-- Seleccionar --</option>
+                                <option value=""> Seleccionar </option>
 
                                 @foreach ($municipios as $m)
                                     <option value="{{ $m->id }}"

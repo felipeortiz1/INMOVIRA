@@ -7,15 +7,65 @@
 @section('content')
     <div class="container mt-4 animate-fade">
         <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4"
-                style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
                 <h5 class="mb-0 fw-bold"><i class="fa-solid fa-mountain-city"></i> Lista de Municipios</h5>
             </div>
+
+            {{-- FILTROS --}}
+            <div class="mt-4 mb-4 p-4 border rounded bg-light shadow-sm">
+
+                <form id="formFiltros" action="{{ route('municipios.index') }}" method="GET" class="row g-3">
+
+                    {{-- BUSCAR --}}
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Buscar (municipio o Codigo Postal)</label>
+                        <input type="text" id="buscador" name="buscar" class="form-control" autocomplete="off"
+                            placeholder="Escribe para buscar...">
+                        <div id="sugerencias" class="list-group position-absolute w-100 mt-1"
+                            style="z-index: 1000; display: none;"></div>
+                    </div>
+
+                    {{-- BOTONES --}}
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button class="btn btn-primary me-3 px-4">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+
+                        <a href="{{ route('municipios.index') }}" class="btn btn-secondary px-4">
+                            Limpiar filtros
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+
             <div class="card-body p-4">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <a href="{{ route('municipios.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
                         <i class="fas fa-plus-circle"></i> Crear Municipio
+                    </a>
+
+                    {{-- Botón filtro ID Asc - Desc --}}
+                    @php
+                        $query = request()->except('sort', 'direction');
+                    @endphp
+
+                    <a href="{{ route(
+                        'municipios.index',
+                        array_merge($query, [
+                            'sort' => 'id',
+                            'direction' => request('direction') === 'asc' ? 'desc' : 'asc',
+                        ]),
+                    ) }}"
+                        class="btn btn-secondary rounded-pill px-4 shadow-sm mb-3">
+
+                        @if (request('direction') === 'asc')
+                            <i class="fas fa-sort-numeric-down-alt"></i> ID Descendente
+                        @else
+                            <i class="fas fa-sort-numeric-down"></i> ID Ascendente
+                        @endif
                     </a>
 
                     <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
@@ -63,8 +113,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    {{-- Paginación --}}
+                    <div class="d-flex justify-content-center mt-3">{{ $municipios->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -145,5 +197,60 @@
                 if (result.isConfirmed) form.submit();
             });
         }
+
+        // Funcionalidad del buscador con sugerencias
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('buscador');
+            const box = document.getElementById('sugerencias');
+
+            input.addEventListener('keyup', function() {
+                const query = this.value.trim();
+
+                if (query.length < 1) {
+                    box.style.display = 'none';
+                    box.innerHTML = '';
+                    return;
+                }
+
+                fetch("{{ route('municipios.buscar') }}?q=" + query)
+                    .then(response => response.json())
+                    .then(data => {
+                        box.innerHTML = "";
+
+                        if (data.length === 0) {
+                            box.style.display = "none";
+                            return;
+                        }
+
+                        data.forEach(municipios => {
+                            const item = document.createElement('button');
+                            item.type = "button";
+                            item.classList.add('list-group-item', 'list-group-item-action');
+                            item.innerHTML = `
+                        <strong>${municipios.nombre}</strong><br>
+                        <small>${municipios.codigoPostal}</small>
+                    `;
+
+                            // Al hacer clic se llena el input
+                            item.addEventListener('click', function() {
+                                input.value = municipios.nombre;
+                                box.style.display = 'none';
+                            });
+
+                            box.appendChild(item);
+                        });
+
+                        box.style.display = "block";
+                    })
+                    .catch(error => console.error(error));
+            });
+
+            // Cerrar menú si se hace clic fuera
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !box.contains(e.target)) {
+                    box.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection

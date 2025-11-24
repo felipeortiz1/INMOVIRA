@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end mt-4">
-                        <a href="{{ route('municipios.index') }}" 
+                        <a href="{{ route('municipios.index') }}"
                             class="btn btn-outline-secondary rounded-pill px-4 me-2 shadow-sm">
                             <i class="fas fa-arrow-left"></i> Cancelar
                         </a>

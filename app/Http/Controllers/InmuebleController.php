@@ -292,17 +292,24 @@ class InmuebleController extends Controller
     }
 
 
-    public function vistaArriendo()
+    public function vistaArriendoPublic()
     {
-        $inmuebles = Inmueble::where('tipoOferta', 'arriendo')->get();
+        $inmuebles = Inmueble::where('tipoOferta', 'arriendo')
+            ->with(['imagens', 'barrio', 'tipoInmueble'])
+            ->get();
 
-        return view('inmuebles.public.listado', compact('inmuebles'));
+        return view('public.arriendo', compact('inmuebles'));
+
     }
 
-    public function vistaVenta()
+    public function vistaVentaPublic()
     {
-        $inmuebles = Inmueble::where('tipoOferta', 'venta')->get();
+        $inmuebles = Inmueble::where('tipoOferta', 'venta')
+            ->with(['imagens', 'barrio', 'tipoInmueble'])
+            ->get();
 
-        return view('inmuebles.public.listado', compact('inmuebles'));
+        return view('public.venta', compact('inmuebles'));
+
     }
+
 }

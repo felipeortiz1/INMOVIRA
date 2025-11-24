@@ -259,7 +259,7 @@
                 return;
             }
 
-            fetch("{{ route('usuario.buscar') }}?q=" + query)
+            fetch("" + query)
                 .then(response => response.json())
                 .then(data => {
                     box.innerHTML = "";

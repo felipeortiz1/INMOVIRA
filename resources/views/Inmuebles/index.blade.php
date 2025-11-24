@@ -536,7 +536,7 @@
                 return;
             }
 
-            fetch("{{ route('inmuebles.buscar') }}?q=" + encodeURIComponent(query))
+            fetch("" + encodeURIComponent(query))
                 .then(res => res.json())
                 .then(data => {
                     box.innerHTML = '';

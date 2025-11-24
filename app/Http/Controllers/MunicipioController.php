@@ -10,11 +10,49 @@ class MunicipioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $municipios = Municipio::all();
+        $query = Municipio::query();
+
+        // BUSCAR POR NOMBRE O CÓDIGO POSTAL
+        if ($request->filled('buscar')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nombre', 'LIKE', '%' . $request->buscar . '%')
+                    ->orWhere('codigoPostal', 'LIKE', '%' . $request->buscar . '%');
+            });
+        }
+
+        // ORDENAR POR ID ASC | DESC
+        if ($request->sort === 'id') {
+            $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+            $query->orderBy('id', $direction);
+        }
+
+        // Mantener filtros en paginación
+        $municipios = $query->paginate(6)->appends($request->all());
+
         return view('Municipio.index', compact('municipios'));
     }
+
+    /**
+     * Buscar usuarios para completar automaticamente.
+     */
+    public function buscar(Request $request)
+    {
+        if (!$request->filled('q')) {
+            return response()->json([]);
+        }
+
+        $term = $request->q;
+
+        $municipios = Municipio::where('nombre', 'LIKE', "%$term%")
+            ->orWhere('codigoPostal', 'LIKE', "%$term%")
+            ->limit(6)
+            ->get(['id', 'nombre', 'codigoPostal']);
+
+        return response()->json($municipios);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,7 +69,7 @@ class MunicipioController extends Controller
     {
         Municipio::create($request->all());
         return redirect()->route('municipios.index')
-        ->with('success','Municipio Creado exitosamente');
+            ->with('success', 'Municipio Creado exitosamente');
     }
 
     /**
@@ -58,7 +96,7 @@ class MunicipioController extends Controller
     {
         $municipio = Municipio::findOrfail($id);
         $municipio->update($request->all());
-        return redirect()->route('municipios.index')->with('success','Municipio actualizado exitosamente');
+        return redirect()->route('municipios.index')->with('success', 'Municipio actualizado exitosamente');
     }
 
     /**
@@ -66,8 +104,16 @@ class MunicipioController extends Controller
      */
     public function destroy($id)
     {
-        $municipio = Municipio::findOrfail($id);
+        $municipio = Municipio::findOrFail($id);
+
+        if ($municipio->barrios()->count() > 0) {
+            return redirect()->route('municipios.index')
+                ->with('error', 'No se puede eliminar este municipio porque tiene barrios asociados.');
+        }
+
         $municipio->delete();
-        return redirect()->route('municipios.index')->with('success','Municipio eliminado exitosamente');
+
+        return redirect()->route('municipios.index')
+            ->with('success', 'Municipio eliminado exitosamente');
     }
 }

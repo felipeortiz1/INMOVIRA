@@ -9,9 +9,122 @@
     <div class="container mt-4 animate-fade">
         <div class="card border-0 shadow-lg rounded-4">
 
-            <div class="card-header text-white rounded-top-4"
-                style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
                 <h5 class="mb-0 fw-bold"><i class="fa-solid fa-shop"></i> Lista de Inmuebles</h5>
+            </div>
+
+            {{-- FILTROS --}}
+            <div class="mt-4 mb-4 p-4 border rounded bg-light shadow-sm">
+                <form method="GET" action="{{ route('inmuebles.index') }}" class="row g-3">
+
+
+                    <!-- Buscador libre (autocompletado) -->
+                    <div class="col-md-4 position-relative">
+                        <label class="form-label fw-bold">Buscar (título / dirección / usuario)</label>
+                        <input type="text" name="buscar" id="buscador" class="form-control" autocomplete="off"
+                            placeholder="Escribe para buscar..." value="{{ request('buscar') }}">
+                        <div id="sugerencias" class="list-group position-absolute w-100 mt-1"
+                            style="z-index:1500; display:none;"></div>
+                    </div>
+
+                    <!-- Usuario (filtro por nombre) -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Usuario (creador)</label>
+                        <input type="text" name="usuario" id="f_usuario" class="form-control"
+                            value="{{ request('usuario') }}">
+                    </div>
+
+                    <!-- Municipio -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Municipio</label>
+                        <select name="municipio" id="selectMunicipio" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            @foreach ($municipios as $m)
+                                <option value="{{ $m->id }}" {{ request('municipio') == $m->id ? 'selected' : '' }}>
+                                    {{ $m->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Barrio (se actualiza según municipio) -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Barrio</label>
+                        <select name="barrio" id="selectBarrio" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            @foreach ($barrios as $b)
+                                <option value="{{ $b->id }}" {{ request('barrio') == $b->id ? 'selected' : '' }}>
+                                    {{ $b->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Tipo de oferta -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Tipo de oferta</label>
+                        <select name="tipoOferta" class="form-select">
+                            <option value="">-- Todos --</option>
+                            <option value="venta" {{ request('tipoOferta') == 'venta' ? 'selected' : '' }}>Venta</option>
+                            <option value="arriendo" {{ request('tipoOferta') == 'arriendo' ? 'selected' : '' }}>Arriendo
+                            </option>
+                            <option value="venta y arriendo"
+                                {{ request('tipoOferta') == 'venta y arriendo' ? 'selected' : '' }}>Venta y arriendo
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Rango de precio -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Precio mínimo</label>
+                        <input type="number" name="precio_min" class="form-control" value="{{ request('precio_min') }}">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Precio máximo</label>
+                        <input type="number" name="precio_max" class="form-control" value="{{ request('precio_max') }}">
+                    </div>
+
+                    <!-- Fecha creación (desde / hasta) -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Fecha creación desde</label>
+                        <input type="date" name="fecha_desde" class="form-control" value="{{ request('fecha_desde') }}">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Fecha creación hasta</label>
+                        <input type="date" name="fecha_hasta" class="form-control" value="{{ request('fecha_hasta') }}">
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Estado publicación</label>
+                        <select name="estadoPublicacion" class="form-select">
+                            <option value="">-- Todos --</option>
+                            <option value="disponible"
+                                {{ request('estadoPublicacion') == 'disponible' ? 'selected' : '' }}>Disponible</option>
+                            <option value="arrendado" {{ request('estadoPublicacion') == 'arrendado' ? 'selected' : '' }}>
+                                Arrendado</option>
+                            <option value="vendido" {{ request('estadoPublicacion') == 'vendido' ? 'selected' : '' }}>
+                                Vendido</option>
+                            <option value="reservado" {{ request('estadoPublicacion') == 'reservado' ? 'selected' : '' }}>
+                                Reservado</option>
+                            <option value="inactivo" {{ request('estadoPublicacion') == 'inactivo' ? 'selected' : '' }}>
+                                Inactivo</option>
+                        </select>
+                    </div>
+
+                    {{-- BOTONES --}}
+                    <div class="col-md-12 d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary me-3 px-4">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+
+                        <a href="{{ route('inmuebles.index') }}" class="btn btn-secondary px-4">
+                            Limpiar filtros
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <div class="card-body p-4">
@@ -20,6 +133,28 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <a href="{{ route('inmuebles.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
                         <i class="fas fa-plus-circle"></i> Crear Inmueble
+                    </a>
+
+                    {{-- Botón filtro ID Asc - Desc --}}
+                    {{-- Botón filtro ID Asc - Desc --}}
+                    @php
+                        $query = request()->except('sort', 'direction');
+                    @endphp
+
+                    <a href="{{ route(
+                        'inmuebles.index',
+                        array_merge($query, [
+                            'sort' => 'id',
+                            'direction' => request('direction') === 'asc' ? 'desc' : 'asc',
+                        ]),
+                    ) }}"
+                        class="btn btn-secondary rounded-pill px-4 shadow-sm mb-3">
+
+                        @if (request('direction') === 'asc')
+                            <i class="fas fa-sort-numeric-down-alt"></i> ID Descendente
+                        @else
+                            <i class="fas fa-sort-numeric-down"></i> ID Ascendente
+                        @endif
                     </a>
 
                     <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
@@ -54,13 +189,11 @@
 
                                     <td>
                                         @if ($inmueble->imagens && $inmueble->imagens->count() > 0)
-                                            <button
-                                                class="btn btn-info btn-sm rounded-pill shadow-sm me-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalImagenes"
-                                                onclick="cargarImagenes({{ $inmueble->id }})"
-                                            >
-                                                <i class="fa-solid fa-eye"></i> Ver ({{ $inmueble->imagens->count() }})
+                                            <button class="btn btn-info btn-sm rounded-pill shadow-sm me-1"
+                                                data-bs-toggle="modal" data-bs-target="#modalImagenes"
+                                                onclick="cargarImagenes({{ $inmueble->id }})">
+                                                <i class="fa-solid fa-eye"></i> Ver
+                                                ({{ $inmueble->imagens->count() }})
                                             </button>
                                         @else
                                             <span class="text-muted">Sin imágenes</span>
@@ -80,8 +213,8 @@
                                             <i class="fas fa-edit"></i> Editar
                                         </a>
 
-                                        <form action="{{ route('inmuebles.destroy', $inmueble->id) }}"
-                                            method="POST" class="d-inline">
+                                        <form action="{{ route('inmuebles.destroy', $inmueble->id) }}" method="POST"
+                                            class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-danger rounded-pill shadow-sm"
                                                 onclick="confirmarEliminacion(event)">
@@ -96,6 +229,11 @@
                     </table>
                 </div>
 
+                {{-- PAGINACIÓN --}}
+                <div class="mt-3 d-flex justify-content-center">
+                    {{ $inmuebles->links('pagination::bootstrap-5') }}
+                </div>
+
             </div>
         </div>
     </div>
@@ -108,14 +246,18 @@
             overflow: hidden;
             transition: all 0.3s ease-in-out;
         }
+
         .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
+
         table tbody tr:hover {
             background-color: #f9fafc;
         }
-        th, td {
+
+        th,
+        td {
             padding: 1rem !important;
         }
     </style>
@@ -137,26 +279,63 @@
                             <!-- JS INSERTA AQUÍ -->
                         </div>
 
-                        <button class="carousel-control-prev" type="button"
-                            data-bs-target="#carouselInmueble" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselInmueble"
+                            data-bs-slide="prev">
                             <span class="carousel-control-prev-icon"></span>
                         </button>
 
-                        <button class="carousel-control-next" type="button"
-                            data-bs-target="#carouselInmueble" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselInmueble"
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon"></span>
                         </button>
 
                     </div>
 
-                    <div id="contadorImagenes"
-                        class="text-center mt-3 fs-5 fw-bold"></div>
+                    <div id="contadorImagenes" class="text-center mt-3 fs-5 fw-bold"></div>
 
                 </div>
 
             </div>
         </div>
     </div>
+
+    <!-- Modal: Ver detalles -->
+    <div class="modal fade" id="modalVerDetalles" tabindex="-1" aria-labelledby="modalVerDetallesLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalVerDetallesLabel">Detalles del Inmueble</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Contenedor donde se carga dynamic -->
+                    <div id="contenedorDetalles" class="px-3 py-2">
+                        <p class="text-muted">Cargando detalles...</p>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="fw-bold mt-4 mb-3 text-center text-secondary">
+                        Galería de Imágenes
+                    </h5>
+
+                    <div class="row g-3" id="galeriaDetalles">
+                        <p class="text-muted text-center">Cargando imágenes...</p>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 @endsection
 
@@ -244,31 +423,170 @@
     /* ======================================================
     DETALLES DEL INMUEBLE
     ====================================================== */
-    function mostrarDetalles(id) {
-        const contenedor = document.getElementById('contenedorDetalles');
-        contenedor.innerHTML = '<p class="text-muted">Cargando detalles...</p>';
 
-        fetch(`/inmueble/${id}/detalles`)
-            .then(r => r.json())
+    function mostrarDetalles(inmuebleId) {
+        const detalles = document.getElementById('contenedorDetalles');
+        const galeria = document.getElementById('galeriaDetalles');
+
+        detalles.innerHTML = '<p class="text-muted">Cargando detalles...</p>';
+        galeria.innerHTML = '<p class="text-muted text-center">Cargando imágenes...</p>';
+
+        fetch(`/inmueble/${inmuebleId}/detalles`)
+            .then(response => response.json())
             .then(data => {
-                contenedor.innerHTML = `
-                    <h5 class="fw-bold text-center mb-3">${data.titulo}</h5>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Dirección:</strong> ${data.direccion}</li>
-                        <li class="list-group-item"><strong>Tipo de oferta:</strong> ${data.tipoOferta}</li>
-                        <li class="list-group-item"><strong>Tipo de inmueble:</strong> ${data.tipo_inmueble?.nombre ?? 'N/A'}</li>
-                        <li class="list-group-item"><strong>Barrio:</strong> ${data.barrio?.nombre ?? 'N/A'}</li>
-                        <li class="list-group-item"><strong>Usuario:</strong> ${data.usuario?.nombre ?? 'N/A'}</li>
-                        <li class="list-group-item"><strong>Precio:</strong> $${Number(data.precio).toLocaleString()}</li>
-                        <li class="list-group-item"><strong>Área:</strong> ${data.area} m²</li>
-                        <li class="list-group-item"><strong>Baños:</strong> ${data.nBaños}</li>
-                        <li class="list-group-item"><strong>Estado publicación:</strong> ${data.estadoPublicacion}</li>
-                        <li class="list-group-item"><strong>Fecha publicación:</strong> ${data.fechaPublicacion}</li>
-                        <li class="list-group-item"><strong>Descripción:</strong><br>${data.descripcion}</li>
-                    </ul>
-                `;
 
-                new bootstrap.Modal(document.getElementById('modalVerDetalles')).show();
+                // ====== DETALLES ======
+                detalles.innerHTML = `
+                <h4 class="fw-bold text-center mb-3">${data.titulo}</h4>
+
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Dirección:</strong> ${data.direccion}</li>
+                    <li class="list-group-item"><strong>Tipo de oferta:</strong> ${data.tipoOferta}</li>
+                    <li class="list-group-item"><strong>Tipo de inmueble:</strong> ${data.tipo_inmueble?.nombre || 'N/A'}</li>
+                    <li class="list-group-item"><strong>Barrio:</strong> ${data.barrio?.nombre || 'N/A'}</li>
+                    <li class="list-group-item"><strong>Usuario:</strong> ${data.usuario?.nombre || 'N/A'}</li>
+                    <li class="list-group-item"><strong>Precio:</strong> $${parseFloat(data.precio).toLocaleString()}</li>
+                    <li class="list-group-item"><strong>Área:</strong> ${data.area} m²</li>
+                    <li class="list-group-item"><strong>Baños:</strong> ${data.nBaños}</li>
+                    <li class="list-group-item"><strong>Estado de publicación:</strong> ${data.estadoPublicacion}</li>
+                    <li class="list-group-item"><strong>Fecha de publicación:</strong> ${data.fechaPublicacion}</li>
+                    <li class="list-group-item">
+                        <strong>Descripción:</strong><br>${data.descripcion}
+                    </li>
+                </ul>
+            `;
+
+                // ====== GALERÍA ======
+                if (!data.imagenes || data.imagenes.length === 0) {
+                    galeria.innerHTML = `<p class="text-muted text-center">Sin imágenes disponibles.</p>`;
+                } else {
+                    let html = "";
+
+                    data.imagenes.forEach(img => {
+                        html += `
+                        <div class="col-md-4 col-sm-6">
+                            <div class="card shadow-sm">
+                                <img src="${img.url_imagen}" class="card-img-top rounded" alt="Imagen inmueble">
+                            </div>
+                        </div>
+                    `;
+                    });
+
+                    galeria.innerHTML = html;
+                }
+
+                // Abrir modal
+                const modal = new bootstrap.Modal(document.getElementById('modalVerDetalles'));
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Error al cargar detalles:', error);
+                detalles.innerHTML = '<p class="text-danger">Ocurrió un error cargando los detalles.</p>';
             });
     }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- SELECT DEPENDIENTE: Municipio -> Barrios ---
+        const selectMunicipio = document.getElementById('selectMunicipio');
+        const selectBarrio = document.getElementById('selectBarrio');
+
+        selectMunicipio?.addEventListener('change', function() {
+            const id = this.value;
+
+            // limpiar el select de barrios si no hay municipio
+            if (!id) {
+                selectBarrio.innerHTML = '<option value="">-- Seleccionar --</option>';
+                return;
+            }
+
+            fetch(`{{ url('') }}/barrios-por-municipio/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    selectBarrio.innerHTML = '<option value="">-- Seleccionar --</option>';
+                    if (data.length === 0) {
+                        selectBarrio.innerHTML += '<option value="">Sin barrios</option>';
+                        return;
+                    }
+                    data.forEach(b => {
+                        selectBarrio.innerHTML +=
+                            `<option value="${b.id}">${b.nombre}</option>`;
+                    });
+                })
+                .catch(err => console.error(err));
+        });
+
+        // --- AUTOCOMPLETADO para TÍTULO/DIRECCIÓN/USUARIO (autollenado) ---
+        const input = document.getElementById('buscador');
+        const box = document.getElementById('sugerencias');
+
+        // campos que vamos a autollenar al seleccionar
+        const tituloInput = document.querySelector('input[name="titulo"]'); // si existiera en create/edit
+        const direccionInput = document.querySelector('input[name="direccion"]'); // si existiera
+        const usuarioInput = document.querySelector(
+            'input[name="usuario"]'); // campo visible/hidden donde guardes usuario
+
+        input?.addEventListener('keyup', function() {
+            const query = this.value.trim();
+
+            if (query.length < 1) {
+                box.style.display = 'none';
+                box.innerHTML = '';
+                return;
+            }
+
+            fetch("{{ route('inmuebles.buscar') }}?q=" + encodeURIComponent(query))
+                .then(res => res.json())
+                .then(data => {
+                    box.innerHTML = '';
+
+                    if (!data || data.length === 0) {
+                        box.style.display = 'none';
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.classList.add('list-group-item', 'list-group-item-action');
+                        btn.innerHTML = `
+                        <strong>${item.titulo}</strong><br>
+                        <small>${item.direccion}</small><br>
+                        <small>Usuario: ${item.usuario_nombre ?? 'N/A'}</small>
+                    `;
+
+                        btn.addEventListener('click', function() {
+                            // Rellenar el input visible del buscador con el título
+                            input.value = item.titulo;
+
+                            // Si existen inputs específicos en el formulario de create/edit, los llenamos
+                            if (tituloInput) tituloInput.value = item.titulo;
+                            if (direccionInput) direccionInput.value = item
+                                .direccion;
+                            if (usuarioInput) usuarioInput.value = item
+                                .usuario_nombre ?? '';
+
+                            box.style.display = 'none';
+                        });
+
+                        box.appendChild(btn);
+                    });
+
+                    box.style.display = 'block';
+                })
+                .catch(err => {
+                    console.error(err);
+                    box.style.display = 'none';
+                });
+        });
+
+        // cerrar al hacer click fuera
+        document.addEventListener('click', function(e) {
+            if (!input?.contains(e.target) && !box?.contains(e.target)) {
+                if (box) box.style.display = 'none';
+            }
+        });
+
+    });
 </script>

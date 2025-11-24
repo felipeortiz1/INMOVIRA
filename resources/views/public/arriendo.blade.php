@@ -71,6 +71,14 @@
             box-shadow: 0px 8px 25px rgba(0,0,0,0.12);
         }
 
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
         .card h3 {
             margin: 0;
             font-size: 1.35rem;
@@ -127,17 +135,33 @@
             <div class="grid">
 
                 @foreach ($inmuebles as $item)
+
+                    @php
+                        $img = $item->imagens->first();
+                    @endphp
+
                     <div class="card">
+
+                        {{-- Imagen del inmueble --}}
+                        @if ($img)
+                            <img src="{{ asset('storage/' . $img->ruta) }}" alt="Imagen del inmueble">
+                        @else
+                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
+                        @endif
+
                         <h3>{{ $item->titulo }}</h3>
 
                         <p><strong>Dirección:</strong> {{ $item->direccion }}</p>
                         <p><strong>Municipio:</strong> {{ $item->barrio->municipio->nombre ?? 'N/A' }}</p>
                         <p><strong>Barrio:</strong> {{ $item->barrio->nombre ?? 'N/A' }}</p>
                         <p><strong>Usuario:</strong> {{ $item->usuario->nombre ?? 'N/A' }}</p>
+
                         <p><strong>Precio:</strong> ${{ number_format($item->precio, 0, ',', '.') }}</p>
 
                         <span class="badge">Arriendo</span>
+
                     </div>
+
                 @endforeach
 
             </div>

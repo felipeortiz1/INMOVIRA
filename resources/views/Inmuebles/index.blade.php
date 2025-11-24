@@ -38,7 +38,7 @@
                     <div class="col-md-2">
                         <label class="form-label fw-bold">Municipio</label>
                         <select name="municipio" id="selectMunicipio" class="form-select">
-                            <option value="">-- Seleccionar --</option>
+                            <option value=""> Seleccionar </option>
                             @foreach ($municipios as $m)
                                 <option value="{{ $m->id }}" {{ request('municipio') == $m->id ? 'selected' : '' }}>
                                     {{ $m->nombre }}
@@ -51,7 +51,7 @@
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Barrio</label>
                         <select name="barrio" id="selectBarrio" class="form-select">
-                            <option value="">-- Seleccionar --</option>
+                            <option value=""> Seleccionar </option>
                             @foreach ($barrios as $b)
                                 <option value="{{ $b->id }}" {{ request('barrio') == $b->id ? 'selected' : '' }}>
                                     {{ $b->nombre }}
@@ -64,13 +64,11 @@
                     <div class="col-md-2">
                         <label class="form-label fw-bold">Tipo de oferta</label>
                         <select name="tipoOferta" class="form-select">
-                            <option value="">-- Todos --</option>
+                            <option value=""> Todos </option>
                             <option value="venta" {{ request('tipoOferta') == 'venta' ? 'selected' : '' }}>Venta</option>
                             <option value="arriendo" {{ request('tipoOferta') == 'arriendo' ? 'selected' : '' }}>Arriendo
                             </option>
-                            <option value="venta y arriendo"
-                                {{ request('tipoOferta') == 'venta y arriendo' ? 'selected' : '' }}>Venta y arriendo
-                            </option>
+                            
                         </select>
                     </div>
 
@@ -100,7 +98,7 @@
                     <div class="col-md-2">
                         <label class="form-label fw-bold">Estado publicación</label>
                         <select name="estadoPublicacion" class="form-select">
-                            <option value="">-- Todos --</option>
+                            <option value=""> Todos </option>
                             <option value="disponible"
                                 {{ request('estadoPublicacion') == 'disponible' ? 'selected' : '' }}>Disponible</option>
                             <option value="arrendado" {{ request('estadoPublicacion') == 'arrendado' ? 'selected' : '' }}>

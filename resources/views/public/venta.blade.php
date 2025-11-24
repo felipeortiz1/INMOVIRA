@@ -6,7 +6,6 @@
     <title>Inmuebles en Venta</title>
 
     <style>
-        /* mismos estilos que arriendo, puedes copiar/pegar */
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -23,6 +22,7 @@
             align-items: center;
             position: sticky;
             top: 0;
+            z-index: 50;
         }
 
         .nav a {
@@ -33,7 +33,9 @@
             transition: 0.2s;
         }
 
-        .nav a:hover { color: #1e8cff; }
+        .nav a:hover {
+            color: #1e8cff;
+        }
 
         .container {
             max-width: 1100px;
@@ -46,6 +48,7 @@
             margin-bottom: 40px;
             font-size: 2.4rem;
             font-weight: 700;
+            color: #222;
         }
 
         .grid {
@@ -68,24 +71,49 @@
             box-shadow: 0px 8px 25px rgba(0,0,0,0.12);
         }
 
-        .card h3 { margin: 0; font-size: 1.35rem; color: #4da3ff; }
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 1.35rem;
+            color: #4da3ff;
+            font-weight: 700;
+        }
+
+        .card p {
+            margin: 8px 0;
+            color: #555;
+        }
 
         .badge {
             display: inline-block;
             margin-top: 14px;
             padding: 6px 15px;
             border-radius: 50px;
+            font-size: 0.78rem;
             background: #27a844;
             color: white;
             font-weight: 500;
         }
 
-        .empty { text-align:center; color:#666; margin-top:50px; }
+        .empty {
+            text-align:center;
+            color:#666;
+            font-size:1.1rem;
+            margin-top:50px;
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- NAV -->
     <nav class="nav">
         <div>
             <a href="{{ url('/') }}">Inicio</a>
@@ -107,7 +135,20 @@
             <div class="grid">
 
                 @foreach ($inmuebles as $item)
+
+                    @php
+                        $img = $item->imagens->first();
+                    @endphp
+
                     <div class="card">
+
+                        {{-- Mostrar imagen --}}
+                        @if ($img)
+                            <img src="{{ asset('storage/' . $img->ruta) }}" alt="Imagen del inmueble">
+                        @else
+                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
+                        @endif
+
                         <h3>{{ $item->titulo }}</h3>
 
                         <p><strong>Dirección:</strong> {{ $item->direccion }}</p>
@@ -118,6 +159,7 @@
 
                         <span class="badge">Venta</span>
                     </div>
+
                 @endforeach
 
             </div>

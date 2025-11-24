@@ -10,7 +10,7 @@ class InmueblesSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('inmuebles')->insert([
+        DB::table( 'inmuebles')->insert([
             // 1️⃣ CASA - Málaga
             [
                 'direccion' => 'Calle 5 # 3-20',

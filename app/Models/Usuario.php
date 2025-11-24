@@ -26,12 +26,12 @@ class Usuario extends Model
         }
     }
 
-    public function Inmuebles()
+    public function inmuebles()
     {
-        return $this->hasMany(Inmueble::class);
+        return $this->hasMany(Inmueble::class, 'idUsuario');
     }
 
-    public function Interacciones()
+    public function interacciones()
     {
         return $this->hasMany(Interaccion::class);
     }

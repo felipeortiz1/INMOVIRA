@@ -9,7 +9,7 @@ class Barrio extends Model
     protected $table = 'barrios';
     protected $fillable = ['nombre','idMunicipio'];
 
-    public function Municipios()
+    public function municipio()
     {
         return $this->belongsTo(Municipio::class, 'idMunicipio');
     }

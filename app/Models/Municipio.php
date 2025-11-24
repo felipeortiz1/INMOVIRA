@@ -13,8 +13,8 @@ class Municipio extends Model
         'codigoPostal'
     ];
 
-    public function Barrio()
+    public function barrios()
     {
-        return $this->hasMany(Barrio::class);
+        return $this->hasMany(Barrio::class, 'idMunicipio');
     }
 }

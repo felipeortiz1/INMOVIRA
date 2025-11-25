@@ -136,5 +136,19 @@ class UsuarioController extends Controller
         return view('inmobiliarias.vista', compact('inmobiliarias'));
     }
 
+    public function detallesInmobiliaria($id)
+{
+    $inm = Usuario::findOrFail($id);
+
+    return response()->json([
+        'id' => $inm->id,
+        'nombreEmpresa' => $inm->nombreEmpresa,
+        'nombre' => $inm->nombre,
+        'email' => $inm->email,
+        'telefono' => $inm->telefono,
+        'direccion' => $inm->direccion,
+    ]);
+}
+
 
 }

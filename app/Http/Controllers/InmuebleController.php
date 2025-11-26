@@ -18,10 +18,8 @@ class InmuebleController extends Controller
     // Lista de inmuebles con filtros avanzados y paginación.
     public function index(Request $request)
     {
-        // Base: cargamos relaciones necesarias para mostrar en la tabla
         $query = Inmueble::query()->with(['usuario', 'barrio.municipio', 'tipoInmueble']);
 
-        // Búsqueda libre por título, dirección o nombre de usuario
         if ($request->filled('buscar')) {
             $term = $request->buscar;
             $query->where(function ($q) use ($term) {
@@ -33,61 +31,53 @@ class InmuebleController extends Controller
             });
         }
 
-        // Filtrar por municipio (vía relación barrio->municipio)
         if ($request->filled('municipio')) {
             $query->whereHas('barrio.municipio', function ($q) use ($request) {
                 $q->where('id', $request->municipio);
             });
         }
 
-        // Filtrar por barrio (id)
         if ($request->filled('barrio')) {
             $query->where('idBarrio', $request->barrio);
         }
 
-        // Filtrar por tipo de oferta
         if ($request->filled('tipoOferta')) {
             $query->where('tipoOferta', $request->tipoOferta);
         }
 
-        // Filtrar por estado de publicación
         if ($request->filled('estadoPublicacion')) {
             $query->where('estadoPublicacion', $request->estadoPublicacion);
         }
 
-        // Filtrar por usuario creador (por nombre)
         if ($request->filled('usuario')) {
             $query->whereHas('usuario', function ($q) use ($request) {
                 $q->where('nombre', 'LIKE', '%' . $request->usuario . '%');
             });
         }
 
-        // Rango de precio
         if ($request->filled('precio_min')) {
             $query->where('precio', '>=', $request->precio_min);
         }
+
         if ($request->filled('precio_max')) {
             $query->where('precio', '<=', $request->precio_max);
         }
 
-        // Fecha de creacion (rango o exacta) - usamos columna fechaCreacion de la migracion
         if ($request->filled('fecha_desde')) {
             $query->whereDate('fechaCreacion', '>=', $request->fecha_desde);
         }
+
         if ($request->filled('fecha_hasta')) {
             $query->whereDate('fechaCreacion', '<=', $request->fecha_hasta);
         }
 
-        // ORDENAR POR ID ASC | DESC
         if ($request->sort === 'id') {
             $direction = $request->direction === 'desc' ? 'desc' : 'asc';
             $query->orderBy('id', $direction);
         }
 
-        // PAGINACIÓN (mantiene query string para conservar filtros)
         $inmuebles = $query->paginate(10)->withQueryString();
 
-        // Datos para selects en la vista
         $usuarios = Usuario::all();
         $municipios = Municipio::all();
         $barrios = Barrio::all();
@@ -96,10 +86,7 @@ class InmuebleController extends Controller
         return view('inmuebles.index', compact('inmuebles', 'usuarios', 'municipios', 'barrios', 'tipos'));
     }
 
-    /**
-     * Autocompletado: buscar inmuebles por título/dirección o usuario.
-     * Devuelve JSON con los campos que usa el JS para autollenar.
-     */
+
     public function buscar(Request $request)
     {
         if (!$request->filled('q')) {
@@ -117,7 +104,6 @@ class InmuebleController extends Controller
             ->limit(8)
             ->get();
 
-        // Mapear a estructura sencilla que el JS espera
         $data = $resultados->map(function ($i) {
             return [
                 'id' => $i->id,
@@ -132,7 +118,6 @@ class InmuebleController extends Controller
     }
 
 
-    // Mostrar formulario de creación
     public function create(Request $request)
     {
         $municipios = Municipio::all();
@@ -143,14 +128,11 @@ class InmuebleController extends Controller
         return view('inmuebles.create', compact('barrios', 'tipos', 'usuarios', 'municipios'));
     }
 
-    // Guardar nuevo inmueble
+
     public function store(InmuebleRequest $request)
     {
-
-        // Crear inmueble con datos validados
         $inmueble = Inmueble::create($request->validated());
 
-        // Guardar imágenes
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $imagen) {
                 $path = $imagen->store('inmuebles', 'public');
@@ -166,15 +148,13 @@ class InmuebleController extends Controller
     }
 
 
-    // Mostrar detalles de un inmueble
     public function show($id)
     {
-        // Retorna la vista parcial con el contenido del inmueble (no JSON)
         $inmueble = Inmueble::with(['imagen', 'barrio', 'usuario', 'tipoInmueble'])->findOrFail($id);
         return view('inmuebles.show', compact('inmueble'));
     }
 
-    // Mostrar formulario de edición
+
     public function edit($id)
     {
         $inmueble = Inmueble::with('imagens')->findOrFail($id);
@@ -186,13 +166,11 @@ class InmuebleController extends Controller
         return view('inmuebles.edit', compact('inmueble', 'barrios', 'tipos', 'usuarios', 'municipios'));
     }
 
-    // Actualizar inmueble existente
+
     public function update(InmuebleRequest $request, $id)
     {
-        // 1️⃣ Buscar el inmueble
         $inmueble = Inmueble::findOrFail($id);
 
-        // 2️⃣ Actualizar los campos principales
         $inmueble->update([
             'titulo' => $request->titulo,
             'direccion' => $request->direccion,
@@ -210,22 +188,18 @@ class InmuebleController extends Controller
             'fechaPublicacion' => $request->fechaPublicacion,
         ]);
 
-        // 3️⃣ Eliminar imágenes seleccionadas (si el usuario marcó alguna)
         if ($request->has('eliminar_imagenes')) {
             foreach ($request->eliminar_imagenes as $idImagen) {
                 $imagen = Imagen::find($idImagen);
                 if ($imagen) {
-                    // Borrar el archivo físico si existe
                     if (Storage::disk('public')->exists($imagen->ruta)) {
                         Storage::disk('public')->delete($imagen->ruta);
                     }
-                    // Eliminar registro de la base de datos
                     $imagen->delete();
                 }
             }
         }
 
-        // 4️⃣ Subir nuevas imágenes (si se enviaron)
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $imagen) {
                 $rutaImagen = $imagen->store('inmuebles', 'public');
@@ -233,23 +207,21 @@ class InmuebleController extends Controller
                 $inmueble->imagens()->create([
                     'ruta' => $rutaImagen,
                     'url_imagen' => asset('storage/' . $rutaImagen),
-                    'idInmueble' => $inmueble->id, // 👈 Esto garantiza la relación
+                    'idInmueble' => $inmueble->id,
                 ]);
             }
         }
 
-        // 5️⃣ Redirigir con mensaje de éxito
         return redirect()
             ->route('inmuebles.index')
             ->with('success', 'Inmueble actualizado correctamente.');
     }
 
-    // Eliminar inmueble
+
     public function destroy($id)
     {
         $inmueble = Inmueble::with('imagens')->findOrFail($id);
 
-        // eliminar archivos físicos y registros de imagen
         foreach ($inmueble->imagens as $imagen) {
             Storage::disk('public')->delete($imagen->ruta);
             $imagen->delete();
@@ -260,14 +232,14 @@ class InmuebleController extends Controller
         return redirect()->route('inmuebles.index')->with('success', 'Inmueble e imágenes eliminados correctamente.');
     }
 
-    // Obtener imagenes de un inmueble
+
     public function obtenerImagenes($id)
     {
         $imagenes = Imagen::where('idInmueble', $id)->get();
         return response()->json($imagenes);
     }
 
-    // Obtener detalles del inmueble
+
     public function obtenerDetalles($id)
     {
         $inmueble = Inmueble::with(['usuario', 'tipoInmueble', 'barrio', 'imagens'])
@@ -287,29 +259,117 @@ class InmuebleController extends Controller
             'estadoPublicacion' => $inmueble->estadoPublicacion,
             'fechaPublicacion' => $inmueble->created_at->format('Y-m-d'),
             'descripcion' => $inmueble->descripcion,
-            'imagenes' => $inmueble->imagens, // <- IMPORTANTE
+            'imagenes' => $inmueble->imagens,
         ]);
     }
 
 
-    public function vistaArriendoPublic()
+    public function vistaArriendoPublic(Request $request)
     {
-        $inmuebles = Inmueble::where('tipoOferta', 'arriendo')
-            ->with(['imagens', 'barrio', 'tipoInmueble'])
-            ->get();
+        $query = Inmueble::where('tipoOferta', 'arriendo')
+            ->with(['imagens', 'barrio.municipio', 'usuario']);
 
-        return view('public.arriendo', compact('inmuebles'));
+        if ($request->filled('tipo')) {
+            $query->whereHas('tipoInmueble', function ($q) use ($request) {
+                $q->where('nombre', $request->tipo);
+            });
+        }
 
+        if ($request->filled('municipio')) {
+            $query->whereHas('barrio.municipio', function ($q) use ($request) {
+                $q->where('id', $request->municipio);
+            });
+        }
+
+        if ($request->filled('barrio')) {
+            $query->where('idBarrio', $request->barrio);
+        }
+
+        if ($request->filled('min')) {
+            $query->where('precio', '>=', $request->min);
+        }
+
+        if ($request->filled('max')) {
+            $query->where('precio', '<=', $request->max);
+        }
+
+        $inmuebles = $query->orderBy('created_at', 'desc')
+            ->paginate(12)
+            ->withQueryString();
+
+        $municipios = Municipio::all();
+        $barrios = Barrio::all();
+
+        return view('public.arriendo', compact('inmuebles', 'municipios', 'barrios'));
     }
 
-    public function vistaVentaPublic()
+
+    public function vistaVentaPublic(Request $request)
     {
-        $inmuebles = Inmueble::where('tipoOferta', 'venta')
-            ->with(['imagens', 'barrio', 'tipoInmueble'])
-            ->get();
+        $query = Inmueble::where('tipoOferta', 'venta')
+            ->with(['imagens', 'barrio.municipio', 'usuario', 'tipoInmueble']);
 
-        return view('public.venta', compact('inmuebles'));
+        if ($request->filled('q')) {
+            $term = $request->q;
+            $query->where(function($q) use ($term) {
+                $q->where('titulo', 'LIKE', "%{$term}%")
+                ->orWhere('direccion', 'LIKE', "%{$term}%")
+                ->orWhereHas('usuario', function($q2) use ($term){
+                    $q2->where('nombre', 'LIKE', "%{$term}%");
+                });
+            });
+        }
 
+        if ($request->filled('tipo')) {
+            $query->whereHas('tipoInmueble', function ($q) use ($request) {
+                $q->where('nombre', $request->tipo);
+            });
+        }
+
+        if ($request->filled('municipio')) {
+            $query->whereHas('barrio.municipio', function ($q) use ($request) {
+                $q->where('id', $request->municipio);
+            });
+        }
+
+        if ($request->filled('barrio')) {
+            $query->where('idBarrio', $request->barrio);
+        }
+
+        if ($request->filled('min')) {
+            $query->where('precio', '>=', $request->min);
+        }
+
+        if ($request->filled('max')) {
+            $query->where('precio', '<=', $request->max);
+        }
+
+        $inmuebles = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
+
+        $municipios = Municipio::all();
+        $barrios = Barrio::all();
+
+        return view('public.venta', compact('inmuebles', 'municipios', 'barrios'));
     }
 
+
+    // 👉 NUEVO: Vista pública de inmobiliarias con buscador
+    public function vistaInmobiliariasPublic(Request $request)
+    {
+        $query = Usuario::where('tipoUsuario', 'inmobiliaria');
+
+        if ($request->filled('q')) {
+            $term = $request->q;
+            $query->where(function($q2) use ($term) {
+                $q2->where('nombreEmpresa', 'LIKE', "%{$term}%")
+                    ->orWhere('nombre', 'LIKE', "%{$term}%")
+                    ->orWhere('email', 'LIKE', "%{$term}%")
+                    ->orWhere('telefono', 'LIKE', "%{$term}%");
+            });
+        }
+
+        $inmobiliarias = $query->orderBy('nombreEmpresa')->get();
+
+        return view('public.inmobiliarias', compact('inmobiliarias'));
+    }
 }

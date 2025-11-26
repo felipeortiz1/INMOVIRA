@@ -1,170 +1,463 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inmuebles en Venta</title>
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background: #f6f9fc;
-            color: #333;
+        :root{
+            --bg: #FAFCFF;
+            --card: #ffffff;
+            --muted: #7a7f8c;
+
+            --accent: #8CB4FF;
+            --accent-hover: #6EA1FF;
+
+            --success: #7DD88C;
+            --danger: #FF8A8A;
+
+            --shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
 
-        .nav {
-            background: white;
-            padding: 14px 38px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
+        [data-theme="dark"]{
+            --bg: #1a1f2a;
+            --card: #242b38;
+            --muted: #d0d6e0;
+            --accent: #9CC4FF;
+            --accent-hover: #7FB0FF;
+            --shadow: 0 6px 28px rgba(0,0,0,0.55);
+            color: #e6eef8;
         }
 
-        .nav a {
-            text-decoration: none;
-            color: #4da3ff;
-            font-weight: 600;
-            margin-right: 18px;
-            transition: 0.2s;
+        html,body{height:100%; margin:0; font-family:Inter, Poppins, system-ui;}
+        body{ background:var(--bg); color:#0f172a; transition:.25s; }
+
+        .nav{
+            display:flex; justify-content:space-between; align-items:center;
+            padding:14px 28px; background:var(--card); box-shadow:var(--shadow);
+            position:sticky; top:0; z-index:120;
+        }
+        .nav .left a{
+            color:var(--accent); font-weight:600; margin-right:18px; text-decoration:none;
+            transition:.2s;
+        }
+        .nav .left a:hover{ color:var(--accent-hover); }
+
+        .btn { padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
+
+        .btn-ghost {
+            background: transparent;
+            color:var(--accent);
+            border:1px solid rgba(0,0,0,0.07);
+            transition:0.2s;
+        }
+        .btn-ghost:hover { background: rgba(140,180,255,0.12); }
+
+        .btn-primary { background:var(--accent); color:white; }
+        .btn-primary:hover { background:var(--accent-hover); }
+
+        .container{ max-width:1120px; margin:36px auto; padding:0 18px; }
+
+        h1{ text-align:center; margin-bottom:20px; font-size:2rem; }
+
+        /* FILTROS */
+        .filters {
+            display:flex; gap:12px; flex-wrap:wrap;
+            background:var(--card); padding:16px; border-radius:14px;
+            box-shadow:var(--shadow); border:1px solid rgba(0,0,0,0.04);
+            margin-bottom:24px;
+        }
+        .filters input, .filters select {
+            width:100%; padding:10px 12px; border-radius:10px;
+            border:1px solid rgba(0,0,0,0.1); background:var(--bg);
+            transition:0.2s;
+        }
+        .filters input:focus, .filters select:focus {
+            border-color:var(--accent);
+            box-shadow:0 0 0 3px rgba(140,180,255,0.25);
         }
 
-        .nav a:hover {
-            color: #1e8cff;
+        /* GRID */
+        .list-grid {
+            display:grid;
+            gap:20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 0 20px;
+        .list-view .card { display:flex; gap:14px; align-items:flex-start; }
+
+        .card{
+            background:var(--card);
+            border-radius:14px;
+            overflow:hidden;
+            box-shadow:var(--shadow);
+            transition:transform .18s;
+            border:1px solid rgba(0,0,0,0.05);
+            display:flex;
+            flex-direction:column;
+        }
+        .card:hover{ transform:translateY(-5px); }
+
+        .card img{
+            width:100%;
+            height:180px;
+            object-fit:cover;
+            background:#d7d7d7;
+            display:block;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #222;
+        .card-body{ padding:14px; display:flex; flex-direction:column; flex:1; }
+        .card h3{ margin:0; color:var(--accent); font-size:1.1rem; }
+        .muted{ color:var(--muted); font-size:0.95rem; }
+
+        .price{
+            font-weight:700;
+            color:var(--success);
+            font-size:1rem;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-            gap: 28px;
+        .fav{
+            background:rgba(255,255,255,0.75);
+            border:none;
+            cursor:pointer;
+            font-size:19px;
+            color:var(--danger);
+            border-radius:8px;
+            padding:6px;
+            position:absolute;
+            right:10px;
+            top:10px;
         }
 
-        .card {
-            background: white;
-            padding: 22px;
-            border-radius: 18px;
-            box-shadow: 0px 4px 14px rgba(0,0,0,0.07);
-            transition: 0.25s;
-            border: 1px solid #e9edf3;
+        .open-modal{
+            background:rgba(255,255,255,0.75);
+            border-radius:8px;
+            padding:6px;
+            border:none;
+            cursor:pointer;
+            position:absolute;
+            left:10px;
+            top:10px;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 8px 25px rgba(0,0,0,0.12);
+        /* PAGINACIÓN */
+        .pagination { display:flex; justify-content:center; margin-top:18px; }
+        .pagination nav > div > span,
+        .pagination nav > div > a{
+            padding:8px 12px; background:var(--card);
+            border-radius:8px; border:1px solid rgba(0,0,0,0.07);
+            text-decoration:none; font-size:.9rem;
+        }
+        .pagination nav > div > a:hover{ background:var(--accent); color:white; }
+        .pagination nav .bg-indigo-500{ background:var(--accent) !important; color:white !important; }
+        .pagination nav div:first-child,
+        .pagination nav div:last-child{ display:none !important; }
+
+        .empty{ text-align:center; padding:40px; background:var(--card); border-radius:14px; box-shadow:var(--shadow); }
+
+        /* MODAL */
+        .modal-backdrop{
+            position:fixed; inset:0;
+            background:rgba(0,0,0,0.45);
+            backdrop-filter:blur(6px);
+            display:flex; justify-content:center; align-items:center;
+        }
+        .modal{
+            background:var(--card);
+            padding:14px;
+            border-radius:14px;
+            width:90%;
+            max-width:700px;
+            max-height:90vh;
+            overflow-y:auto;
+            position:relative;
+        }
+        .modal img{
+            max-width:100%;
+            height:auto;
+            display:block;
+            border-radius:10px;
         }
 
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 15px;
+        /* LUPA */
+        .zoom-btn{
+            margin-top:10px;
+            background:var(--accent);
+            color:white;
+            padding:8px 12px;
+            border-radius:10px;
+            border:none;
+            cursor:pointer;
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+        }
+        .zoom-btn:hover{
+            background:var(--accent-hover);
         }
 
-        .card h3 {
-            margin: 0;
-            font-size: 1.35rem;
-            color: #4da3ff;
-            font-weight: 700;
+        /* LIGHTBOX */
+        .zoom-modal{
+            position:relative;
+            max-width:95vw;
+            max-height:95vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
         }
-
-        .card p {
-            margin: 8px 0;
-            color: #555;
-        }
-
-        .badge {
-            display: inline-block;
-            margin-top: 14px;
-            padding: 6px 15px;
-            border-radius: 50px;
-            font-size: 0.78rem;
-            background: #27a844;
-            color: white;
-            font-weight: 500;
-        }
-
-        .empty {
-            text-align:center;
-            color:#666;
-            font-size:1.1rem;
-            margin-top:50px;
+        .zoom-full{
+            max-width:95vw;
+            max-height:95vh;
+            object-fit:contain;
+            border-radius:8px;
         }
     </style>
 </head>
+<body data-theme="{{ request()->cookie('theme','light') }}">
 
-<body>
-
-    <!-- NAV -->
     <nav class="nav">
-        <div>
+        <div class="left">
             <a href="{{ url('/') }}">Inicio</a>
             <a href="{{ route('vista.arriendo') }}">Arriendo</a>
             <a href="{{ route('vista.venta') }}">Venta</a>
             <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
         </div>
 
-        <a href="{{ route('login') }}" style="color:#1e8cff; font-weight:600;">Iniciar sesión</a>
+        <div class="right">
+            <button id="toggleTheme" class="btn btn-ghost">🌓</button>
+            <a href="{{ route('login') }}" class="btn btn-ghost">Iniciar sesión</a>
+        </div>
     </nav>
 
-
-    <div class="container">
+    <div class="container fade-in">
         <h1>Inmuebles en Venta</h1>
 
-        @if ($inmuebles->isEmpty())
-            <p class="empty">No hay inmuebles en venta por el momento.</p>
-        @else
-            <div class="grid">
+        {{-- FILTROS --}}
+        <form id="filterForm" method="GET" class="filters" action="{{ route('vista.venta') }}">
+            <div class="search" style="flex:1; min-width:220px;">
+                <input type="search" name="q" placeholder="Buscar por título, dirección o barrio"
+                       value="{{ request('q') }}">
+            </div>
 
-                @foreach ($inmuebles as $item)
+            <select name="tipo">
+                <option value="">Tipo (todos)</option>
+                <option value="Casa" {{ request('tipo')=='Casa'?'selected':'' }}>Casa</option>
+                <option value="Apartamento" {{ request('tipo')=='Apartamento'?'selected':'' }}>Apartamento</option>
+                <option value="Lote" {{ request('tipo')=='Lote'?'selected':'' }}>Lote</option>
+                <option value="Local comercial" {{ request('tipo')=='Local comercial'?'selected':'' }}>Local comercial</option>
+            </select>
 
-                    @php
-                        $img = $item->imagens->first();
-                    @endphp
-
-                    <div class="card">
-
-                        {{-- Mostrar imagen --}}
-                        @if ($img)
-                            <img src="{{ asset('storage/' . $img->ruta) }}" alt="Imagen del inmueble">
-                        @else
-                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
-                        @endif
-
-                        <h3>{{ $item->titulo }}</h3>
-
-                        <p><strong>Dirección:</strong> {{ $item->direccion }}</p>
-                        <p><strong>Municipio:</strong> {{ $item->barrio->municipio->nombre ?? 'N/A' }}</p>
-                        <p><strong>Barrio:</strong> {{ $item->barrio->nombre ?? 'N/A' }}</p>
-                        <p><strong>Usuario:</strong> {{ $item->usuario->nombre ?? 'N/A' }}</p>
-                        <p><strong>Precio:</strong> ${{ number_format($item->precio, 0, ',', '.') }}</p>
-
-                        <span class="badge">Venta</span>
-                    </div>
-
+            <select name="municipio" id="municipio">
+                <option value="">Municipio</option>
+                @foreach($municipios as $m)
+                    <option value="{{ $m->id }}" {{ request('municipio')==$m->id?'selected':'' }}>{{ $m->nombre }}</option>
                 @endforeach
+            </select>
 
+            <select name="barrio" id="barrio">
+                <option value="">Barrio</option>
+                @foreach($barrios as $b)
+                    @if(request('municipio') == $b->idMunicipio)
+                        <option value="{{ $b->id }}" {{ request('barrio')==$b->id?'selected':'' }}>{{ $b->nombre }}</option>
+                    @endif
+                @endforeach
+            </select>
+
+            <input type="number" name="min" placeholder="Precio min" value="{{ request('min') }}">
+            <input type="number" name="max" placeholder="Precio max" value="{{ request('max') }}">
+
+            <button type="submit" class="btn btn-primary">Aplicar</button>
+            <a href="{{ route('vista.venta') }}" class="btn btn-ghost">Limpiar</a>
+        </form>
+
+        {{-- CONTROLS --}}
+        <div class="controls" style="display:flex;align-items:center;margin-bottom:12px;">
+            <div class="view-toggle">
+                <button id="gridBtn" class="btn btn-ghost">Grid</button>
+                <button id="listBtn" class="btn btn-ghost">Lista</button>
+            </div>
+            <span class="muted" style="margin-left:12px;">
+                Resultados: <strong>{{ $inmuebles->total() }}</strong>
+            </span>
+        </div>
+
+        {{-- LISTADO --}}
+        @if($inmuebles->isEmpty())
+            <div class="empty">No hay inmuebles en venta.</div>
+        @else
+            <div id="listing" class="list-grid {{ request('view')=='list'?'list-view':'' }}">
+                @foreach($inmuebles as $item)
+                    @php $img = optional($item->imagens->first())->ruta; @endphp
+
+                    <article class="card" style="position:relative;">
+                        <div style="position:relative;">
+                            <img src="{{ $img ? asset('storage/'.$img) : asset('img/no-image.jpg') }}" alt="Imagen inmueble">
+                            <button class="fav" data-id="{{ $item->id }}">♡</button>
+                            <button class="open-modal" data-img="{{ $img ? asset('storage/'.$img) : asset('img/no-image.jpg') }}">🔍</button>
+                        </div>
+
+                        <div class="card-body">
+                            <h3>{{ $item->titulo }}</h3>
+                            <div class="muted">{{ $item->direccion }}</div>
+                            <div class="muted" style="font-size:.9rem;">
+                                {{ $item->barrio->nombre ?? 'Barrio N/A' }} •
+                                {{ $item->barrio->municipio->nombre ?? 'Municipio N/A' }}
+                            </div>
+
+                            <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:center;">
+                                <div class="price">${{ number_format($item->precio,0,',','.') }}</div>
+                                <a href="#" class="btn btn-ghost" onclick="event.preventDefault(); mostrarDetalles({{ $item->id }});">Ver</a>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="pagination">
+                {{ $inmuebles->withQueryString()->links() }}
             </div>
         @endif
     </div>
+
+    {{-- MODAL ROOT --}}
+    <div id="modalRoot" style="display:none;"></div>
+
+    <script>
+        /* TEMA */
+        const body = document.body;
+        const themeBtn = document.getElementById('toggleTheme');
+
+        (function initTheme(){
+            const match = document.cookie.split('; ').find(r => r.startsWith('theme='));
+            const theme = match ? match.split('=')[1] :
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            body.setAttribute('data-theme', theme);
+        })();
+
+        themeBtn.onclick = () => {
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.cookie = "theme="+newTheme+"; path=/; max-age=" + 60*60*24*365;
+        };
+
+        /* GRID/LIST */
+        const listing = document.getElementById('listing');
+        document.getElementById('gridBtn').onclick = () => listing.classList.remove('list-view');
+        document.getElementById('listBtn').onclick = () => listing.classList.add('list-view');
+
+
+        /* MODAL GLOBAL */
+        const modalRoot = document.getElementById('modalRoot');
+
+        document.addEventListener('click', (e) => {
+
+            /* ABRIR MODAL */
+            const openBtn = e.target.closest('.open-modal');
+            if (openBtn) {
+                const src = openBtn.getAttribute('data-img') || '';
+                modalRoot.innerHTML = `
+                    <div class="modal-backdrop">
+                        <div class="modal">
+                            <button class="modal-close"
+                                style="position:absolute;right:10px;top:10px;background:transparent;border:none;font-size:20px;cursor:pointer;">✕</button>
+
+                            <img src="${src}" class="modal-img">
+
+                            <button class="zoom-btn" onclick="zoomImage('${src}')">
+                                🔍 Ver imagen completa
+                            </button>
+
+                            <div id="modalExtra" style="padding:10px;"></div>
+                        </div>
+                    </div>
+                `;
+                modalRoot.style.display = "block";
+                return;
+            }
+
+            /* CERRAR MODAL */
+            if (e.target.classList.contains('modal-backdrop') ||
+                e.target.classList.contains('modal-close')) {
+                modalRoot.innerHTML = "";
+                modalRoot.style.display = "none";
+            }
+        });
+
+
+        /* LIGHTBOX */
+        function zoomImage(src){
+            modalRoot.innerHTML = `
+                <div class="modal-backdrop">
+                    <div class="zoom-modal">
+                        <button class="modal-close"
+                            style="position:absolute;right:20px;top:20px;background:transparent;border:none;font-size:24px;cursor:pointer;">✕</button>
+                        <img src="${src}" class="zoom-full">
+                    </div>
+                </div>
+            `;
+            modalRoot.style.display = "block";
+        }
+
+
+        /* SELECT DEPENDIENTE */
+        document.getElementById('municipio')?.addEventListener('change',function(){
+            const mid = this.value;
+            const barrio = document.getElementById('barrio');
+            barrio.innerHTML = '<option value="">Barrio</option>';
+
+            const data = @json($barrios);
+
+            data.forEach(b=>{
+                if(String(b.idMunicipio)===String(mid)){
+                    barrio.innerHTML += `<option value="${b.id}">${b.nombre}</option>`;
+                }
+            });
+        });
+
+
+        /* MOSTRAR DETALLES */
+        async function mostrarDetalles(id){
+            try{
+                const res = await fetch(`/inmueble/${id}/detalles`);
+                const data = await res.json();
+
+                const info = `
+                    <h3>${data.titulo}</h3>
+                    <p class="muted">${data?.barrio?.nombre || ''} • ${data?.barrio?.municipio?.nombre || ''}</p>
+                    <p><b>Dirección:</b> ${data.direccion}</p>
+                    <p><b>Usuario:</b> ${data.usuario?.nombre || ''}</p>
+                    <p><b>Precio:</b> $${Number(data.precio||0).toLocaleString()}</p>
+                `;
+
+                const src = data.imagenes?.length
+                    ? (data.imagenes[0].url_imagen || '/storage/'+data.imagenes[0].ruta)
+                    : '{{ asset("img/no-image.jpg") }}';
+
+                modalRoot.innerHTML = `
+                    <div class="modal-backdrop">
+                        <div class="modal">
+                            <button class="modal-close"
+                                style="position:absolute;right:10px;top:10px;background:transparent;border:none;font-size:20px;cursor:pointer;">✕</button>
+
+                            <img src="${src}" class="modal-img">
+
+                            <button class="zoom-btn" onclick="zoomImage('${src}')">
+                                🔍 Ver imagen completa
+                            </button>
+
+                            <div style="padding:10px;">${info}</div>
+                        </div>
+                    </div>
+                `;
+                modalRoot.style.display = "block";
+
+            }catch(e){
+                console.error(e);
+            }
+        }
+    </script>
 
 </body>
 </html>

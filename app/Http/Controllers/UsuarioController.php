@@ -130,11 +130,26 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario eliminado correctamente');
     }
 
-    public function inmobiliariasVista()
-    {
-        $inmobiliarias = Usuario::where('tipoUsuario', 'inmobiliaria')->get();
-        return view('inmobiliarias.vista', compact('inmobiliarias'));
+    public function inmobiliariasVista(Request $request)
+{
+    $query = Usuario::where('tipoUsuario', 'inmobiliaria');
+
+    if ($request->filled('q')) {
+        $t = $request->q;
+
+        $query->where(function ($q) use ($t) {
+            $q->where('nombreEmpresa', 'LIKE', "%{$t}%")
+                ->orWhere('nombre', 'LIKE', "%{$t}%")
+                ->orWhere('email', 'LIKE', "%{$t}%")
+                ->orWhere('telefono', 'LIKE', "%{$t}%");
+            });
     }
+
+    $inmobiliarias = $query->get();
+
+    return view('inmobiliarias.vista', compact('inmobiliarias'));
+}
+
 
     public function detallesInmobiliaria($id)
 {
@@ -149,6 +164,21 @@ class UsuarioController extends Controller
         'direccion' => $inm->direccion,
     ]);
 }
+
+public function detalles($id)
+{
+    $user = Usuario::findOrFail($id);
+
+    return response()->json([
+        'id' => $user->id,
+        'nombreEmpresa' => $user->nombreEmpresa,
+        'nombre' => $user->nombre,
+        'email' => $user->email,
+        'telefono' => $user->telefono,
+        'direccion' => $user->direccion,
+    ]);
+}
+
 
 
 }

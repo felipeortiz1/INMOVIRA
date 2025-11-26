@@ -103,7 +103,8 @@ Route::get('/venta', [InmuebleController::class, 'vistaVentaPublic'])
 Route::get('/inmobiliarias', [UsuarioController::class, 'inmobiliariasVista'])
     ->name('vista.inmobiliarias');
 
-
+Route::get('/inmobiliaria/{id}/detalles', [UsuarioController::class, 'detalles'])
+    ->name('inmobiliarias.detalles');
 
 
 //Ruta para filtros

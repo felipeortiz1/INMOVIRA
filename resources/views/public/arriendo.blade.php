@@ -184,6 +184,7 @@
     {{-- NAV --}}
     <nav class="nav">
         <div class="left">
+            <a href="{{ route('pagina.principal') }}">Inicio</a>
             <a href="{{ route('vista.arriendo') }}">Arriendo</a>
             <a href="{{ route('vista.venta') }}">Venta</a>
             <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
@@ -262,7 +263,7 @@
 
                     <article class="card">
                         <img src="{{ $img ? asset('storage/'.$img) : asset('img/no-image.jpg') }}"
-                             alt="Imagen inmueble">
+                            alt="Imagen inmueble">
 
                         <div class="card-body">
                             <h3>{{ $item->titulo }}</h3>

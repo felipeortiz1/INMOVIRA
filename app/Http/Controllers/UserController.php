@@ -48,13 +48,13 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
 
             // borrar foto anterior
-            if ($user->avatar && Storage::exists('public/adminAvatar/' . $user->avatar)) {
-                Storage::delete('public/adminAvatar/' . $user->avatar);
+            if ($user->avatar && Storage::disk('public')->exists('adminAvatar/' . $user->avatar)) {
+                Storage::disk('public')->delete('adminAvatar/' . $user->avatar);
             }
 
             // guardar nuevo avatar
             $imageName = time() . '.' . $request->avatar->extension();
-            $request->avatar->storeAs('public/adminAvatar', $imageName);
+            $request->avatar->storeAs('adminAvatar', $imageName, 'public');
 
             $user->avatar = $imageName;
         }

@@ -13,9 +13,9 @@
                 <div class="card-body box-profile text-center">
 
                     {{-- Avatar actual o generado --}}
-                    <img id="preview-avatar" class="profile-user-img img-fluid img-circle"
+                    <img id="preview-avatar" class="avatar-circle"
                         src="@if (Auth::user()->avatar) {{ asset('storage/adminAvatar/' . Auth::user()->avatar) }}
-                          @else
+                            @else
                             https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3c8dbc&color=fff&size=300&bold=true @endif"
                         alt="Avatar">
 
@@ -122,6 +122,15 @@
 
 @endsection
 
+<style>
+    .avatar-circle {
+        width: 150px;          /* Ajusta si quieres más grande o más pequeño */
+        height: 150px;
+        object-fit: cover;     /* Recorta la imagen uniformemente */
+        border-radius: 50%;    /* Mantiene el círculo perfecto */
+        border: 3px solid #ddd; /* Opcional: borde suave */
+    }
+</style>
 
 {{-- ========================= --}}
 {{-- SCRIPT: PREVISUALIZAR AVATAR --}}

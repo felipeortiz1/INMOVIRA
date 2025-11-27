@@ -15,14 +15,15 @@
                 <div class="card-body box-profile text-center">
 
                     {{-- Mostrar avatar (subido) o avatar automático --}}
-                    @if (Auth::user()->avatar)
-                        <img class="profile-user-img img-fluid img-circle shadow"
-                            src="{{ asset('storage/adminAvatar/' . Auth::user()->avatar) }}" alt="Foto de perfil">
-                    @else
-                        <img class="profile-user-img img-fluid img-circle shadow"
-                            src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3c8dbc&color=fff&size=300&bold=true"
-                            alt="Avatar">
-                    @endif
+                    <img id="preview-avatar" 
+                    class="avatar-circle"
+                    src="@if (Auth::user()->avatar) {{ asset('storage/adminAvatar/' . Auth::user()->avatar) }}
+                        @else https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3c8dbc&color=fff&size=300&bold=true 
+                        @endif"
+                    alt="Avatar"
+                    style="cursor: pointer;"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAvatarView">
 
                     <h3 class="profile-username mt-3 fw-bold">
                         {{ Auth::user()->name }}
@@ -83,3 +84,50 @@
     </div>
 
 @endsection
+
+
+<style>
+    .avatar-circle {
+        width: 150px;          /* Ajusta si quieres más grande o más pequeño */
+        height: 150px;
+        object-fit: cover;     /* Recorta la imagen uniformemente */
+        border-radius: 50%;    /* Mantiene el círculo perfecto */
+        border: 3px solid #ddd; /* Opcional: borde suave */
+    }
+</style>
+
+
+<!-- Modal: Ver Avatar en Grande -->
+<div class="modal fade" id="modalAvatarView" tabindex="-1" aria-labelledby="modalAvatarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAvatarLabel">Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <img id="modal-avatar-img"
+                    src="@if (Auth::user()->avatar) {{ asset('storage/adminAvatar/' . Auth::user()->avatar) }}
+                        @else https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3c8dbc&color=fff&size=300&bold=true 
+                        @endif"
+                    class="img-fluid rounded shadow"
+                    style="max-height: 400px; object-fit: contain;">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+
+        document.getElementById('preview-avatar').src = url;
+        document.getElementById('modal-avatar-img').src = url;
+    }
+</script>
+
+

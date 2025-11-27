@@ -10,6 +10,7 @@ use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BuscadorController;
+use App\Http\Controllers\UserController;
 use App\Models\Municipio;
 
 // Ruta inicial -> redirige siempre al login
@@ -110,3 +111,10 @@ Route::get('/inmobiliaria/{id}/detalles', [UsuarioController::class, 'detalles']
 //Ruta para filtros
 Route::get('/buscar', [BuscadorController::class, 'buscar'])
     ->name('buscador.inmuebles');
+
+// Ruta para el perfil de Administrador
+Route::get('/adminPerfil', [UserController::class, 'profile'])->name('perfil');
+Route::get('/adminPerfil/editar', [UserController::class, 'edit'])->name('perfil.edit');
+Route::post('/adminPerfil/actualizar', [UserController::class, 'update'])->name('perfil.update');
+Route::delete('/perfil/eliminar-avatar', [UserController::class, 'deleteAvatar'])->name('perfil.avatar.delete');
+

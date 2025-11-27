@@ -18,7 +18,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Administrador',
                 'email' => 'admin@adso.com',
-                'password' => Hash::make('password'), 
+                'password' => Hash::make('password'),
+                'avatar'   => null, // Para que use la inicial automática "A"
             ]
         );
     }

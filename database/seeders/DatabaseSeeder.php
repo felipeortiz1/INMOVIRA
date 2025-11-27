@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             TipoInmueblesSeeder::class,
             BarriosSeeder::class,
             InmueblesSeeder::class,
+            UserSeeder::class,
         ]);
 
     }

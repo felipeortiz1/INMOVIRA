@@ -28,6 +28,7 @@ class InmuebleRequest extends FormRequest
 
             // Relaciones (ajustadas según tu modelo)
             'idTipoInmueble' => 'required|exists:tipo_inmuebles,id',
+            'idMunicipio' => 'required|exists:municipios,id',
             'idBarrio' => 'required|exists:barrios,id',
             'idUsuario' => 'required|exists:usuarios,id',
 
@@ -37,9 +38,8 @@ class InmuebleRequest extends FormRequest
             'area' => 'nullable|numeric|min:0',
 
             // Campos enteros opcionales
-            'nHabitaciones' => 'nullable|integer|min:0',
-            'nBaños' => 'nullable|integer|min:0',
-            'nParqueaderos' => 'nullable|integer|min:0',
+            'nHabitaciones' => 'nullable|integer|min:0, max:5',
+            'nBaños' => 'nullable|integer|min:0, max:5',
             'nPiso' => 'nullable|integer|min:0',
             'pisoNumero' => 'nullable|integer|min:0',
 
@@ -64,9 +64,25 @@ class InmuebleRequest extends FormRequest
             'titulo.required' => 'El título es obligatorio.',
             'direccion.required' => 'La dirección es obligatoria.',
             'tipoOferta.required' => 'Debe seleccionar un tipo de oferta.',
+            
             'idTipoInmueble.exists' => 'El tipo de inmueble seleccionado no existe.',
+            'idTipoInmueble.required' => 'Debe seleccionar un tipo de inmueble.',
+            
+            'nHabitaciones.min' => 'El número no debe ser negativo.',
+            'nHabitaciones.max' => 'El maximo de habitaciones es 5.',
+
+            'nBaños.min' => 'El número no debe ser negavito.',
+            'nBaños.max' => 'El maximo de baños es 5.',
+
+            'idMunicipio.exists' => 'El municipio seleccionado no existe.',
+            'idMunicipio.required' => 'Debe seleccionar un municipio.',
+            
             'idBarrio.exists' => 'El barrio seleccionado no existe.',
+            'idBarrio.required' => 'Debe seleccionar un Barrio.',
+            
             'idUsuario.exists' => 'El usuario seleccionado no existe.',
+            'idUsuario.required' => 'Debe seleccionar un Usuario.',
+            
             'estadoPublicacion.required' => 'Debe seleccionar un estado para la publicación.',
             'fechaPublicacion.required' => 'Debe ingresar una fecha de publicación.',
             'fechaPublicacion.date' => 'La fecha de publicación no es válida.',

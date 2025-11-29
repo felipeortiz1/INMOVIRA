@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BarrioRequest;
 use App\Models\Barrio;
 use App\Models\Municipio;
 use Illuminate\Database\QueryException;
@@ -86,7 +87,7 @@ class BarrioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BarrioRequest $request)
     {
         Barrio::create($request->all());
         return redirect()->route('barrios.index')
@@ -114,7 +115,7 @@ class BarrioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(BarrioRequest $request, $id)
     {
         $barrio = Barrio::findOrfail($id);
         $barrio->update($request->all());

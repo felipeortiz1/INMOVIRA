@@ -11,28 +11,44 @@
                 </h5>
             </div>
 
+            {{-- Mostrar errores del Request --}}
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <strong>Por favor corrige los siguientes errores:</strong>
+                    <ul class="mt-2 mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
         <div class="card-body p-4">
-            <form action="{{ route('barrios.store')}}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('barrios.store')}}" method="POST" >
                 @csrf
 
                 <!-- Nombre -->
                 <div class="mb-4">
                     <label for="nombre" class="form-label fw-semibold">Nombre del barrio</label>
-                    <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" id="nombre" name="nombre"
-                        placeholder="Ej: Chapinero" required>
-                    <div class="invalid-feedback">Por favor, ingrese el nombre del barrio.</div>
+                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre"
+                        placeholder="Ej: Chapinero">
+                        @error('nombre')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                 </div>
 
                 <!-- Municipio -->
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Municipio</label>
-                    <select class="form-select form-select-lg rounded-3 shadow-sm" name="idMunicipio" id="idMunicipio" required>
+                    <select class="form-select @error('idMunicipio') is-invalid @enderror" name="idMunicipio" id="idMunicipio">
                         <option value="">Seleccione un municipio...</option>
                         @foreach($municipios as $municipio)
                             <option value="{{ $municipio->id }}">{{ $municipio->nombre }}</option>
                         @endforeach
                     </select>
-                    <div class="invalid-feedback">Debe seleccionar un municipio válido.</div>
+                    @error('idMunicipio')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Botones -->

@@ -251,6 +251,7 @@ class InmuebleController extends Controller
             'direccion' => $inmueble->direccion,
             'tipoOferta' => $inmueble->tipoOferta,
             'tipo_inmueble' => $inmueble->tipoInmueble,
+            'municipio' => $inmueble->barrio->municipio,
             'barrio' => $inmueble->barrio,
             'usuario' => $inmueble->usuario,
             'precio' => $inmueble->precio,

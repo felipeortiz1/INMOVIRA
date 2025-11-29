@@ -12,6 +12,19 @@
             </h5>
         </div>
 
+        {{-- Mostrar errores del Request --}}
+        @if ($errors->any())
+            <div class="alert alert-danger mt-3">
+                <strong>Por favor corrige los siguientes errores:</strong>
+                <ul class="mt-2 mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+
         <div class="card-body">
             <form action="{{ route('inmuebles.update', $inmueble->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -20,7 +33,7 @@
                 {{-- Tipo de inmueble --}}
                 <div class="mb-3">
                     <label for="idTipoInmueble" class="form-label">Tipo de Inmueble</label>
-                    <select name="idTipoInmueble" id="idTipoInmueble" class="form-select" required>
+                    <select name="idTipoInmueble" id="idTipoInmueble" class="form-select @error('idTipoInmueble') is-invalid @enderror">
                         <option value="">Seleccione...</option>
                         @foreach ($tipos as $tipo)
                             <option value="{{ $tipo->id }}" {{ $inmueble->idTipoInmueble == $tipo->id ? 'selected' : '' }}>
@@ -28,6 +41,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('idTipoInmueble')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Campos dinámicos --}}
@@ -55,9 +71,16 @@
                 {{-- Reemplazar imágenes --}}
                 <div class="mb-3">
                     <label class="form-label">Reemplazar o agregar imágenes</label>
-                    <input type="file" name="imagenes[]" multiple class="form-control" id="imagenes">
+                    <input type="file" name="imagenes[]" multiple class="form-control @error('imagenes') is-invalid @enderror" id="imagenes">
                     <div id="preview" class="mt-2 d-flex flex-wrap gap-2"></div>
                     <small class="text-muted">Si seleccionas nuevas imágenes, reemplazarán las existentes.</small>
+
+                    @error('imagenes')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                    @enderror
+                    @error('imagenes.*')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
@@ -84,6 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const municipios = @json($municipios);
     const barrios = @json($barrios);
 
+    function error(name) {
+        return `@error('${name}') <span class="text-danger small d-block">{{ $message }}</span> @enderror`;
+    }
+
     function renderCampos() {
         const tipoId = tipoSelect.value;
         if (!tipoId) { contenedor.innerHTML = ''; return; }
@@ -91,119 +118,147 @@ document.addEventListener('DOMContentLoaded', function() {
         const tipo = tipos.find(t => t.id == tipoId)?.nombre.toLowerCase() || '';
         let html = '';
 
-        // Campos comunes a todos los tipos
+        // CAMPOS COMUNES
         html += `
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Título</label>
-                <input type="text" name="titulo" class="form-control" value="${inmueble.titulo || ''}">
+                <input type="text" name="titulo" class="form-control @error('titulo') is-invalid @enderror" value="${inmueble.titulo || ''}">
+                ${error('titulo')}
             </div>
+
             <div class="col-md-4 mb-3">
                 <label class="form-label">Dirección</label>
-                <input type="text" name="direccion" class="form-control" value="${inmueble.direccion || ''}">
+                <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="${inmueble.direccion || ''}">
+                ${error('direccion')}
             </div>
+
             <div class="col-md-4 mb-3">
                 <label class="form-label">Usuario</label>
-                <select class="form-select" name="idUsuario">
+                <select class="form-select @error('idUsuario') is-invalid @enderror" name="idUsuario">
                     <option value="">Seleccione...</option>
                     ${usuarios.map(u => `<option value="${u.id}" ${inmueble.idUsuario == u.id ? 'selected' : ''}>${u.nombre}</option>`).join('')}
                 </select>
+                ${error('idUsuario')}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-3 mb-3">
                 <label class="form-label">Tipo de oferta</label>
-                <select class="form-select" name="tipoOferta">
+                <select class="form-select @error('tipoOferta') is-invalid @enderror" name="tipoOferta">
                     <option value="">Seleccione...</option>
                     <option value="venta" ${inmueble.tipoOferta == 'venta' ? 'selected' : ''}>Venta</option>
                     <option value="arriendo" ${inmueble.tipoOferta == 'arriendo' ? 'selected' : ''}>Arriendo</option>
                     <option value="venta y arriendo" ${inmueble.tipoOferta == 'venta y arriendo' ? 'selected' : ''}>Venta y Arriendo</option>
                 </select>
+                ${error('tipoOferta')}
             </div>
+
             <div class="col-md-3 mb-3">
                 <label class="form-label">Municipio</label>
-                <select class="form-select" name="idMunicipio" id="idMunicipio">
+                <select class="form-select @error('idMunicipio') is-invalid @enderror" name="idMunicipio" id="idMunicipio">
                     <option value="">Seleccione...</option>
                     ${municipios.map(m => `<option value="${m.id}" ${inmueble.idMunicipio == m.id ? 'selected' : ''}>${m.nombre}</option>`).join('')}
                 </select>
+                ${error('idMunicipio')}
             </div>
-            <div class="col-md-3 mb-3" id="campo-barrio">
+
+            <div class="col-md-3 mb-3">
                 <label class="form-label">Barrio</label>
-                <select class="form-select" name="idBarrio" id="idBarrio">
+                <select class="form-select @error('idBarrio') is-invalid @enderror" name="idBarrio" id="idBarrio">
                     <option value="">Seleccione...</option>
                     ${barrios.filter(b => b.idMunicipio == inmueble.idMunicipio).map(b => `<option value="${b.id}" ${inmueble.idBarrio == b.id ? 'selected' : ''}>${b.nombre}</option>`).join('')}
                 </select>
+                ${error('idBarrio')}
             </div>
+
             <div class="col-md-3 mb-3">
                 <label class="form-label">Precio</label>
-                <input type="number" name="precio" step="0.01" class="form-control" value="${inmueble.precio || ''}">
+                <input type="number" step="0.01" name="precio" class="form-control @error('precio') is-invalid @enderror" value="${inmueble.precio || ''}">
+                ${error('precio')}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Área (m²)</label>
-                <input type="number" name="area" class="form-control" value="${inmueble.area || ''}">
+                <input type="number" name="area" class="form-control @error('area') is-invalid @enderror" value="${inmueble.area || ''}">
+                ${error('area')}
             </div>
-        </div>`;
+        </div>
+        `;
 
-        // Campos específicos por tipo
+        // CAMPOS POR TIPO
         if (tipo === 'apartamento') {
             html += `
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Precio Administración</label>
-                    <input type="number" name="precioAdministracion" class="form-control" step="0.01" value="${inmueble.precioAdministracion || ''}">
+                    <input type="number" name="precioAdministracion" step="0.01" class="form-control @error('precioAdministracion') is-invalid @enderror" value="${inmueble.precioAdministracion || ''}">
+                    ${error('precioAdministracion')}
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Piso</label>
-                    <input type="number" name="pisoNumero" class="form-control" value="${inmueble.pisoNumero || ''}">
+                    <input type="number" name="pisoNumero" class="form-control @error('pisoNumero') is-invalid @enderror" value="${inmueble.pisoNumero || ''}">
+                    ${error('pisoNumero')}
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Habitaciones</label>
-                    <input type="number" name="nhabitaciones" class="form-control" value="${inmueble.nhabitaciones || ''}">
+                    <input type="number" name="nHabitaciones" class="form-control @error('nHabitaciones') is-invalid @enderror" value="${inmueble.nHabitaciones || ''}">
+                    ${error('nHabitaciones')}
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Baños</label>
-                    <input type="number" name="nBaños" class="form-control" value="${inmueble.nBaños || ''}">
+                    <input type="number" name="nBaños" class="form-control @error('nBaños') is-invalid @enderror" value="${inmueble.nBaños || ''}">
+                    ${error('nBaños')}
                 </div>
             </div>`;
-        } else if (tipo === 'casa') {
+        }
+
+        if (tipo === 'casa') {
             html += `
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Habitaciones</label>
-                    <input type="number" name="nhabitaciones" class="form-control" value="${inmueble.nhabitaciones || ''}">
+                    <input type="number" name="nHabitaciones" class="form-control @error('nHabitaciones') is-invalid @enderror" value="${inmueble.nHabitaciones || ''}">
+                    ${error('nHabitaciones')}
                 </div>
+
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Baños</label>
-                    <input type="number" name="nBaños" class="form-control" value="${inmueble.nBaños || ''}">
+                    <input type="number" name="nBaños" class="form-control @error('nBaños') is-invalid @enderror" value="${inmueble.nBaños || ''}">
+                    ${error('nBaños')}
                 </div>
-            </div>`;
-        } else if (tipo === 'finca' || tipo === 'lote') {
-            // No hay campos adicionales, solo título, dirección, área, precio y descripción
-        } else if (tipo === 'local comercial') {
-            html += `
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Baño disponible</label>
-                <select name="banos" class="form-select">
-                    <option value="0" ${inmueble.banos == 0 ? 'selected' : ''}>No</option>
-                    <option value="1" ${inmueble.banos == 1 ? 'selected' : ''}>Sí</option>
-                </select>
             </div>`;
         }
 
-        // Descripción y estado para todos
+        if (tipo === 'local comercial') {
+            html += `
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Baño disponible</label>
+                    <select name="banos" class="form-select @error('banos') is-invalid @enderror">
+                        <option value="0" ${inmueble.banos == 0 ? 'selected' : ''}>No</option>
+                        <option value="1" ${inmueble.banos == 1 ? 'selected' : ''}>Sí</option>
+                    </select>
+                    ${error('banos')}
+                </div>
+            </div>`;
+        }
+
+        // DESCRIPCIÓN + ESTADO
         html += `
         <div class="col-md-12 mb-3">
             <label class="form-label">Descripción</label>
-            <textarea name="descripcion" class="form-control" rows="3">${inmueble.descripcion || ''}</textarea>
+            <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" rows="3">${inmueble.descripcion || ''}</textarea>
+            ${error('descripcion')}
         </div>
+
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Estado</label>
-                <select class="form-select" name="estadoPublicacion">
+                <select class="form-select @error('estadoPublicacion') is-invalid @enderror" name="estadoPublicacion">
                     <option value="">Seleccione...</option>
                     <option value="disponible" ${inmueble.estadoPublicacion == 'disponible' ? 'selected' : ''}>Disponible</option>
                     <option value="arrendado" ${inmueble.estadoPublicacion == 'arrendado' ? 'selected' : ''}>Arrendado</option>
@@ -211,22 +266,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     <option value="reservado" ${inmueble.estadoPublicacion == 'reservado' ? 'selected' : ''}>Reservado</option>
                     <option value="inactivo" ${inmueble.estadoPublicacion == 'inactivo' ? 'selected' : ''}>Inactivo</option>
                 </select>
+                ${error('estadoPublicacion')}
             </div>
+
             <div class="col-md-4 mb-3">
                 <label class="form-label">Fecha de publicación</label>
-                <input type="date" name="fechaPublicacion" class="form-control" value="${inmueble.fechaPublicacion || ''}">
+                <input type="date" name="fechaPublicacion" class="form-control @error('fechaPublicacion') is-invalid @enderror" value="${inmueble.fechaPublicacion || ''}">
+                ${error('fechaPublicacion')}
             </div>
         </div>`;
 
         contenedor.innerHTML = html;
 
-        // Filtrar barrios
+        // FILTRAR BARRIOS
         const municipioSelect = document.getElementById('idMunicipio');
         const barrioSelect = document.getElementById('idBarrio');
+
         if(municipioSelect && barrioSelect){
             municipioSelect.addEventListener('change', function(){
                 const mid = parseInt(this.value);
                 barrioSelect.innerHTML = '<option value="">Seleccione...</option>';
+
                 barrios.filter(b => b.idMunicipio === mid).forEach(b => {
                     const opt = document.createElement('option');
                     opt.value = b.id;
@@ -237,10 +297,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Render inicial
     renderCampos();
+
+    // Cambio de tipo
     tipoSelect.addEventListener('change', renderCampos);
 
-    // Vista previa de imágenes
+    // Preview Imágenes
     document.getElementById('imagenes').addEventListener('change', function(event){
         const preview = document.getElementById('preview');
         preview.innerHTML = '';

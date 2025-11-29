@@ -441,6 +441,7 @@
                     <li class="list-group-item"><strong>Dirección:</strong> ${data.direccion}</li>
                     <li class="list-group-item"><strong>Tipo de oferta:</strong> ${data.tipoOferta}</li>
                     <li class="list-group-item"><strong>Tipo de inmueble:</strong> ${data.tipo_inmueble?.nombre || 'N/A'}</li>
+                    <li class="list-group-item"><strong>Municipio:</strong> ${data.municipio?.nombre || 'N/A'}</li>
                     <li class="list-group-item"><strong>Barrio:</strong> ${data.barrio?.nombre || 'N/A'}</li>
                     <li class="list-group-item"><strong>Usuario:</strong> ${data.usuario?.nombre || 'N/A'}</li>
                     <li class="list-group-item"><strong>Precio:</strong> $${parseFloat(data.precio).toLocaleString()}</li>

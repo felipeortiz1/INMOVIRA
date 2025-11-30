@@ -11,40 +11,66 @@
                 </h5>
             </div>
 
+            {{-- Mostrar errores del Request --}}
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <strong>Por favor corrige los siguientes errores:</strong>
+                    <ul class="mt-2 mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="card-body p-4">
                 <form action="{{ route('usuario.store') }}" method="POST">
                     @csrf
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej: Juanito"
-                            required>
+                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" placeholder="Ej: Juanito">
+                        @error('nombre')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" name="email"
-                            placeholder="Ej: xxxxx@gmail.com" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                            placeholder="Ej: xxxxx@gmail.com">
+                        @error('email')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="text" class="form-control" id="telefono" name="telefono"
+                        <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono"
                             placeholder="Ej: 3201234567">
+                        @error('telefono')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
-                        <select name="tipoUsuario" id="tipoUsuario" class="form-select" required>
+                        <select name="tipoUsuario" id="tipoUsuario" class="form-select @error('tipoUsuario') is-invalid @enderror">
                             <option value="">Seleccione...</option>
                             <option value="persona">Persona</option>
                             <option value="inmobiliaria">Inmobiliaria</option>
                         </select>
+                        @error('tipoUsuario')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3" id="empresaContainer" style="display:none;">
                         <label for="nombreEmpresa" class="form-label">Nombre de la Empresa</label>
-                        <input type="text" name="nombreEmpresa" id="nombreEmpresa" class="form-control">
+                        <input type="text" name="nombreEmpresa" id="nombreEmpresa" class="form-control @error('nombreEmpresa') is-invalid @enderror">
+                        @error('nombreEmpresa')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
 

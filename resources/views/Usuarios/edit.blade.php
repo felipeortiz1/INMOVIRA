@@ -11,42 +11,69 @@
                 </h5>
             </div>
 
+            {{-- Mostrar errores del Request --}}
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <strong>Por favor corrige los siguientes errores:</strong>
+                    <ul class="mt-2 mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="card-body">
                 <form action="{{ route('usuario.update', $usuario->id) }}" method="POST">
                     @csrf
 
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre"
-                            value="{{ $usuario->nombre }}" required>
+                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre"
+                            value="{{ $usuario->nombre }}">
+                        @error('nombre')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" name="email"
-                            value="{{ $usuario->email }}" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                            value="{{ $usuario->email }}">
+                        @error('email')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="text" class="form-control" id="telefono" name="telefono"
-                            value="{{ $usuario->telefono }}" required>
+                        <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono"
+                            value="{{ $usuario->telefono }}">
+                        @error('telefono')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
-                        <select class="form-select" name="tipoUsuario" id="tipoUsuario" required>
+                        <select class="form-select @error('tipoUsuario') is-invalid @enderror" name="tipoUsuario" id="tipoUsuario" required>
                             <option value="persona" @if ($usuario->tipoUsuario == 'persona') selected @endif>Persona</option>
 
                             <option value="inmobiliaria" @if ($usuario->tipoUsuario == 'inmobiliaria') selected @endif>Inmobiliaria
                             </option>
                         </select>
+                        @error('tipoUsuario')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-3" id="empresaContainer" style="display:none;">
-                        <label for="nombreEmpresa" class="form-label">Nombre de la Empresa</label>
+                        <label for="nombreEmpresa" class="form-label @error('nombreEmpresa') is-invalid @enderror">Nombre de la Empresa</label>
                         <input type="text" name="nombreEmpresa" id="nombreEmpresa" class="form-control"
                             value="{{ $usuario->nombreEmpresa }}">
+                        @error('nombreEmpresa')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="d-flex justify-content-end mt-4">

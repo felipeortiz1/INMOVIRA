@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MunicipioRequest;
 use App\Models\Municipio;
 use Illuminate\Http\Request;
 
@@ -65,7 +66,7 @@ class MunicipioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MunicipioRequest $request)
     {
         Municipio::create($request->all());
         return redirect()->route('municipios.index')
@@ -92,7 +93,7 @@ class MunicipioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(MunicipioRequest $request, $id)
     {
         $municipio = Municipio::findOrfail($id);
         $municipio->update($request->all());

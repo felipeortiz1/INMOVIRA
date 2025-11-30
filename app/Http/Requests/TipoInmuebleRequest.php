@@ -11,7 +11,7 @@ class TipoInmuebleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class TipoInmuebleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => 'required', 'string', 'max:5', 'unique:tipo_inmuebles, nombre',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nombre.required' => 'El nombre del tipo de inmueble es obligatorio.',
+            'nombre.string'   => 'El nombre debe ser un texto válido.',
+            'nombre.max'      => 'El nombre no puede exceder los 25 caracteres.',
+            'nombre.unique'   => 'Este tipo de inmueble ya existe.',
         ];
     }
 }

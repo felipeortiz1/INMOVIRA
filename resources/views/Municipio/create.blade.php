@@ -11,26 +11,38 @@
                 </h5>
             </div>
 
+            {{-- Mostrar errores del Request --}}
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <strong>Por favor corrige los siguientes errores:</strong>
+                    <ul class="mt-2 mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="card-body p-4">
-                <form action="{{ route('municipios.store') }}" method="POST" class="needs-validation" novalidate>
+                <form action="{{ route('municipios.store') }}" method="POST">
                     @csrf
 
                     <div class="mb-4">
                         <label for="nombre" class="form-label fw-semibold">Nombre del Municipio</label>
-                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm"
-                            id="nombre" name="nombre" placeholder="Ej: Málaga" required>
-                        <div class="invalid-feedback">
-                            Por favor, ingrese el nombre del municipio.
-                        </div>
+                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm  @error('nombre') is-invalid @enderror"
+                            id="nombre" name="nombre" placeholder="Ej: Málaga" >
+                        @error('nombre')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="codigoPostal" class="form-label fw-semibold">Código Postal</label>
-                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm"
-                            id="codigoPostal" name="codigoPostal" placeholder="Ej: 2536" required>
-                        <div class="invalid-feedback">
-                            El código postal es obligatorio.
-                        </div>
+                        <input type="text" class="form-control form-control-lg border-success-subtle shadow-sm  @error('codigoPostal') is-invalid @enderror"
+                            id="codigoPostal" name="codigoPostal" placeholder="Ej: 2536">
+                        @error('codigoPostal')
+                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="d-flex justify-content-end mt-4">

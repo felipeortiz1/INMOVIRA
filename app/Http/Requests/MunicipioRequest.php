@@ -11,7 +11,7 @@ class MunicipioRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class MunicipioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => 'required|string|max:255|unique:municipios,nombre',
+            'codigoPostal' => 'required|string|size:6|unique:municipios,codigoPostal',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nombre.required' => 'El nombre del municipio es obligatorio.',
+            'nombre.unique' => 'Este municipio ya está registrado.',
+            'codigoPostal.required' => 'El código postal es obligatorio.',
+            'codigoPostal.size' => 'El código postal debe tener exactamente 6 caracteres.',
+            'codigoPostal.unique' => 'Este código postal ya está en uso.',
         ];
     }
 }

@@ -3,163 +3,164 @@
 @section('titulo', 'Editar usuario')
 
 @section('content')
-    <div class="container mt-4 animate-fade">
-        <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #ffc107, #e0a800);">
-                <h5 class="mb-0 fw-bold">
-                    <i class="fas fa-fw fa-user"></i> Editar Inmueble
-                </h5>
-            </div>
+<div class="container mt-4 animate-fade">
+    <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #ffc107, #e0a800);">
+            <h5 class="mb-0 fw-bold">
+                <i class="fas fa-fw fa-user"></i> Editar Usuario
+            </h5>
+        </div>
 
-            {{-- Mostrar errores del Request --}}
-            @if ($errors->any())
-                <div class="alert alert-danger mt-3">
-                    <strong>Por favor corrige los siguientes errores:</strong>
-                    <ul class="mt-2 mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        @if ($errors->any())
+            <div class="alert alert-danger m-3">
+                <strong>Corrige los siguientes errores:</strong>
+                <ul class="mb-0 mt-2">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="card-body p-4">
+
+            <form action="{{ route('usuario.update', $usuario->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text"
+                           class="form-control"
+                           name="nombre"
+                           value="{{ $usuario->nombre }}">
                 </div>
-            @endif
 
-            <div class="card-body">
-                <form action="{{ route('usuario.update', $usuario->id) }}" method="POST">
-                    @csrf
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email"
+                           class="form-control"
+                           name="email"
+                           value="{{ $usuario->email }}">
+                </div>
 
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre"
-                            value="{{ $usuario->nombre }}">
-                        @error('nombre')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text"
+                           class="form-control"
+                           name="telefono"
+                           value="{{ $usuario->telefono }}">
+                </div>
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
-                            value="{{ $usuario->email }}">
-                        @error('email')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Usuario</label>
+                    <select name="tipoUsuario" id="tipoUsuario"
+                            class="form-select" required>
+                        <option value="persona" {{ $usuario->tipoUsuario == 'persona' ? 'selected' : '' }}>Persona</option>
+                        <option value="inmobiliaria" {{ $usuario->tipoUsuario == 'inmobiliaria' ? 'selected' : '' }}>Inmobiliaria</option>
+                    </select>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono"
-                            value="{{ $usuario->telefono }}">
-                        @error('telefono')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                {{-- SOLO INMOBILIARIA --}}
+                <div id="empresaContainer" style="display:none;">
 
                     <div class="mb-3">
-                        <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
-                        <select class="form-select @error('tipoUsuario') is-invalid @enderror" name="tipoUsuario" id="tipoUsuario" required>
-                            <option value="persona" @if ($usuario->tipoUsuario == 'persona') selected @endif>Persona</option>
-
-                            <option value="inmobiliaria" @if ($usuario->tipoUsuario == 'inmobiliaria') selected @endif>Inmobiliaria
-                            </option>
-                        </select>
-                        @error('tipoUsuario')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
+                        <label class="form-label">Nombre de la inmobiliaria</label>
+                        <input type="text"
+                               name="nombreEmpresa"
+                               id="nombreEmpresa"
+                               class="form-control"
+                               value="{{ $usuario->nombreEmpresa }}">
                     </div>
 
-                    <div class="mb-3" id="empresaContainer" style="display:none;">
-                        <label for="nombreEmpresa" class="form-label @error('nombreEmpresa') is-invalid @enderror">Nombre de la Empresa</label>
-                        <input type="text" name="nombreEmpresa" id="nombreEmpresa" class="form-control"
-                            value="{{ $usuario->nombreEmpresa }}">
-                        @error('nombreEmpresa')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    {{-- IMAGEN ACTUAL --}}
+                    @if($usuario->imagen)
+                        <div class="mb-3">
+                            <label class="form-label d-block">Imagen actual</label>
+                            <img src="{{ asset('storage/'.$usuario->imagen) }}"
+                                 style="max-height:120px;border-radius:10px;box-shadow:0 5px 10px rgba(0,0,0,0.15)">
+                        </div>
 
-                    <div class="d-flex justify-content-end mt-4">
-                        <a href="{{ route('usuario.index') }}"
-                            class="btn btn-outline-secondary rounded-pill px-4 me-2 shadow-sm">
-                            <i class="fas fa-arrow-left"></i> Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-warning rounded-pill px-4 shadow-sm">
-                            <i class="fa-solid fa-pen-to-square"></i> Actualizar
-                        </button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="eliminar_imagen"
+                                   id="eliminar_imagen"
+                                   value="1">
+                            <label class="form-check-label text-danger" for="eliminar_imagen">
+                                Eliminar imagen actual
+                            </label>
+                        </div>
+                    @endif
+
+                    {{-- NUEVA IMAGEN --}}
+                    <div class="mb-3">
+                        <label class="form-label">Cambiar imagen</label>
+                        <input type="file"
+                               class="form-control"
+                               name="imagen"
+                               id="imagen"
+                               accept="image/*">
+
+                        <img id="previewImagen"
+                            style="margin-top:10px;max-height:140px;border-radius:10px;display:none;">
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+
+                    <a href="{{ route('usuario.index') }}"
+                       class="btn btn-outline-secondary rounded-pill px-4 me-2">
+                        <i class="fas fa-arrow-left"></i> Cancelar
+                    </a>
+
+                    <button type="submit" class="btn btn-warning rounded-pill px-4">
+                        <i class="fa-solid fa-pen-to-square"></i> Actualizar
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
     </div>
-
+</div>
 @endsection
 
-    <style>
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
-            border-color: #198754;
-        }
-
-        .btn-success,
-        .btn-outline-secondary {
-            font-weight: 500;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-success:hover {
-            background-color: #157347;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-    </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tipoUsuario = document.getElementById('tipoUsuario');
-        const empresaContainer = document.getElementById('empresaContainer');
-        const inputEmpresa = document.getElementById('nombreEmpresa');
+document.addEventListener('DOMContentLoaded', function() {
 
-        tipoUsuario.addEventListener('change', function() {
-            if (this.value === 'inmobiliaria') {
-                empresaContainer.style.display = 'block';
-                inputEmpresa.setAttribute('required', 'required');
-            } else {
-                empresaContainer.style.display = 'none';
-                inputEmpresa.removeAttribute('required');
-                inputEmpresa.value = '';
+    const tipoUsuario = document.getElementById('tipoUsuario');
+    const empresa = document.getElementById('empresaContainer');
+    const preview = document.getElementById('previewImagen');
+    const imagen = document.getElementById('imagen');
+
+    function toggleEmpresa(){
+        if(tipoUsuario.value === 'inmobiliaria'){
+            empresa.style.display = 'block';
+        } else {
+            empresa.style.display = 'none';
+        }
+    }
+
+    toggleEmpresa();
+
+    tipoUsuario.addEventListener('change', toggleEmpresa);
+
+    if(imagen){
+        imagen.addEventListener('change', function(e){
+            const file = e.target.files[0];
+
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
             }
         });
-    });
+    }
+
+});
 </script>

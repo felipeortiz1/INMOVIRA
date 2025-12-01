@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\UserController;
+use App\Models\Barrio;
 use App\Models\Municipio;
 
 // Ruta inicial -> redirige siempre al login
@@ -82,7 +83,7 @@ Route::get('/inmueble/{id}/detalles', [InmuebleController::class, 'obtenerDetall
 
 // Obtener barrios por municipio (select dependiente)
 Route::get('/barrios-por-municipio/{id}', function ($id) {
-    return App\Models\Barrio::where('idMunicipio', $id)->get();
+    return Barrio::where('idMunicipio', $id)->get();
 })->name('barrios.porMunicipio');
 
 // ruta para la vista principal

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UsuarioRequest;
+use App\Models\Inmueble;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -124,7 +125,7 @@ public function update(UsuarioRequest $request, $id)
 
     // ✅ Si marcó eliminar imagen
     if ($request->filled('eliminar_imagen') && $usuario->imagen) {
-        \Storage::disk('public')->delete($usuario->imagen);
+        Storage::disk('public')->delete($usuario->imagen);
         $data['imagen'] = null;
     }
 
@@ -133,7 +134,7 @@ public function update(UsuarioRequest $request, $id)
 
         // Eliminar la anterior si existe
         if ($usuario->imagen) {
-            \Storage::disk('public')->delete($usuario->imagen);
+            Storage::disk('public')->delete($usuario->imagen);
         }
 
         $file = $request->file('imagen');
@@ -235,6 +236,28 @@ public function verInmobiliaria($id)
     return view('Inmobiliarias.detalle', compact('inmobiliaria'));
 }
 
+public function buscarInmuebles(Request $request)
+{
+    $tipo = $request->input('tipo');
+    $municipio = $request->input('municipio');
+
+    $inmuebles = Inmueble::query();
+
+    // Filtro por tipo
+    if ($tipo) {
+        $inmuebles->where('tipo', 'LIKE', "%{$tipo}%");
+    }
+
+    // Filtro por municipio
+    if ($municipio) {
+        $inmuebles->where('municipio', 'LIKE', "%{$municipio}%");
+    }
+    
+
+    $inmuebles = $inmuebles->latest()->get();
+
+    return view('buscador.resultados', compact('inmuebles'));
+}
 
 
 

@@ -1,299 +1,284 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inmobiliarias</title>
 
     <style>
-        :root {
+        :root{
             --bg: #FAFCFF;
             --card: #ffffff;
-            --muted: #6b7280;
-            --accent: #1f3b8b;
-            --accent-hover: #274baf;
-            --shadow: 0 10px 28px rgba(0, 0, 0, .08);
-            --radius: 18px;
+            --muted: #7a7f8c;
+            --accent: #8CB4FF;
+            --accent-hover: #6EA1FF;
+            --shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
 
-        body {
-            margin: 0;
-            font-family: Inter, system-ui;
-            background: var(--bg);
-            display: flex;
+        [data-theme="dark"]{
+            --bg: #1a1f2a;
+            --card: #242b38;
+            --muted: #d0d6e0;
+            --accent: #9CC4FF;
+            --accent-hover: #7FB0FF;
+            --shadow: 0 6px 28px rgba(0,0,0,0.55);
+            color: #e6eef8;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 220px;
-            background: #0f172a;
-            min-height: 100vh;
-            padding: 25px 20px;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
+        html,body{height:100%; margin:0; font-family:Inter, Poppins, system-ui;}
+        body{ background:var(--bg); color:#0f172a; transition:.25s; }
 
-        .sidebar h2 {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
+        /* NAV */
+        .nav{
+            display:flex; justify-content:space-between; align-items:center;
+            padding:14px 28px;
+            background:var(--card);
+            box-shadow:var(--shadow);
+            position:sticky; top:0; z-index:120;
         }
+        .nav .left a{
+            color:var(--accent); font-weight:600; margin-right:18px;
+            text-decoration:none; transition:.2s;
+        }
+        .nav .left a:hover{ color:var(--accent-hover); }
 
-        .sidebar a {
-            display: block;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #c7d2fe;
-            transition: .2s;
-        }
+        .btn { padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
+        .btn-ghost { background: transparent; color:var(--accent); border:1px solid rgba(0,0,0,0.07); }
+        .btn-ghost:hover { background: rgba(140,180,255,0.12); }
+        .btn-primary { background:var(--accent); color:white; text-decoration:none; }
+        .btn-primary:hover { background:var(--accent-hover); }
 
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, .08);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        /* MAIN */
-        .main {
-            flex: 1;
-            padding: 40px 30px;
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 25px;
-            color: var(--accent);
-        }
+        .container{ max-width:1120px; margin:36px auto; padding:0 18px; }
+        h1{ text-align:center; margin-bottom:20px; font-size:2rem; }
 
         /* BUSCADOR */
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+        .filters{
+            display:flex; gap:12px; flex-wrap:wrap;
+            background:var(--card);
+            padding:16px;
+            border-radius:14px;
+            box-shadow:var(--shadow);
+            border:1px solid rgba(0,0,0,0.04);
+            margin-bottom:24px;
+        }
+        .filters input{
+            flex:1;
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid rgba(0,0,0,0.1);
+            background:var(--bg);
+        }
+        .filters input:focus{
+            border-color:var(--accent);
+            box-shadow:0 0 0 2px rgba(140,180,255,0.3);
         }
 
-        .search-box input {
-            flex: 1;
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
-            font-size: .95rem;
+        /* GRID / LIST */
+        .list-grid{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+        .list-view{ display:flex; flex-direction:column; }
+        .list-view{ display:block; }
+
+        /* CARD */
+        .card{
+            background:var(--card);
+            border-radius:14px;
+            box-shadow:var(--shadow);
+            overflow:hidden;
+            transition:.25s;
+            display:flex;
+            flex-direction:row;
+            align-items:stretch;
+        }
+        .card:hover{ transform:translateY(-4px); }
+
+        .card img{
+            width:260px;
+            height:180px;
+            object-fit:cover;
+            flex-shrink:0;
         }
 
-        .search-box button {
-            border-radius: 14px;
-            padding: 14px 22px;
-            border: none;
-            background: var(--accent);
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
+        .card-body{
+            padding:14px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
         }
 
-        .search-box button:hover {
-            background: var(--accent-hover);
+        .muted{ color:var(--muted); font-size:.9rem; }
+
+        .actions{
+            margin-top:10px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
         }
 
-        /* CARD HORIZONTAL */
-        .inmo-card {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            background: var(--card);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            margin-bottom: 26px;
-            transition: .3s ease;
-            animation: fadeUp .5s ease;
+        /* MODAL */
+        .modal-backdrop{
+            position:fixed; inset:0;
+            background:rgba(0,0,0,0.45);
+            backdrop-filter:blur(6px);
+            display:flex; justify-content:center; align-items:center;
+            animation:fadeIn .25s;
+            z-index:200;
         }
 
-        .inmo-card:hover {
-            transform: translateY(-7px) scale(1.01);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .12);
+        .modal{
+            background:var(--card);
+            padding:16px;
+            border-radius:14px;
+            width:90%;
+            max-width:600px;
+            max-height:90vh;
+            overflow-y:auto;
+            position:relative;
         }
 
-        .inmo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .modal img{
+            max-width:100%;
+            border-radius:10px;
+            margin-bottom:10px;
         }
 
-        .inmo-info {
-            padding: 22px 28px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .inmo-info h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--accent);
-        }
-
-        .inmo-info p {
-            margin: 5px 0;
-            color: var(--muted);
-            font-size: .95rem;
-        }
-
-        .actions {
-            margin-top: auto;
-            display: flex;
-            gap: 14px;
-            padding-top: 12px;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            border-radius: 999px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: .25s;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        .btn-outline {
-            border: 2px solid var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-outline:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* RESPONSIVE */
-        @media(max-width:900px) {
-
-            body {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                display: flex;
-                overflow-x: auto;
-                gap: 8px;
-                min-height: unset;
-            }
-
-            .sidebar h2 {
-                display: none;
-            }
-
-            .sidebar a {
-                white-space: nowrap;
-            }
-
-            .inmo-card {
-                grid-template-columns: 1fr;
-            }
-
-            .inmo-img {
-                height: 200px;
-            }
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn{
+            from{ opacity:0; transform:translateY(8px); }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- SIDEBAR VERTICAL -->
-    <div class="sidebar">
-        <h2>NAVEGACIÓN</h2>
+    {{-- NAV --}}
+    <nav class="nav">
+        <div class="left">
+            <a href="{{ route('pagina.principal') }}">Inicio</a>
+            <a href="{{ route('vista.arriendo') }}">Arriendo</a>
+            <a href="{{ route('vista.venta') }}">Venta</a>
+            <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
+        </div>
 
-        <a href="{{ route('pagina.principal') }}">🏠 Inicio</a>
-        <a href="{{ route('vista.arriendo') }}">🏘 Arriendo</a>
-        <a href="{{ route('vista.venta') }}">💰 Venta</a>
-        <a href="{{ route('vista.inmobiliarias') }}">🏢 Inmobiliarias</a>
-        <a href="javascript:history.back()">🔙 Volver</a>
-    </div>
+        <div class="right">
+            <button id="toggleTheme" class="btn btn-ghost">🌓</button>
+            <a href="{{ route('login') }}" class="btn btn-ghost">Iniciar sesión</a>
+        </div>
+    </nav>
 
-    <!-- MAIN -->
-    <div class="main">
-
+    <div class="container">
         <h1>Inmobiliarias registradas</h1>
 
-        <!-- BUSCADOR -->
-        <form method="GET" class="search-box" action="{{ route('vista.inmobiliarias') }}">
-            <input type="search" name="q"
-                    placeholder="Buscar inmobiliaria..."
+        {{-- BUSCADOR --}}
+        <form class="filters" method="GET" action="{{ route('vista.inmobiliarias') }}">
+            <input type="search" name="q" placeholder="Buscar inmobiliaria..."
                     value="{{ request('q') }}">
-            <button>Buscar</button>
+            <button class="btn btn-primary">Buscar</button>
+            <a href="{{ route('vista.inmobiliarias') }}" class="btn btn-ghost">Limpiar</a>
         </form>
 
+        <div class="controls" style="margin-bottom:12px; display:flex; align-items:center; gap:10px;">
+            <button id="gridBtn" class="btn btn-ghost">Horizontal</button>
+            <button id="listBtn" class="btn btn-ghost">Lista</button>
+            <span class="muted">Total: <b>{{ $inmobiliarias->count() }}</b></span>
+        </div>
+
         @if($inmobiliarias->isEmpty())
-            <p style="color:#777">No hay inmobiliarias registradas.</p>
+            <div style="text-align:center; margin-top:40px;" class="muted">No hay inmobiliarias registradas.</div>
         @else
+            <div id="listing" class="list-grid">
 
-            @foreach($inmobiliarias as $inm)
-                <div class="inmo-card">
+                @foreach($inmobiliarias as $inm)
 
-                    <div class="inmo-img">
-                        <img src="{{ $inm->imagen
-                            ? asset('storage/'.$inm->imagen)
-                            : asset('img/usuarios/default.png') }}">
-                    </div>
+                    <article class="card">
 
-                    <div class="inmo-info">
+                        <img src="{{ $inm->imagen ? asset('storage/'.$inm->imagen) : asset('img/usuarios/default.png') }}">
 
-                        <h3>{{ $inm->nombreEmpresa }}</h3>
+                        <div class="card-body">
 
-                        <p><b>Representante:</b> {{ $inm->nombre }}</p>
-                        <p><b>Email:</b> {{ $inm->email }}</p>
-                        <p><b>Teléfono:</b> {{ $inm->telefono }}</p>
+                            <h3 style="margin:0;">{{ $inm->nombreEmpresa }}</h3>
 
-                        <div class="actions">
+                            <div class="muted"><b>Representante:</b> {{ $inm->nombre }}</div>
+                            <div class="muted"><b>Email:</b> {{ $inm->email }}</div>
+                            <div class="muted"><b>Teléfono:</b> {{ $inm->telefono }}</div>
 
-                            <!-- APARTADO INDEPENDIENTE -->
-                            <a href="{{ route('inmobiliaria.ver', $inm->id) }}"
-                                class="btn btn-primary">
-                                🔍 Ver más
-                            </a>
+                            <div class="actions">
 
-                            <a href="https://wa.me/57{{ $inm->telefono }}"
-                                target="_blank"
-                                class="btn btn-outline">
-                                📱 WhatsApp
-                            </a>
+                                <a href="{{ route('inmobiliaria.ver', $inm->id) }}" class="btn btn-ghost">
+                                    Ver más
+                                </a>
+
+                                <a href="https://wa.me/57{{ $inm->telefono }}"
+                                    target="_blank"
+                                    class="btn btn-primary">
+                                    WhatsApp
+                                </a>
+
+                            </div>
 
                         </div>
+                    </article>
+                @endforeach
 
-                    </div>
-
-                </div>
-            @endforeach
-
+            </div>
         @endif
     </div>
+
+    {{-- MODAL ROOT --}}
+    <div id="modalRoot" style="display:none;"></div>
+
+    <script>
+        /* TEMA */
+        const body = document.body;
+        const themeBtn = document.getElementById('toggleTheme');
+
+        (function initTheme(){
+            const match = document.cookie.split('; ').find(r => r.startsWith('theme='));
+            const theme = match ? match.split('=')[1] :
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            body.setAttribute('data-theme', theme);
+        })();
+
+        themeBtn.onclick = () => {
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.cookie = "theme="+newTheme+"; path=/; max-age=" + 60*60*24*365;
+        };
+
+        /* GRID/LIST */
+        const listing = document.getElementById('listing');
+        document.getElementById('gridBtn').onclick = () => listing.classList.remove('list-view');
+        document.getElementById('listBtn').onclick = () => listing.classList.add('list-view');
+
+        /* CERRAR MODAL */
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('modal-backdrop') ||
+                e.target.classList.contains('modal-close')) {
+                modalRoot.innerHTML = "";
+                modalRoot.style.display = "none";
+            }
+        });
+
+        /* MOSTRAR MODAL */
+        function mostrarInmobiliaria(imgSrc, htmlContent){
+            const modalRoot = document.getElementById('modalRoot');
+            modalRoot.innerHTML = `
+                <div class="modal-backdrop">
+                    <div class="modal">
+                        <button class="modal-close"
+                            style="position:absolute;right:10px;top:10px;background:transparent;border:none;font-size:20px;cursor:pointer;">✕</button>
+                        <img src="${imgSrc}">
+                        <div>${htmlContent}</div>
+                    </div>
+                </div>
+            `;
+            modalRoot.style.display = "block";
+        }
+    </script>
 
 </body>
 </html>

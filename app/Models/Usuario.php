@@ -13,6 +13,7 @@ class Usuario extends Model
         'telefono',
         'tipoUsuario',
         'nombreEmpresa',
+        'imagen',
         'fechaRegistro'
     ];
 

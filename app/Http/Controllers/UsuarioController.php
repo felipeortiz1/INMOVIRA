@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UsuarioRequest;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
@@ -81,10 +82,27 @@ class UsuarioController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(UsuarioRequest $request)
-    {
-        Usuario::create($request->all());
-        return redirect()->route('usuario.index')->with('success', 'Usuario registrado correctamente');
+{
+    $data = $request->all();
+
+    if ($request->hasFile('imagen')) {
+        $file = $request->file('imagen');
+        $name = time() . '_' . $file->getClientOriginalName();
+
+        // Se guarda en storage/app/public/usuarios
+        $path = $file->storeAs('usuarios', $name, 'public');
+
+        $data['imagen'] = $path;
     }
+
+    Usuario::create($data);
+
+    return redirect()
+        ->route('usuario.index')
+        ->with('success', 'Usuario registrado correctamente');
+}
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -98,12 +116,45 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UsuarioRequest $request, $id)
-    {
-        $usuario = Usuario::findOrfail($id);
-        $usuario->update($request->all());
-        return redirect()->route('usuario.index')->with('success', 'Usuario actualizado correctamente');
+
+public function update(UsuarioRequest $request, $id)
+{
+    $usuario = Usuario::findOrFail($id);
+    $data = $request->all();
+
+    // ✅ Si marcó eliminar imagen
+    if ($request->filled('eliminar_imagen') && $usuario->imagen) {
+        \Storage::disk('public')->delete($usuario->imagen);
+        $data['imagen'] = null;
     }
+
+    // ✅ Si subió nueva imagen
+    if ($request->hasFile('imagen')) {
+
+        // Eliminar la anterior si existe
+        if ($usuario->imagen) {
+            \Storage::disk('public')->delete($usuario->imagen);
+        }
+
+        $file = $request->file('imagen');
+        $name = time() . '_' . $file->getClientOriginalName();
+
+        $path = $file->storeAs('usuarios', $name, 'public');
+
+        $data['imagen'] = $path;
+    }
+
+    $usuario->update($data);
+
+    return redirect()
+        ->route('usuario.index')
+        ->with('success', 'Usuario actualizado correctamente');
+}
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -155,8 +206,13 @@ class UsuarioController extends Controller
         'email' => $inm->email,
         'telefono' => $inm->telefono,
         'direccion' => $inm->direccion,
+        'imagen' => $inm->imagen
+            ? asset('storage/' . $inm->imagen)
+            : asset('storage/inmobiliarias/default.png'),
+
     ]);
 }
+
 
 public function detalles($id)
 {
@@ -171,6 +227,14 @@ public function detalles($id)
         'direccion' => $user->direccion,
     ]);
 }
+
+public function verInmobiliaria($id)
+{
+    $inmobiliaria = Usuario::findOrFail($id);
+
+    return view('Inmobiliarias.detalle', compact('inmobiliaria'));
+}
+
 
 
 

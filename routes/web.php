@@ -107,6 +107,14 @@ Route::get('/inmobiliarias', [UsuarioController::class, 'inmobiliariasVista'])
 Route::get('/inmobiliaria/{id}/detalles', [UsuarioController::class, 'detalles'])
     ->name('inmobiliarias.detalles');
 
+Route::get('/inmobiliaria/{id}', [UsuarioController::class, 'verInmobiliaria'])
+    ->name('inmobiliaria.detalle');
+
+Route::get('/inmobiliaria/{id}', [UsuarioController::class, 'verInmobiliaria'])
+    ->name('inmobiliaria.ver');
+
+
+
 
 //Ruta para filtros
 Route::get('/buscar', [BuscadorController::class, 'buscar'])

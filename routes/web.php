@@ -127,3 +127,7 @@ Route::get('/adminPerfil/editar', [UserController::class, 'edit'])->name('perfil
 Route::post('/adminPerfil/actualizar', [UserController::class, 'update'])->name('perfil.update');
 Route::delete('/perfil/eliminar-avatar', [UserController::class, 'deleteAvatar'])->name('perfil.avatar.delete');
 
+//Ruta para ver los inmuebles que ha publicado un usuario
+
+Route::get('/admin/usuarios/{id}/inmuebles', [UsuarioController::class, 'inmuebles'])
+    ->name('usuarios.inmuebles');

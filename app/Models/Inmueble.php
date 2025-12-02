@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inmueble extends Model
 {
-
     protected $table = 'inmuebles';
+
     protected $fillable = [
         'titulo',
         'direccion',
@@ -30,6 +30,7 @@ class Inmueble extends Model
     ];
 
     // Relaciones
+
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'idUsuario');
@@ -45,14 +46,18 @@ class Inmueble extends Model
         return $this->belongsTo(TipoInmueble::class, 'idTipoInmueble');
     }
 
-    public function imagens()
+    public function imagenes()
     {
         return $this->hasMany(Imagen::class, 'idInmueble');
     }
 
-    public function interaccions()
+    public function interacciones()
     {
         return $this->hasMany(Interaccion::class);
     }
 
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class, 'idMunicipio');
+    }
 }

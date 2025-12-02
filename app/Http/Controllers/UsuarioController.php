@@ -260,5 +260,21 @@ public function buscarInmuebles(Request $request)
 }
 
 
+    public function inmuebles($id)
+{
+    $usuario = Usuario::with([
+        'inmuebles.municipio',
+        'inmuebles.barrio',
+        'inmuebles.tipoInmueble'
+    ])->findOrFail($id);
+
+    $inmuebles = $usuario->inmuebles;
+
+    return view('usuarios.inmuebles', compact('usuario', 'inmuebles'));
+}
+
+
+
+
 
 }

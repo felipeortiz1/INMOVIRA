@@ -60,15 +60,16 @@
                         <input type="text" name="nombreEmpresa" id="nombreEmpresa" class="form-control">
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Logo / Imagen</label>
-                        <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
+                </div>
 
-                        <img id="previewImagen"
-                             src=""
-                             style="display:none;margin-top:10px;max-height:120px;border-radius:10px;">
-                    </div>
+                {{-- IMAGEN PARA TODOS --}}
+                <div class="mb-3">
+                    <label class="form-label">Imagen de perfil</label>
+                    <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
 
+                    <img id="previewImagen"
+                        src=""
+                        style="display:none;margin-top:10px;max-height:120px;border-radius:10px;">
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">

@@ -255,12 +255,12 @@ body{
                         <!-- IMAGEN -->
                         <div class="inmueble-img-zone">
 
-                            @if($inmueble->imagenes->isNotEmpty())
-                                <img src="{{ asset('storage/'.$inmueble->imagenes->first()->ruta) }}"
-                                     class="inmueble-img">
+                            @if($inmueble->imagens->isNotEmpty())
+                                <img src="{{ asset('storage/'.$inmueble->imagens->first()->ruta) }}"
+                                    class="inmueble-img">
                             @else
                                 <img src="{{ asset('img/no-image.png') }}"
-                                     class="inmueble-img">
+                                    class="inmueble-img">
                             @endif
 
                             <div class="img-overlay"></div>

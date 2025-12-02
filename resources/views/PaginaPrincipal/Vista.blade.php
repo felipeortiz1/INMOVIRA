@@ -303,10 +303,11 @@ footer {
                 <!-- Palabras clave -->
                 <input 
                     type="text" 
-                    name="q" 
-                    placeholder="Busca por ubicación, barrio, título o palabra clave"
-                    value="{{ request('q') }}"
+                    name="barrio" 
+                    placeholder="Buscar por municipio, nombre..."
+                    value="{{ request('barrio') }}"
                 >
+
 
                 <!-- Botón -->
                 <button type="submit">

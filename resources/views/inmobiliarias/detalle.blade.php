@@ -22,7 +22,7 @@ body{
     background:var(--bg);
 }
 
-/* NAV VERTICAL */
+/* NAV */
 .nav{
     position:fixed;
     top:0;
@@ -35,6 +35,7 @@ body{
     display:flex;
     flex-direction:column;
     gap:20px;
+    z-index:10;
 }
 
 .nav h2{
@@ -54,7 +55,8 @@ body{
     transition:.25s;
 }
 
-.nav a:hover{
+.nav a:hover,
+.nav a.active{
     background:var(--accent2);
     color:white;
 }
@@ -66,20 +68,19 @@ body{
     animation:fade .6s ease;
 }
 
-/* CARD GRANDE */
+/* CARD PRINCIPAL */
 .detalle-card{
     background:var(--card);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
     overflow:hidden;
     display:grid;
-    grid-template-columns: 400px 1fr;
-    transition:.3s;
+    grid-template-columns: 420px 1fr;
 }
 
+/* IMAGEN */
 .detalle-img{
     background:#e5e7eb;
-    position:relative;
 }
 
 .detalle-img img{
@@ -88,23 +89,13 @@ body{
     object-fit:cover;
 }
 
+/* CONTENIDO */
 .detalle-content{
     padding:36px;
-}
-
-.detalle-content h1{
-    margin-top:0;
-    color:var(--accent);
-    font-size:2rem;
-}
-
-.detalle-content p{
-    margin:8px 0;
-    color:#111827;
-}
-
-.detalle-content .muted{
-    color:var(--muted);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
 }
 
 .badge{
@@ -115,18 +106,57 @@ body{
     border-radius:999px;
     font-size:13px;
     margin-bottom:10px;
+    width:max-content;
+}
+
+.detalle-content h1{
+    margin:0;
+    color:var(--accent);
+    font-size:2.2rem;
+}
+
+.divider{
+    width:60px;
+    height:4px;
+    background:var(--accent2);
+    border-radius:999px;
+    margin:12px 0 20px;
+}
+
+/* DATOS */
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px 30px;
+    margin-bottom:20px;
+}
+
+.info-grid p{
+    margin:0;
+    font-size:15px;
+}
+
+.info-grid span{
+    color:var(--muted);
+    font-weight:500;
+}
+
+.descripcion{
+    margin-top:10px;
+    color:#111827;
+    line-height:1.6;
 }
 
 /* BOTONES */
 .actions{
-    margin-top:25px;
+    margin-top:30px;
     display:flex;
     gap:12px;
     flex-wrap:wrap;
 }
 
 .btn{
-    padding:12px 18px;
+    padding:12px 20px;
     border-radius:14px;
     text-decoration:none;
     font-weight:600;
@@ -136,6 +166,7 @@ body{
     transition:.25s;
     border:none;
     cursor:pointer;
+    font-size:15px;
 }
 
 .btn-primary{
@@ -145,6 +176,7 @@ body{
 
 .btn-primary:hover{
     background:#162f6e;
+    transform:scale(1.04);
 }
 
 .btn-outline{
@@ -170,6 +202,7 @@ body{
 
     .main{
         margin-left:0;
+        padding:20px;
     }
 
     .detalle-card{
@@ -178,6 +211,10 @@ body{
 
     .detalle-img{
         height:260px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
     }
 }
 
@@ -190,20 +227,21 @@ body{
 
 <body>
 
-<!-- NAV VERTICAL -->
+<!-- NAV -->
 <div class="nav">
     <h2>Inmuebles</h2>
     <a href="{{ route('pagina.principal') }}">🏠 Inicio</a>
     <a href="{{ route('vista.arriendo') }}">📌 Arriendo</a>
     <a href="{{ route('vista.venta') }}">💰 Venta</a>
-    <a href="{{ route('vista.inmobiliarias') }}">🏢 Inmobiliarias</a>
+    <a href="{{ route('vista.inmobiliarias') }}" class="active">🏢 Inmobiliarias</a>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
+<!-- CONTENIDO -->
 <div class="main">
 
     <div class="detalle-card">
 
+        <!-- IMAGEN -->
         <div class="detalle-img">
             <img 
                 src="{{ $inmobiliaria->imagen 
@@ -212,18 +250,27 @@ body{
                 alt="Imagen inmobiliaria">
         </div>
 
+        <!-- INFO -->
         <div class="detalle-content">
 
             <span class="badge">Inmobiliaria</span>
 
             <h1>{{ $inmobiliaria->nombreEmpresa }}</h1>
+            <div class="divider"></div>
 
-            <p class="muted"><strong>Representante:</strong> {{ $inmobiliaria->nombre }}</p>
-            <p><strong>Correo:</strong> {{ $inmobiliaria->email }}</p>
-            <p><strong>Teléfono:</strong> {{ $inmobiliaria->telefono }}</p>
-            <p><strong>Dirección:</strong> {{ $inmobiliaria->direccion ?? 'No registrada' }}</p>
-            <p><strong>Descripción:</strong> {{ $inmobiliaria->descripcion ?? 'Sin descripción' }}</p>
+            <div class="info-grid">
+                <p><span>Representante:</span> {{ $inmobiliaria->nombre }}</p>
+                <p><span>Correo:</span> {{ $inmobiliaria->email }}</p>
+                <p><span>Teléfono:</span> {{ $inmobiliaria->telefono }}</p>
+                <p><span>Dirección:</span> {{ $inmobiliaria->direccion ?? 'No registrada' }}</p>
+            </div>
 
+            <p class="descripcion">
+                <strong>Descripción:</strong><br>
+                {{ $inmobiliaria->descripcion ?? 'Sin descripción registrada para esta inmobiliaria.' }}
+            </p>
+
+            <!-- BOTONES -->
             <div class="actions">
                 <a href="https://wa.me/57{{ $inmobiliaria->telefono }}" target="_blank" class="btn btn-primary">
                     💬 Contactar por WhatsApp

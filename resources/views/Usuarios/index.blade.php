@@ -18,6 +18,7 @@
             <a href="{{ route('usuario.create') }}" class="btn btn-primary mb-3 rounded-pill">
                 <i class="fas fa-plus-circle"></i> Crear Usuario
             </a>
+            
 
             <div class="table-responsive">
                 <table class="table table-hover text-center align-middle">
@@ -45,12 +46,12 @@
                             <td>
                                 @if($usuario->tipoUsuario == 'inmobiliaria' && $usuario->imagen)
                                     <img src="{{ asset('storage/'.$usuario->imagen) }}"
-                                         width="60" height="60"
-                                         style="object-fit:cover;border-radius:50%;border:2px solid #0d6efd;">
+                                        width="60" height="60"
+                                        style="object-fit:cover;border-radius:50%;border:2px solid #0d6efd;">
                                 @else
                                     <img src="{{ asset('img/usuarios/default.png') }}"
-                                         width="60" height="60"
-                                         style="object-fit:cover;border-radius:50%;">
+                                        width="60" height="60"
+                                        style="object-fit:cover;border-radius:50%;">
                                 @endif
                             </td>
 
@@ -70,24 +71,25 @@
 
                             <td>
                                 {{-- BOTÓN VER SOLO IMAGEN --}}
-                                @if($usuario->tipoUsuario == 'inmobiliaria' && $usuario->imagen)
-                                    <button onclick="verImagen('{{ asset('storage/'.$usuario->imagen) }}')"
-                                            class="btn btn-sm btn-info text-white rounded-pill">
-                                        <i class="fas fa-eye"></i> Ver
-                                    </button>
-                                @endif
+                                <a href="{{ route('usuarios.inmuebles', $usuario->id) }}" 
+                                    class="btn btn-info btn-sm">
+                                    Ver inmuebles
+                                </a>
+
+
+
 
                                 {{-- EDITAR --}}
                                 <a href="{{ route('usuario.edit',$usuario->id) }}"
-                                   class="btn btn-sm btn-warning rounded-pill">
+                                    class="btn btn-sm btn-warning rounded-pill">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 {{-- ELIMINAR --}}
                                 <form action="{{ route('usuario.destroy',$usuario->id) }}"
-                                      method="POST"
-                                      class="d-inline"
-                                      onsubmit="confirmarEliminacion(event)">
+                                        method="POST"
+                                        class="d-inline"
+                                        onsubmit="confirmarEliminacion(event)">
 
                                     @csrf
                                     @method('DELETE')

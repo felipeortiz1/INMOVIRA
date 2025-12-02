@@ -144,6 +144,7 @@
                 <h3>{{ $item->titulo }}</h3>
 
                 <p><strong style="color:#333;">Municipio:</strong> {{ $item->barrio->municipio->nombre }}</p>
+                <p><strong style="color:#333;">Barrio:</strong> {{ $item->barrio->nombre }}</p>
 
                 <p>{{ Str::limit($item->descripcion, 140) }}</p>
 

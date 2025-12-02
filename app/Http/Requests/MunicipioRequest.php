@@ -3,27 +3,34 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MunicipioRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        // Obtener el ID del municipio para ignorar en el unique al editar
+        $municipioId = $this->route('id');
+
         return [
-            'nombre' => 'required|string|max:255|unique:municipios,nombre',
-            'codigoPostal' => 'required|string|size:6|unique:municipios,codigoPostal',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('municipios', 'nombre')->ignore($municipioId),
+            ],
+
+            'codigoPostal' => [
+                'required',
+                'string',
+                'size:6',
+                Rule::unique('municipios', 'codigoPostal')->ignore($municipioId),
+            ],
         ];
     }
 
@@ -32,6 +39,7 @@ class MunicipioRequest extends FormRequest
         return [
             'nombre.required' => 'El nombre del municipio es obligatorio.',
             'nombre.unique' => 'Este municipio ya está registrado.',
+
             'codigoPostal.required' => 'El código postal es obligatorio.',
             'codigoPostal.size' => 'El código postal debe tener exactamente 6 caracteres.',
             'codigoPostal.unique' => 'Este código postal ya está en uso.',

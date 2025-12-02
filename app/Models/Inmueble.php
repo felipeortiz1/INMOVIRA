@@ -46,7 +46,7 @@ class Inmueble extends Model
         return $this->belongsTo(TipoInmueble::class, 'idTipoInmueble');
     }
 
-    public function imagenes()
+    public function imagens()
     {
         return $this->hasMany(Imagen::class, 'idInmueble');
     }

@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Inmobiliarias</title>
@@ -192,7 +194,7 @@
             margin-bottom: 35px;
         }
 
-        .footer-col h4 {
+        .footer-col h4 { 
             font-size: 1.2rem;
             font-weight: 700;
             color: #007bff;
@@ -271,51 +273,91 @@
         }
 
         /* MULTI SELECT */
-        .multi-select {
-            position: relative;
-            flex: 0.6;
-            background: #f3f6f9;
-            padding: 12px 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            color: #333;
-        }
+        /* ===== MULTI SELECT MEJORADO ===== */
+.multi-select {
+    position: relative;
+    flex: 0.6;
+    background: #f3f6f9;
+    padding: 12px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
 
-        .multi-select-display {
-            user-select: none;
-        }
+.multi-select:hover {
+    border-color: #007bff;
+    background: #ffffff;
+}
 
-        .multi-select-options {
-            position: absolute;
-            top: 55px;
-            left: 0;
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-            display: none;
-            max-height: 260px;
-            overflow-y: auto;
-            z-index: 99;
-        }
+.multi-select-display {
+    user-select: none;
+    font-weight: 500;
+}
 
-        .multi-option {
-            display: flex;
-            align-items: center;
-            padding: 10px 18px;
-            cursor: pointer;
-        }
+/* Panel de opciones */
+.multi-select-options {
+    display: none;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 99;
 
-        .multi-option:hover {
-            background: #eef3ff;
-        }
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
+    row-gap: 10px;
 
-        .multi-option input {
-            margin-right: 10px;
-            cursor: pointer;
-        }
+    justify-items: start; /* ← CLAVE */
+    align-items: start;
+}
+
+
+/* Scroll bonito */
+.multi-select-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.multi-select-options::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 10px;
+}
+
+/* Opciones */
+.multi-option {
+    display: flex;
+    justify-content: flex-start;  
+    align-items: center;
+    text-align: left;             
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f8f9fa;
+    font-size: 0.95rem;
+}
+
+
+.multi-option:hover {
+    background: #007bff;
+    color: white;
+}
+
+.multi-option input {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
     </style>
 
 </head>
@@ -366,7 +408,7 @@
 
                 <!-- BOTÓN -->
                 <button type="submit">
-                    <i class="fas fa-search">Buscar</i> 
+                    <i>Buscar</i> 
                 </button>
             </form>
 
@@ -385,10 +427,10 @@
             <div class="footer-col">
                 <h4>Enlaces</h4>
                 <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Arriendo</a></li>
-                    <li><a href="#">Venta</a></li>
-                    <li><a href="#">Inmobiliarias</a></li>
+                    <li><a href="{{ route('pagina.principal') }}">Inicio</a></li>
+                    <li><a href="{{ route('vista.arriendo') }}">Arriendo</a></li>
+                    <li><a href="{{ route('vista.venta') }}">Venta</a></li>
+                    <li><a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a></li>
                 </ul>
             </div>
 
@@ -402,14 +444,30 @@
             </div>
 
             <div class="footer-col">
-                <h4>Síguenos</h4>
-                <div class="social-icons">
-                    <a href=""><i class="fab fa-facebook-f"></i></a>
-                    <a href=""><i class="fab fa-instagram"></i></a>
-                    <a href=""><i class="fab fa-twitter"></i></a>
-                    <a href=""><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
+    <h4>Síguenos</h4>
+    <div class="social-icons">
+        <a href=""><i class="fab fa-facebook-f"></i></a>
+
+        <a 
+            href="https://www.instagram.com/felipe_ortzzz?igsh=MTR0Mndybzh1NXprdw==" 
+            target="_blank" 
+            rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+        </a>
+
+        <a 
+            href="https://www.instagram.com/dreyan90?igsh=MWpiYTJnbjF1MHQ2bw==" 
+            target="_blank" 
+            rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+        </a>
+
+
+        <a href=""><i class="fab fa-twitter"></i></a>
+        <a href=""><i class="fab fa-linkedin-in"></i></a>
+    </div>
+</div>
+
         </div>
 
         <div class="footer-bottom">

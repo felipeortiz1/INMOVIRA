@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inmobiliarias</title>
@@ -30,26 +31,134 @@
 
         /* NAV */
         .nav{
-            display:flex; justify-content:space-between; align-items:center;
+            display:flex;
+            align-items:center;
             padding:14px 28px;
-            background:var(--card);
+            background:#98FB98; /* ✅ VERDE CLARO */
             box-shadow:var(--shadow);
-            position:sticky; top:0; z-index:120;
+            position:sticky;
+            top:0;
+            z-index:120;
         }
+
+        .nav .left{
+            flex:1;
+            display:flex;
+            justify-content:center; /* CENTRA LOS LINKS */
+            margin-left: 160px;
+        }
+
+
         .nav .left a{
-            color:var(--accent); font-weight:600; margin-right:18px;
-            text-decoration:none; transition:.2s;
+            position: relative;
+            color:#1c7c45;
+            font-weight:700;
+            margin:0 24px;
+            font-size:1.15rem;
+            text-decoration:none;
+            transition: all .3s ease;
+            padding:6px 4px;
         }
-        .nav .left a:hover{ color:var(--accent-hover); }
 
-        .btn { padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
-        .btn-ghost { background: transparent; color:var(--accent); border:1px solid rgba(0,0,0,0.07); }
-        .btn-ghost:hover { background: rgba(140,180,255,0.12); }
-        .btn-primary { background:var(--accent); color:white; text-decoration:none; }
-        .btn-primary:hover { background:var(--accent-hover); }
+        /* Línea oculta debajo */
+        .nav .left a::after{
+            content:"";
+            position:absolute;
+            bottom:-4px;
+            left:50%;
+            width:0%;
+            height:3px;
+            background:#1c7c45;
+            border-radius:5px;
+            transition:all .3s ease;
+        }
 
-        .container{ max-width:1120px; margin:36px auto; padding:0 18px; }
-        h1{ text-align:center; margin-bottom:20px; font-size:2rem; }
+        /* Cuando pasas el mouse */
+        .nav .left a:hover{
+            transform:translateY(-2px);
+            color:#14663a;
+        }
+
+        /* Línea aparece animada */
+        .nav .left a:hover::after{
+            width:100%;
+            left:0;
+        }
+
+        .nav .left a.active{
+            color:#14663a;
+        }
+
+        .nav .left a.active::after{
+            width:100%;
+            left:0;
+        }
+
+        .btn{
+            padding:8px 12px;
+            border-radius:10px;
+            border:none;
+            cursor:pointer;
+            font-weight:600;
+        }
+        .btn-ghost{
+            background:transparent;
+            color:var(--accent);
+            border:1px solid rgba(0,0,0,0.07);
+            transition:.2s;
+        }
+        /* ✅ BOTÓN INICIAR SESIÓN - AZUL OSCURO ÚNICO */
+        .btn-login{
+            background:#00BFFF;   /* azul oscuro casi negro */
+            text-decoration: none;
+            color:white;
+            border:none;
+            padding:8px 14px;
+            border-radius:10px;
+            font-weight:700;
+            transition:.2s ease;
+            
+        }
+
+        .btn-login:hover{
+            background:#020617; /* aún más oscuro en hover */
+            transform:translateY(-1px);
+        }
+
+        /* en modo oscuro sigue viéndose bien */
+        [data-theme="dark"] .btn-login{
+            background:#0b1220;
+        }
+
+        .btn-primary{ background:var(--accent); color:white; }
+        .btn-primary:hover{ background:var(--accent-hover); }
+
+        .container{ 
+            max-width:1250px; 
+            margin:36px auto; 
+            padding:0 18px; 
+        }
+
+        h1{
+            text-align: right;
+            margin-right: 390px;
+            margin-bottom: 20px;
+
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: .1px;
+            color:#065f46;
+
+            opacity:1;
+            transform: translateX(-20px);
+            animation: titleIn .7s ease forwards;
+        }
+
+        h1 span{
+            color:#22c55e;
+            font-weight:900;
+        }
 
         /* BUSCADOR */
         .filters{
@@ -160,17 +269,17 @@
             <a href="{{ route('pagina.principal') }}">Inicio</a>
             <a href="{{ route('vista.arriendo') }}">Arriendo</a>
             <a href="{{ route('vista.venta') }}">Venta</a>
-            <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
+            <a href="{{ route('vista.inmobiliarias') }}" class="active">Inmobiliarias</a>
         </div>
 
         <div class="right">
             <button id="toggleTheme" class="btn btn-ghost">🌓</button>
-            <a href="{{ route('login') }}" class="btn btn-ghost">Iniciar sesión</a>
+            <a href="{{ route('login') }}" class="btn btn-login">Iniciar sesión</a>
         </div>
     </nav>
 
     <div class="container">
-        <h1>Inmobiliarias registradas</h1>
+    <h1>Inmobiliarias <span>Registradas</span></h1>
 
         {{-- BUSCADOR --}}
         <form class="filters" method="GET" action="{{ route('vista.inmobiliarias') }}">

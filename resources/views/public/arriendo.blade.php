@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inmuebles en Arriendo</title>
@@ -10,9 +12,9 @@
             --bg: #FAFCFF;
             --card: #ffffff;
             --muted: #7a7f8c;
-            --accent: #8CB4FF;
+            --accent: #98FB98;
             --accent-hover: #6EA1FF;
-            --success: #7DD88C;
+            --success: #6EA1FF;
             --danger: #FF8A8A;
             --shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
@@ -40,21 +42,70 @@
         }
 
         .nav{
-            display:flex; justify-content:space-between; align-items:center;
+            display:flex;
+            align-items:center;
             padding:14px 28px;
-            background:var(--card);
+            background:#98FB98; /* ✅ VERDE CLARO */
             box-shadow:var(--shadow);
-            position:sticky; top:0; z-index:120;
+            position:sticky;
+            top:0;
+            z-index:120;
         }
 
-        .nav .left a{
-            color:var(--accent);
-            font-weight:600;
-            margin-right:18px;
-            text-decoration:none;
-            transition:.2s;
+        .nav .left{
+            flex:1;
+            display:flex;
+            justify-content:center; /* CENTRA LOS LINKS */
+            margin-left: 160px;
         }
-        .nav .left a:hover{ color:var(--accent-hover); }
+
+
+        .nav .left a{
+        position: relative;
+            color:#1c7c45;
+            font-weight:700;
+            margin:0 24px;
+            font-size:1.15rem;
+            text-decoration:none;
+            transition: all .3s ease;
+            padding:6px 4px;
+        }
+
+        /* Línea oculta debajo */
+        .nav .left a::after{
+            content:"";
+            position:absolute;
+            bottom:-4px;
+            left:50%;
+            width:0%;
+            height:3px;
+            background:#1c7c45;
+            border-radius:5px;
+            transition:all .3s ease;
+        }
+
+        /* Cuando pasas el mouse */
+        .nav .left a:hover{
+            transform:translateY(-2px);
+            color:#14663a;
+        }
+
+        /* Línea aparece animada */
+        .nav .left a:hover::after{
+            width:100%;
+            left:0;
+        }
+
+        .nav .left a.active{
+            color:#14663a;
+        }
+
+        .nav .left a.active::after{
+            width:100%;
+            left:0;
+        }
+
+
 
         .btn{
             padding:8px 12px;
@@ -69,13 +120,59 @@
             border:1px solid rgba(0,0,0,0.07);
             transition:.2s;
         }
-        .btn-ghost:hover{ background:rgba(140,180,255,0.12); }
+        /* ✅ BOTÓN INICIAR SESIÓN - AZUL OSCURO ÚNICO */
+        .btn-login{
+            background:#00BFFF;   /* azul oscuro casi negro */
+            text-decoration: none;
+            color:white;
+            border:none;
+            padding:8px 14px;
+            border-radius:10px;
+            font-weight:700;
+            transition:.2s ease;
+            
+        }
+
+        .btn-login:hover{
+            background:#020617; /* aún más oscuro en hover */
+            transform:translateY(-1px);
+        }
+
+        /* en modo oscuro sigue viéndose bien */
+        [data-theme="dark"] .btn-login{
+            background:#0b1220;
+        }
+
         .btn-primary{ background:var(--accent); color:white; }
         .btn-primary:hover{ background:var(--accent-hover); }
 
-        .container{ max-width:1120px; margin:36px auto; padding:0 18px; }
+        .container{
+            max-width:1350px; 
+            margin:36px auto; 
+            padding:0 18px; 
+        }
 
-        h1{ text-align:center; margin-bottom:20px; font-size:2rem; }
+        h1{
+            text-align: right;
+            margin-right: 390px;
+            margin-bottom: 20px;
+
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: .1px;
+            color:#065f46;
+
+            opacity:1;
+            transform: translateX(-20px);
+            animation: titleIn .7s ease forwards;
+        }
+
+        h1 span{
+            color:#22c55e;
+            font-weight:900;
+        }
+
 
         /* CONTENEDOR PRINCIPAL: FILTROS + LISTADO */
         .main-content{
@@ -85,7 +182,7 @@
 
         /* FILTROS LATERALES */
         .filters-wrapper{
-            width:250px;
+            width:270px;
             flex-shrink:0;
         }
 
@@ -126,8 +223,8 @@
 
         .list-grid{
             display:grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap:20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap:26px;
             flex:1;
         }
 
@@ -143,7 +240,7 @@
 
         .card{
             background:var(--card);
-            border-radius:14px;
+            border-radius:18px;
             overflow:hidden;
             box-shadow:var(--shadow);
             transition:transform .18s;
@@ -156,14 +253,14 @@
 
         .card img{
             width:100%;
-            height:180px;
+            height:260px;
             object-fit:cover;
             background:#d7d7d7;
             display:block;
         }
 
         .card-body{
-            padding:14px;
+            padding:18px;
             display:flex;
             flex-direction:column;
             flex:1;
@@ -172,7 +269,7 @@
         .card h3{
             margin:0;
             color:var(--accent);
-            font-size:1.1rem;
+            font-size:1.25rem;
         }
 
         .muted{ color:var(--muted); font-size:0.95rem; }
@@ -180,7 +277,7 @@
         .price{
             font-weight:700;
             color:var(--success);
-            font-size:1rem;
+            font-size:1.15rem;
         }
 
         .fav, .open-modal{
@@ -267,18 +364,20 @@
 <nav class="nav">
     <div class="left">
         <a href="{{ url('/') }}">Inicio</a>
-        <a href="{{ route('vista.arriendo') }}">Arriendo</a>
+        <a href="{{ route('vista.arriendo') }}" class="active">Arriendo</a>
         <a href="{{ route('vista.venta') }}">Venta</a>
         <a href="{{ route('vista.inmobiliarias') }}">Inmobiliarias</a>
     </div>
     <div class="right">
         <button id="toggleTheme" class="btn btn-ghost">🌓</button>
-        <a href="{{ route('login') }}" class="btn btn-ghost">Iniciar sesión</a>
+        <a href="{{ route('login') }}" class="btn btn-login">Iniciar sesión</a>
+
     </div>
 </nav>
 
 <div class="container fade-in">
-    <h1>Inmuebles en Arriendo</h1>
+    <h1>Inmuebles en <span>Arriendo</span></h1>
+
 
     <button id="toggleFilters" class="btn btn-ghost">Ocultar/Mostrar filtros</button>
 

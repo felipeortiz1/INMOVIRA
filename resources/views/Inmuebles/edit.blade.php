@@ -159,7 +159,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label class="form-label">Municipio</label>
                 <select class="form-select @error('idMunicipio') is-invalid @enderror" name="idMunicipio" id="idMunicipio">
                     <option value="">Seleccione...</option>
-                    ${municipios.map(m => `<option value="${m.id}" ${inmueble.idMunicipio == m.id ? 'selected' : ''}>${m.nombre}</option>`).join('')}
+                    @foreach($municipios as $m)
+                        <option value="{{ $m->id }}" 
+                            {{ optional($inmueble->barrio->municipio)->id == $m->id ? 'selected' : '' }}>
+                            {{ $m->nombre }}
+                        </option>
+                    @endforeach
                 </select>
                 ${error('idMunicipio')}
             </div>
@@ -168,7 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label class="form-label">Barrio</label>
                 <select class="form-select @error('idBarrio') is-invalid @enderror" name="idBarrio" id="idBarrio">
                     <option value="">Seleccione...</option>
-                    ${barrios.filter(b => b.idMunicipio == inmueble.idMunicipio).map(b => `<option value="${b.id}" ${inmueble.idBarrio == b.id ? 'selected' : ''}>${b.nombre}</option>`).join('')}
+                    @foreach($barrios as $b)
+                        <option value="{{ $b->id }}" data-municipio="{{ $b->idMunicipio }}"
+                            {{ $inmueble->idBarrio == $b->id ? 'selected' : '' }}>
+                            {{ $b->nombre }}
+                        </option>
+                    @endforeach
                 </select>
                 ${error('idBarrio')}
             </div>
@@ -279,22 +289,39 @@ document.addEventListener('DOMContentLoaded', function() {
         contenedor.innerHTML = html;
 
         // FILTRAR BARRIOS
-        const municipioSelect = document.getElementById('idMunicipio');
-        const barrioSelect = document.getElementById('idBarrio');
+        document.addEventListener("DOMContentLoaded", function(){
 
-        if(municipioSelect && barrioSelect){
-            municipioSelect.addEventListener('change', function(){
-                const mid = parseInt(this.value);
-                barrioSelect.innerHTML = '<option value="">Seleccione...</option>';
+            const municipioSelect = document.getElementById("municipio"); // ID correcto
+            const barrioSelect = document.getElementById("idBarrio");
 
-                barrios.filter(b => b.idMunicipio === mid).forEach(b => {
-                    const opt = document.createElement('option');
-                    opt.value = b.id;
-                    opt.textContent = b.nombre;
-                    barrioSelect.appendChild(opt);
+            if(municipioSelect && barrioSelect){
+
+                // 👉 FILTRAR BARRIOS CUANDO CAMBIA MUNICIPIO
+                municipioSelect.addEventListener("change", function(){
+
+                    const mid = parseInt(this.value);
+                    
+                    barrioSelect.innerHTML = '<option value="">Seleccione...</option>';
+
+                    // filtramos por atributo del HTML (data-municipio)
+                    @json($barrios).forEach(b => {
+                        if (b.idMunicipio === mid){
+                            const opt = document.createElement("option");
+                            opt.value = b.id;
+                            opt.textContent = b.nombre;
+                            barrioSelect.appendChild(opt);
+                        }
+                    });
                 });
-            });
-        }
+
+                // 👉 CARGAR BARRIOS DESDE EL MUNICIPIO ACTUAL EN EDITAR
+                const municipioActual = municipioSelect.value;
+                if(municipioActual){
+                    municipioSelect.dispatchEvent(new Event('change'));
+                    barrioSelect.value = "{{ $inmueble->idBarrio }}";
+                }
+            }
+        });
     }
 
     // Render inicial

@@ -7,7 +7,7 @@
 
     <style>
 /* ===============================
-   VARIABLES GLOBALES PREMIUM
+    VARIABLES GLOBALES PREMIUM
 ================================ */
 :root {
     --primary: #0057ff;
@@ -21,7 +21,7 @@
 }
 
 /* ===============================
-   BODY + FONDO PREMIUM
+    BODY + FONDO PREMIUM
 ================================ */
 body {
     margin: 0;
@@ -31,7 +31,7 @@ body {
 }
 
 /* ===============================
-   CONTENEDOR PRINCIPAL
+    CONTENEDOR PRINCIPAL
 ================================ */
 .container {
     max-width: 1200px;
@@ -40,7 +40,7 @@ body {
 }
 
 /* ===============================
-   BOTÓN VOLVER
+    BOTÓN VOLVER
 ================================ */
 .back {
     display: inline-flex;
@@ -64,7 +64,7 @@ body {
 }
 
 /* ===============================
-   TITULO + SUBTITULO
+    TITULO + SUBTITULO
 ================================ */
 h1 {
     font-size: 2.2rem;
@@ -82,7 +82,7 @@ h1 {
 }
 
 /* ===============================
-   GRID DE RESULTADOS
+    GRID DE RESULTADOS
 ================================ */
 .results-grid {
     display: grid;
@@ -91,7 +91,7 @@ h1 {
 }
 
 /* ===============================
-   TARJETAS PRO
+    TARJETAS PRO
 ================================ */
 .card {
     background: var(--glass);
@@ -110,7 +110,7 @@ h1 {
 }
 
 /* ===============================
-   IMAGEN TARJETA
+    IMAGEN TARJETA
 ================================ */
 .card img {
     width: 100%;
@@ -125,21 +125,21 @@ h1 {
 }
 
 /* ===============================
-   BOTONES SOBRE IMAGEN
+    BOTONES SOBRE IMAGEN
 ================================ */
 .card button {
     backdrop-filter: blur(5px);
 }
 
 /* ===============================
-   CONTENIDO TARJETA
+    CONTENIDO TARJETA
 ================================ */
 .card-content {
     padding: 20px;
 }
 
 /* ===============================
-   TAG DE TIPO
+    TAG DE TIPO
 ================================ */
 .tag {
     display: inline-block;
@@ -153,7 +153,7 @@ h1 {
 }
 
 /* ===============================
-   TITULO INMUEBLE
+    TITULO INMUEBLE
 ================================ */
 .card h3 {
     margin: 0 0 10px;
@@ -162,7 +162,7 @@ h1 {
 }
 
 /* ===============================
-   TEXTOS INFO
+    TEXTOS INFO
 ================================ */
 .card p {
     margin-bottom: 6px;
@@ -172,7 +172,7 @@ h1 {
 }
 
 /* ===============================
-   BOTONES SOBRE LA IMAGEN
+    BOTONES SOBRE LA IMAGEN
 ================================ */
 .fav {
     position: absolute;
@@ -214,7 +214,7 @@ h1 {
 }
 
 /* ===============================
-   MENSAJE SIN RESULTADOS
+    MENSAJE SIN RESULTADOS
 ================================ */
 .no-results {
     background: linear-gradient(120deg, #fff7e6, #fff3cd);
@@ -229,7 +229,7 @@ h1 {
 }
 
 /* ===============================
-   MODAL MEJORADO
+    MODAL MEJORADO
 ================================ */
 #imgModal .modal {
     animation: zoomIn .3s ease;
@@ -255,7 +255,7 @@ h1 {
 }
 
 /* ===============================
-   RESPONSIVE
+    RESPONSIVE
 ================================ */
 @media (max-width: 600px) {
 

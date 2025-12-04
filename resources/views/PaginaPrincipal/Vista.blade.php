@@ -3,6 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -274,89 +275,88 @@
 
         /* MULTI SELECT */
         /* ===== MULTI SELECT MEJORADO ===== */
-.multi-select {
-    position: relative;
-    flex: 0.6;
-    background: #f3f6f9;
-    padding: 12px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-}
+        .multi-select {
+            position: relative;
+            flex: 0.6;
+            background: #f3f6f9;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #333;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
 
-.multi-select:hover {
-    border-color: #007bff;
-    background: #ffffff;
-}
+        .multi-select:hover {
+            border-color: #007bff;
+            background: #ffffff;
+        }
 
-.multi-select-display {
-    user-select: none;
-    font-weight: 500;
-}
+        .multi-select-display {
+            user-select: none;
+            font-weight: 500;
+        }
 
-/* Panel de opciones */
-.multi-select-options {
-    display: none;
-    position: absolute;
-    top: 65px;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-radius: 18px;
-    padding: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    max-height: 220px;
-    overflow-y: auto;
-    z-index: 99;
+        /* Panel de opciones */
+        .multi-select-options {
+            display: none;
+            position: absolute;
+            top: 65px;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 99;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 15px;
-    row-gap: 10px;
-
-    justify-items: start; /* ← CLAVE */
-    align-items: start;
-}
+            grid-template-columns: 1fr;
+            column-gap: 15px;
+            row-gap: 10px;
+            justify-items: start;
+            align-items: start;
+        }
 
 
-/* Scroll bonito */
-.multi-select-options::-webkit-scrollbar {
-    width: 6px;
-}
 
-.multi-select-options::-webkit-scrollbar-thumb {
-    background: #007bff;
-    border-radius: 10px;
-}
+        /* Scroll bonito */
+        .multi-select-options::-webkit-scrollbar {
+            width: 6px;
+        }
 
-/* Opciones */
-.multi-option {
-    display: flex;
-    justify-content: flex-start;  
-    align-items: center;
-    text-align: left;             
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: #f8f9fa;
-    font-size: 0.95rem;
-}
+        .multi-select-options::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 10px;
+        }
+
+        /* Opciones */
+        .multi-option {
+            display: flex;
+            justify-content: flex-start;  
+            align-items: center;
+            text-align: left;             
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+            font-size: 0.95rem;
+        }
 
 
-.multi-option:hover {
-    background: #007bff;
-    color: white;
-}
+        .multi-option:hover {
+            background: #007bff;
+            color: white;
+        }
 
-.multi-option input {
-    cursor: pointer;
-    transform: scale(1.1);
-}
+        .multi-option input {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
 
     </style>
 
@@ -538,9 +538,11 @@
             const options = document.getElementById("multiOptions");
             const container = document.getElementById("multiSelect");
 
-            container.addEventListener("click", () => {
-                options.style.display = options.style.display === "block" ? "none" : "block";
+            container.addEventListener("click", (e) => {
+                e.stopPropagation();
+                options.style.display = (options.style.display === "grid") ? "none" : "grid";
             });
+
 
             document.querySelectorAll('.multi-option input').forEach(chk => {
                 chk.addEventListener("change", () => {

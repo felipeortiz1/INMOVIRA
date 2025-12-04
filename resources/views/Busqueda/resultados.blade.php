@@ -6,133 +6,270 @@
     <title>Resultados de la búsqueda</title>
 
     <style>
-        /* 🎨 Variables globales de colores para facilitar cambios */
-        :root {
-            --primary: #0057ff;
-            --text-dark: #222;
-            --text-light: #666;
-            --border: #e3e7ef;
-            --bg: #f6f8fd;
-        }
+/* ===============================
+   VARIABLES GLOBALES PREMIUM
+================================ */
+:root {
+    --primary: #0057ff;
+    --primary-dark: #003ecb;
+    --accent: #00c2ff;
+    --glass: rgba(255,255,255,0.75);
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --border: rgba(0,0,0,0.08);
+    --bg: linear-gradient(180deg, #f8fafc, #eef2ff);
+}
 
-        /* Estilos generales del body */
-        body {
-            margin: 0;
-            font-family: "Poppins", sans-serif;
-            background: var(--bg);
-            color: var(--text-dark);
-        }
+/* ===============================
+   BODY + FONDO PREMIUM
+================================ */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+}
 
-        /* Contenedor central para la página */
-        .container {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
+/* ===============================
+   CONTENEDOR PRINCIPAL
+================================ */
+.container {
+    max-width: 1200px;
+    margin: 70px auto;
+    padding: 0 24px;
+}
 
-        /* Enlace "volver" */
-        .back {
-            display: inline-block;
-            margin-bottom: 25px;
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 500;
-        }
+/* ===============================
+   BOTÓN VOLVER
+================================ */
+.back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    text-decoration: none;
+    color: white;
+    background: var(--primary);
+    padding: 9px 18px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: .9rem;
+    transition: all .25s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,.1);
+}
 
-        /* Título principal */
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: var(--primary);
-        }
+.back:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
 
-        /* Subtítulo */
-        .subtitle {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            margin-bottom: 35px;
-        }
+/* ===============================
+   TITULO + SUBTITULO
+================================ */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        /* 🧱 Grid responsiva para mostrar tarjetas */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 25px;
-        }
+.subtitle {
+    font-size: .95rem;
+    color: var(--text-light);
+    margin-bottom: 40px;
+}
 
-        /* Estilo general de las tarjetas */
-        .card {
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 0;
-            overflow: hidden;
-            transition: 0.3s ease;
-            cursor: pointer;
-        }
+/* ===============================
+   GRID DE RESULTADOS
+================================ */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
 
-        /* Efecto hover en tarjetas */
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
-        }
+/* ===============================
+   TARJETAS PRO
+================================ */
+.card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+}
 
-        /* Imagen superior de la tarjeta */
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #d7d7d7;
-            display: block;
-        }
+.card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    border-color: var(--primary);
+}
 
-        /* Contenido interno de la tarjeta */
-        .card-content {
-            padding: 18px;
-        }
+/* ===============================
+   IMAGEN TARJETA
+================================ */
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: .4s ease;
+}
 
-        /* Título del inmueble */
-        .card h3 {
-            margin: 0 0 9px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
+.card:hover img {
+    transform: scale(1.06);
+}
 
-        /* Párrafos descriptivos */
-        .card p {
-            margin-bottom: 8px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            line-height: 1.4rem;
-        }
+/* ===============================
+   BOTONES SOBRE IMAGEN
+================================ */
+.card button {
+    backdrop-filter: blur(5px);
+}
 
-        /* Etiqueta superior con el tipo de inmueble */
-        .tag {
-            display: inline-block;
-            background: rgba(0, 87, 255, 0.12);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
+/* ===============================
+   CONTENIDO TARJETA
+================================ */
+.card-content {
+    padding: 20px;
+}
 
-        /* Estilo del mensaje cuando NO hay resultados */
-        .no-results {
-            background: #fff3cd;
-            border-left: 6px solid #ffcc00;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin-top: 20px;
-            color: #7a6c00;
-            font-size: 0.95rem;
-        }
-    </style>
+/* ===============================
+   TAG DE TIPO
+================================ */
+.tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* ===============================
+   TITULO INMUEBLE
+================================ */
+.card h3 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* ===============================
+   TEXTOS INFO
+================================ */
+.card p {
+    margin-bottom: 6px;
+    color: var(--text-light);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+/* ===============================
+   BOTONES SOBRE LA IMAGEN
+================================ */
+.fav {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    font-size: 18px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.fav:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Botón ver imágenes */
+.card .btn {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    border-radius: 50px;
+    background: white;
+    border: none;
+    font-size: .8rem;
+    padding: 6px 14px;
+    box-shadow: 0 8px 15px rgba(0,0,0,.15);
+    transition: .3s;
+}
+
+.card .btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* ===============================
+   MENSAJE SIN RESULTADOS
+================================ */
+.no-results {
+    background: linear-gradient(120deg, #fff7e6, #fff3cd);
+    border-left: 6px solid #ffcc00;
+    padding: 22px;
+    border-radius: 14px;
+    max-width: 550px;
+    margin-top: 20px;
+    color: #7a6c00;
+    font-size: 0.95rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+/* ===============================
+   MODAL MEJORADO
+================================ */
+#imgModal .modal {
+    animation: zoomIn .3s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Botones carrusel animados */
+#prevBtn,
+#nextBtn,
+#zoomBtn {
+    transition: all .25s ease;
+}
+
+#prevBtn:hover,
+#nextBtn:hover,
+#zoomBtn:hover {
+    transform: scale(1.08);
+    background: var(--primary-dark) !important;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 600px) {
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .card img {
+        height: 180px;
+    }
+
+}
+</style>
+
 
 </head>
 

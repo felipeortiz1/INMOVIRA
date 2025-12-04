@@ -157,7 +157,7 @@ class InmuebleController extends Controller
 
     public function edit($id)
     {
-        $inmueble = Inmueble::with('imagens')->findOrFail($id);
+        $inmueble = Inmueble::with(['imagens', 'barrio.municipio'])->findOrFail($id);
         $municipios = Municipio::all();
         $barrios = Barrio::all();
         $tipos = TipoInmueble::all();

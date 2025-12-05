@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <option value="">Seleccione...</option>
                     @foreach($municipios as $m)
                         <option value="{{ $m->id }}" 
-                            {{ optional($inmueble->barrio->municipio)->id == $m->id ? 'selected' : '' }}>
+                            {{ $inmueble->idMunicipio == $m->id ? 'selected' : '' }}>
                             {{ $m->nombre }}
                         </option>
                     @endforeach
@@ -288,41 +288,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
         contenedor.innerHTML = html;
 
-        // FILTRAR BARRIOS
-        document.addEventListener("DOMContentLoaded", function(){
+        activarFiltro();
+    }
 
-            const municipioSelect = document.getElementById("municipio"); // ID correcto
+    // Filtro dinámico de municipio → barrio
+        function activarFiltro() {
+            const municipioSelect = document.getElementById("idMunicipio");
             const barrioSelect = document.getElementById("idBarrio");
 
-            if(municipioSelect && barrioSelect){
+            if (!municipioSelect || !barrioSelect) return;
 
-                // 👉 FILTRAR BARRIOS CUANDO CAMBIA MUNICIPIO
-                municipioSelect.addEventListener("change", function(){
+            // FILTRADO AL CAMBIAR MUNICIPIO
+            municipioSelect.addEventListener("change", function () {
+                const mid = parseInt(this.value);
 
-                    const mid = parseInt(this.value);
-                    
-                    barrioSelect.innerHTML = '<option value="">Seleccione...</option>';
+                barrioSelect.innerHTML = '<option value="">Seleccione...</option>';
 
-                    // filtramos por atributo del HTML (data-municipio)
-                    @json($barrios).forEach(b => {
-                        if (b.idMunicipio === mid){
-                            const opt = document.createElement("option");
-                            opt.value = b.id;
-                            opt.textContent = b.nombre;
-                            barrioSelect.appendChild(opt);
-                        }
-                    });
+                barrios.forEach(b => {
+                    if (b.idMunicipio == mid) {
+                        const opt = document.createElement("option");
+                        opt.value = b.id;
+                        opt.textContent = b.nombre;
+                        barrioSelect.appendChild(opt);
+                    }
                 });
+            });
 
-                // 👉 CARGAR BARRIOS DESDE EL MUNICIPIO ACTUAL EN EDITAR
-                const municipioActual = municipioSelect.value;
-                if(municipioActual){
-                    municipioSelect.dispatchEvent(new Event('change'));
-                    barrioSelect.value = "{{ $inmueble->idBarrio }}";
-                }
+            // PRECARGA EN MODO EDICIÓN
+            if (typeof inmuebleMunicipio !== "undefined") {
+                municipioSelect.value = inmuebleMunicipio;
+
+                // dispara el cambio para cargar barrios correctos
+                municipioSelect.dispatchEvent(new Event("change"));
+
+                // selecciona el barrio actual
+                barrioSelect.value = inmueble.idBarrio;
             }
-        });
-    }
+
+        }
+
 
     // Render inicial
     renderCampos();
@@ -348,6 +352,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+</script>
+<script>
+    const inmuebleMunicipio = {{ $inmueble->barrio->municipio->id }};
 </script>
 
 @endsection

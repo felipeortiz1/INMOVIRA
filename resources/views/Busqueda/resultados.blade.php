@@ -2,22 +2,40 @@
 <html lang="es">
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Resultados de la búsqueda</title>
 
     <style>
 /* ===============================
     VARIABLES GLOBALES PREMIUM
+    (Se añadieron más variables 
+    para micro-interacciones)
 ================================ */
 :root {
     --primary: #0057ff;
     --primary-dark: #003ecb;
+    --primary-light: #4d8bff;
     --accent: #00c2ff;
+    --accent-soft: #e0f6ff;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
     --glass: rgba(255,255,255,0.75);
+    --glass-strong: rgba(255,255,255,0.9);
     --text-dark: #1f2937;
     --text-light: #6b7280;
     --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.15);
     --bg: linear-gradient(180deg, #f8fafc, #eef2ff);
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.04);
+    --shadow-md: 0 12px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 25px 60px rgba(0,0,0,0.12);
+    --shadow-xl: 0 30px 80px rgba(0,0,0,0.16);
 }
 
 /* ===============================
@@ -28,6 +46,19 @@ body {
     font-family: "Poppins", sans-serif;
     background: var(--bg);
     color: var(--text-dark);
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+/* Fondo con ruido suave */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* ===============================
@@ -36,7 +67,8 @@ body {
 .container {
     max-width: 1200px;
     margin: 70px auto;
-    padding: 0 24px;
+    padding: 0 24px 50px;
+    position: relative;
 }
 
 /* ===============================
@@ -49,36 +81,39 @@ body {
     margin-bottom: 25px;
     text-decoration: none;
     color: white;
-    background: var(--primary);
-    padding: 9px 18px;
+    background: linear-gradient(135deg,var(--primary),var(--accent));
+    padding: 10px 22px;
     border-radius: 50px;
     font-weight: 500;
-    font-size: .9rem;
+    font-size: .95rem;
     transition: all .25s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,.1);
+    box-shadow: var(--shadow-md);
+    letter-spacing: .3px;
 }
 
 .back:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg,var(--primary-dark),var(--primary));
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-lg);
 }
 
 /* ===============================
     TITULO + SUBTITULO
 ================================ */
 h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 14px;
     background: linear-gradient(to right, var(--primary), var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    font-size: .95rem;
+    font-size: 1rem;
     color: var(--text-light);
     margin-bottom: 40px;
+    max-width: 600px;
 }
 
 /* ===============================
@@ -87,25 +122,39 @@ h1 {
 .results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
+    gap: 32px;
 }
 
 /* ===============================
     TARJETAS PRO
 ================================ */
 .card {
+    position: relative;
     background: var(--glass);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: 22px;
     overflow: hidden;
-    backdrop-filter: blur(12px);
-    transition: all .35s cubic-bezier(.4,0,.2,1);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+    backdrop-filter: blur(14px);
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+    box-shadow: var(--shadow-md);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 60%, rgba(0,87,255,.04));
+    opacity: 0;
+    transition: .4s;
+}
+
+.card:hover::before {
+    opacity: 1;
 }
 
 .card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    transform: translateY(-10px) scale(1.015);
+    box-shadow: var(--shadow-xl);
     border-color: var(--primary);
 }
 
@@ -117,25 +166,25 @@ h1 {
     height: 220px;
     object-fit: cover;
     display: block;
-    transition: .4s ease;
+    transition: .6s ease;
 }
 
 .card:hover img {
-    transform: scale(1.06);
+    transform: scale(1.08);
 }
 
 /* ===============================
     BOTONES SOBRE IMAGEN
 ================================ */
 .card button {
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
 }
 
 /* ===============================
     CONTENIDO TARJETA
 ================================ */
 .card-content {
-    padding: 20px;
+    padding: 22px 22px 26px;
 }
 
 /* ===============================
@@ -145,44 +194,47 @@ h1 {
     display: inline-block;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: #fff;
-    padding: 6px 14px;
+    padding: 6px 16px;
     border-radius: 100px;
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 12px;
+    letter-spacing: .5px;
 }
 
 /* ===============================
     TITULO INMUEBLE
 ================================ */
 .card h3 {
-    margin: 0 0 10px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
 }
 
 /* ===============================
     TEXTOS INFO
 ================================ */
 .card p {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: var(--text-light);
-    font-size: .9rem;
-    line-height: 1.5;
+    font-size: .93rem;
+    line-height: 1.6;
 }
+
+
 
 /* ===============================
     BOTONES SOBRE LA IMAGEN
 ================================ */
 .fav {
     position: absolute;
-    top: 12px;
-    right: 14px;
+    top: 14px;
+    right: 16px;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border: none;
-    background: rgba(255,255,255,0.9);
+    background: var(--glass-strong);
     font-size: 18px;
     cursor: pointer;
     transition: .3s;
@@ -191,53 +243,53 @@ h1 {
 .fav:hover {
     background: var(--primary);
     color: white;
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(5deg);
 }
 
-/* Botón ver imágenes */
-.card .btn {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    border-radius: 50px;
-    background: white;
-    border: none;
-    font-size: .8rem;
-    padding: 6px 14px;
-    box-shadow: 0 8px 15px rgba(0,0,0,.15);
-    transition: .3s;
-}
 
-.card .btn:hover {
-    background: var(--primary);
-    color: white;
-}
 
 /* ===============================
     MENSAJE SIN RESULTADOS
 ================================ */
 .no-results {
     background: linear-gradient(120deg, #fff7e6, #fff3cd);
-    border-left: 6px solid #ffcc00;
-    padding: 22px;
-    border-radius: 14px;
+    border-left: 6px solid var(--warning);
+    padding: 24px;
+    border-radius: 18px;
     max-width: 550px;
     margin-top: 20px;
     color: #7a6c00;
     font-size: 0.95rem;
-    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    box-shadow: var(--shadow-md);
 }
 
 /* ===============================
     MODAL MEJORADO
 ================================ */
 #imgModal .modal {
-    animation: zoomIn .3s ease;
+    animation: zoomIn .35s ease;
 }
 
+.see-images-btn {
+    width: 100%;
+    border: none;
+    background: var(--primary);
+    color: white;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: .85rem;
+    margin: 10px 0 15px;
+    transition: .3s;
+}
+
+.see-images-btn:hover {
+    background: var(--primary-dark);
+}
+
+
 @keyframes zoomIn {
-    from { transform: scale(.7); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from { transform: scale(.7) translateY(40px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 /* Botones carrusel animados */
@@ -255,21 +307,112 @@ h1 {
 }
 
 /* ===============================
+    CONTENEDOR CON BARRA LATERAL
+================================ */
+.main-content{
+    display:flex;
+    gap:34px;
+}
+
+/* ===============================
+    COLUMNA IZQUIERDA - FILTROS
+================================ */
+.filters-wrapper{
+    width:300px;
+    flex-shrink:0;
+}
+
+.filters{
+    background: var(--glass);
+    padding:24px;
+    border-radius:24px;
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
+}
+
+.filters label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:.9rem;
+}
+
+.filters input, .filters select{
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    font-size:.9rem;
+    outline:none;
+    transition:.25s;
+}
+
+.filters input:focus{
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(0,87,255,.1);
+}
+
+/* Botón filtro */
+.filter-btn{
+    background: linear-gradient(135deg,var(--primary),var(--accent));
+    color: white;
+    border:none;
+    padding:12px;
+    border-radius:14px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+}
+
+.filter-btn:hover{
+    background: linear-gradient(135deg,var(--primary-dark),var(--primary));
+    transform: translateY(-2px);
+}
+
+
+
+/* ===============================
+    COLUMNA DERECHA
+================================ */
+.results-wrapper{
+    flex:1;
+}
+
+/* Adaptar grid cuando hay barra lateral */
+.results-wrapper .results-grid{
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ===============================
     RESPONSIVE
 ================================ */
-@media (max-width: 600px) {
+@media (max-width:900px){
+    .main-content{
+        flex-direction:column;
+    }
 
+    .filters-wrapper{
+        width:100%;
+    }
+
+    .results-wrapper .results-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media (max-width: 600px) {
     h1 {
-        font-size: 1.6rem;
+        font-size: 1.65rem;
     }
 
     .card img {
         height: 180px;
     }
-
 }
 </style>
-
 
 </head>
 
@@ -291,73 +434,146 @@ h1 {
         <!-- Verifica si existen inmuebles -->
         @if ($inmuebles->count() > 0)
 
-            <!-- Grid donde se muestran los resultados -->
-            <div class="results-grid">
+<div class="main-content">
 
-                <!-- Recorremos cada inmueble -->
-                @foreach ($inmuebles as $item)
-                    @php
-                        // Obtiene la primera imagen del inmueble, si existe.
-                        // optional() evita error si no hay imagen.
-                        $img = optional($item->imagens->first())->ruta;
-                    @endphp
+    <!-- FILTROS A LA IZQUIERDA -->
+    <div class="filters-wrapper">
+        <form class="filters" method="GET" action="{{ route('buscador.inmuebles') }}">
 
-                    <div class="card">
+            <!-- Texto general de búsqueda -->
+            <input type="text" name="q" placeholder="Buscar por título, barrio o municipio..." value="{{ request('q') }}">
 
-                        <!-- Imagen principal del inmueble -->
+            <!-- MUNICIPIO -->
+        <select name="municipio_id" id="municipioSelect">
+            <option value="">Seleccionar municipio</option>
+            @foreach($municipios as $municipio)
+                <option value="{{ $municipio->id }}"
+                    {{ request('municipio_id') == $municipio->id ? 'selected' : '' }}>
+                    {{ $municipio->nombre }}
+                </option>
+            @endforeach
+        </select>
 
-                        <div style="position:relative;">
-                            <img src="{{ $img ? asset('storage/' . $img) : asset('img/no-image.jpg') }}"
-                                alt="Imagen inmueble">
-                            <button class="fav" data-id="{{ $item->id }}">♡</button>
-                            <button class="btn btn-light btn-sm"
-                                onclick="abrirModal(
-                                [
-                                    @foreach ($item->imagens as $img)
-                                        '{{ asset('storage/' . $img->ruta) }}', @endforeach
-                                ],
-                                0
-                            )">
-                                🔍 Ver imágenes
-                            </button>
-                        </div>
+                <!-- PRECIO MÍNIMO -->
+<input 
+    type="number" 
+    name="precio_min" 
+    placeholder="Precio mínimo" 
+    min="0" 
+    value="{{ request('precio_min') }}"
+>
+
+<!-- PRECIO MÁXIMO -->
+<input 
+    type="number" 
+    name="precio_max" 
+    placeholder="Precio máximo" 
+    min="0" 
+    value="{{ request('precio_max') }}"
+
+            <!-- Tipos de inmueble (deben ser ARRAY: tipos[]) -->
+            <label><input type="checkbox" name="tipos[]" value="Casa"
+                {{ in_array('Casa', request('tipos', [])) ? 'checked' : '' }}> Casa</label>
+
+            <label><input type="checkbox" name="tipos[]" value="Apartamento"
+                {{ in_array('Apartamento', request('tipos', [])) ? 'checked' : '' }}> Apartamento</label>
+
+            <label><input type="checkbox" name="tipos[]" value="Lote"
+                {{ in_array('Lote', request('tipos', [])) ? 'checked' : '' }}> Lote</label>
+
+            <button type="submit" class="filter-btn">Aplicar filtros</button>
+
+            <a href="{{ route('buscador.inmuebles') }}"
+            style="text-align:center;font-size:0.85rem;color:var(--primary);text-decoration:none;">
+            Limpiar filtros
+            </a>
+        </form>
+
+    </div>
+
+    <!-- RESULTADOS A LA DERECHA -->
+    <div class="results-wrapper">
+        <div class="results-grid">
+
+            @foreach ($inmuebles as $item)
+        @php
+            $raw = json_decode($item->imagenes, true) ?: [];
+
+            $images = array_map(function($p){
+                if(!$p) return null;
+
+                // Si ya es URL completa, devolverla
+                if(Str::startsWith($p, ['http://','https://','/'])) {
+                    return $p;
+                }
+
+                // Si es relativa, convertir a URL válida
+                return asset('storage/' . ltrim($p, '/'));
+            }, $raw);
+
+            $images = array_values(array_filter($images));
+        @endphp
+
+        <div class="card">
+
+            <button class="fav">❤</button>
 
 
-                        <div class="card-content">
+            <img src="{{ $images[0] ?? 'https://via.placeholder.com/400x250' }}" alt="Imagen inmueble">
 
-                            <!-- Tipo del inmueble (ej. Casa, Apto...) -->
-                            <div class="tag">{{ $item->tipo }}</div>
+            <div class="card-content">
+                <span class="tag">{{ $item->tipo }}</span>
 
-                            <!-- Título del anuncio -->
-                            <h3>{{ $item->titulo }}</h3>
+                <h3>{{ $item->titulo }}</h3>
 
-                            <!-- Municipio -->
-                            <p><strong style="color:#333;">Municipio:</strong>
-                                {{ $item->barrio->municipio->nombre }}
-                            </p>
+                <button class="see-images-btn" type="button" onclick="abrirModal(@json($images), 0)">
+                    📷 Ver imágenes
+                </button>
 
-                            <!-- Barrio -->
-                            <p><strong style="color:#333;">Barrio:</strong>
-                                {{ $item->barrio->nombre }}
-                            </p>
+                <p><strong>Precio:</strong> ${{ number_format($item->precio) }}</p>
+                <p><strong>Ubicación:</strong> {{ $item->direccion }}</p>
+                <p class="location"><strong>Municipio:</strong>
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    {{ $item->barrio->municipio->nombre ?? 'Sin municipio' }} - {{ $item->barrio->nombre ?? '' }}
+                </p>
+                @if($item->usuario)
+                <div class="contacto-inmueble">
 
-                            <!-- Descripción recortada -->
-                            <p>{{ Str::limit($item->descripcion, 140) }}</p>
+                    @if(!empty($item->usuario->telefono))
+                        <p class="contact-info">
+                            <strong>Teléfono:</strong>
+                            <i class="fa-solid fa-phone"></i>
+                            {{ $item->usuario->telefono }}
+                        </p>
+                    @endif
 
-                        </div>
+                    @if(!empty($item->usuario->email))
+                        <p class="contact-info">
+                            <strong>Correo:</strong>
+                            <i class="fa-solid fa-envelope"></i>
+                            {{ $item->usuario->email }}
+                        </p>
+                    @endif
 
-                    </div>
-                @endforeach
+
+                </div>
+                @endif
+
+
 
             </div>
-        @else
-            <!-- Mensaje cuando NO hay resultados -->
-            <div class="no-results">
-                No se encontraron resultados.<br>
-                Prueba buscando con otros términos o filtros.
-            </div>
 
-        @endif
+        </div>
+
+@endforeach
+
+        </div>
+    </div>
+
+</div>
+
+@endif
+
 
     </div>
 
@@ -367,17 +583,17 @@ h1 {
     <div id="imgModal" style="display:none;">
         <div class="modal-backdrop"
             style="position:fixed; inset:0; background:rgba(0,0,0,0.55);
-               backdrop-filter:blur(8px); display:flex; justify-content:center;
-               align-items:center; z-index:9999;">
+                backdrop-filter:blur(8px); display:flex; justify-content:center;
+                align-items:center; z-index:9999;">
 
             <div class="modal"
                 style="background:white; padding:15px; border-radius:15px;
-                   width:90%; max-width:760px; position:relative;">
+                    width:90%; max-width:760px; position:relative;">
 
                 <!-- Botón Cerrar -->
                 <button id="closeModal"
                     style="position:absolute; top:10px; right:10px; background:none;
-                       border:none; font-size:26px; cursor:pointer;">✕</button>
+                        border:none; font-size:26px; cursor:pointer;">✕</button>
 
                 <!-- Imagen -->
                 <img id="imgModalSrc" src=""
@@ -387,17 +603,17 @@ h1 {
                 <div style="display:flex; justify-content:space-between; margin-top:10px;">
                     <button id="prevBtn"
                         style="background:#0d6efd; padding:6px 14px; border:none;
-                           color:white; border-radius:8px; cursor:pointer;">⬅
+                            color:white; border-radius:8px; cursor:pointer;">⬅
                         Anterior</button>
 
                     <button id="zoomBtn"
                         style="background:#6c757d; padding:6px 14px; border:none;
-                           color:white; border-radius:8px; cursor:pointer;">🔍
+                            color:white; border-radius:8px; cursor:pointer;">🔍
                         Zoom</button>
 
                     <button id="nextBtn"
                         style="background:#0d6efd; padding:6px 14px; border:none;
-                           color:white; border-radius:8px; cursor:pointer;">Siguiente
+                            color:white; border-radius:8px; cursor:pointer;">Siguiente
                         ➡</button>
                 </div>
 
@@ -447,7 +663,11 @@ h1 {
             document.getElementById('imgModal').style.display = "none";
         });
     </script>
+    
 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 
 </html>

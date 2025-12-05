@@ -16,8 +16,13 @@ return new class extends Migration
             $table->string('nombre', 45);
             $table->string('email', 45);
             $table->string('telefono', 12);
+            $table->string('direccion', 100)->nullable();
             $table->enum('tipoUsuario', ['persona', 'inmobiliaria']);
             $table->string('nombreEmpresa', 50)->nullable();
+
+            $table->unsignedBigInteger('idMunicipio');
+            $table->foreign('idMunicipio')->references('id')->on('municipios')->restrictOnDelete();
+
             $table->timestamp('fechaRegistro')->useCurrent();
             $table->timestamps(); // created_at, updated_at
 

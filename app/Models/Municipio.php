@@ -17,4 +17,9 @@ class Municipio extends Model
     {
         return $this->hasMany(Barrio::class, 'idMunicipio');
     }
+
+    public function usuarios()
+    {
+        return $this->hasMany(Usuario::class, 'idUsuario');
+    }
 }

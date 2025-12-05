@@ -66,23 +66,20 @@
 
                         {{-- Botón filtro ID Asc - Desc --}}
                         @php
-                            $query = request()->except('sort', 'direction');
-                        @endphp
+                            $currentDirection = request('direction') === 'desc' ? 'desc' : 'asc';
+                            $nextDirection = $currentDirection === 'asc' ? 'desc' : 'asc';
 
-                        <a href="{{ route(
-                            'barrios.index',
-                            array_merge($query, [
+                            $toggleParams = array_merge(request()->all(), [
                                 'sort' => 'id',
-                                'direction' => request('direction') === 'asc' ? 'desc' : 'asc',
-                            ]),
-                        ) }}"
-                            class="btn btn-secondary rounded-pill px-4 shadow-sm mb-3">
+                                'direction' => $nextDirection
+                            ]);
 
-                            @if (request('direction') === 'asc')
-                                <i class="fas fa-sort-numeric-down-alt"></i> ID Descendente
-                            @else
-                                <i class="fas fa-sort-numeric-down"></i> ID Ascendente
-                            @endif
+                            $buttonText = $currentDirection === 'asc'
+                                ? 'Ordenar por ID ↓ Descendente'
+                                : 'Ordenar por ID ↑ Ascendente';
+                        @endphp
+                        <a href="{{ route('barrios.index', $toggleParams) }}" class="btn btn-secondary rounded-pill px-4 shadow-sm mb-3">
+                            {{ $buttonText }}
                         </a>
 
                         <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">

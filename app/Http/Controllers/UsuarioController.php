@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UsuarioRequest;
 use App\Models\Inmueble;
+use App\Models\Municipio;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,40 +16,44 @@ class UsuarioController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Usuario::query();
+        $query = Usuario::query()
 
-        // BUSCAR POR NOMBRE O EMAIL
-        if ($request->filled('buscar')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('nombre', 'LIKE', '%' . $request->buscar . '%')
-                    ->orWhere('email', 'LIKE', '%' . $request->buscar . '%');
-            });
-        }
+            // BUSCAR por nombre o empresa
+            ->when($request->buscar, function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    $query->where('nombre', 'like', "%{$request->buscar}%")
+                        ->orWhere('nombreEmpresa', 'like', "%{$request->buscar}%");
+                });
+            })
 
-        // FILTRAR POR TIPO DE USUARIO
-        if ($request->filled('tipoUsuario')) {
-            $query->where('tipoUsuario', $request->tipoUsuario);
-        }
+            // FILTRO municipio
+            ->when(
+                $request->municipio,
+                fn($q) =>
+                $q->where('idMunicipio', $request->municipio)
+            )
 
-        // FILTRO POR FECHAS
-        if ($request->filled('fechaInicio')) {
-            $query->whereDate('fechaRegistro', '>=', $request->fechaInicio);
-        }
+            // FILTRO tipo
+            ->when(
+                $request->tipoUsuario,
+                fn($q) =>
+                $q->where('tipoUsuario', $request->tipoUsuario)
+            )
 
-        if ($request->filled('fechaFin')) {
-            $query->whereDate('fechaRegistro', '<=', $request->fechaFin);
-        }
+            ->with('municipio');
 
-        // ORDENAR POR ID ASC | DESC
+        // ✅ ORDENAMIENTO POR ID (ASC o DESC)
         if ($request->sort === 'id') {
             $direction = $request->direction === 'desc' ? 'desc' : 'asc';
             $query->orderBy('id', $direction);
         }
 
-        // Mantener filtros en paginación
         $usuarios = $query->paginate(10)->appends($request->all());
 
-        return view('Usuarios.index', compact('usuarios'));
+        // Para el filtro de municipios
+        $municipios = Municipio::orderBy('nombre')->get();
+
+        return view('Usuarios.index', compact('usuarios', 'municipios'));
     }
 
     /**
@@ -56,16 +61,17 @@ class UsuarioController extends Controller
      */
     public function buscar(Request $request)
     {
-        if (!$request->filled('q')) {
-            return response()->json([]);
-        }
+        $query = $request->q;
+        $municipio = $request->municipio;
 
-        $term = $request->q;
-
-        $usuarios = Usuario::where('nombre', 'LIKE', "%$term%")
-            ->orWhere('email', 'LIKE', "%$term%")
-            ->limit(10)
-            ->get(['id', 'nombre', 'email']);
+        $usuarios = Usuario::with('municipio')
+            ->where(function ($q) use ($query) {
+                $q->where('nombre', 'like', "%$query%")
+                    ->orWhere('nombreEmpresa', 'like', "%$query%");
+            })
+            ->when($municipio, fn($q) => $q->where('idMunicipio', $municipio))
+            ->limit(8)
+            ->get();
 
         return response()->json($usuarios);
     }
@@ -76,32 +82,33 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('Usuarios.create');
+        $municipios = Municipio::all();
+        return view('Usuarios.create', compact('municipios'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(UsuarioRequest $request)
-{
-    $data = $request->all();
+    {
+        $data = $request->all();
 
-    if ($request->hasFile('imagen')) {
-        $file = $request->file('imagen');
-        $name = time() . '_' . $file->getClientOriginalName();
+        if ($request->hasFile('imagen')) {
+            $file = $request->file('imagen');
+            $name = time() . '_' . $file->getClientOriginalName();
 
-        // Se guarda en storage/app/public/usuarios
-        $path = $file->storeAs('usuarios', $name, 'public');
+            // Se guarda en storage/app/public/usuarios
+            $path = $file->storeAs('usuarios', $name, 'public');
 
-        $data['imagen'] = $path;
+            $data['imagen'] = $path;
+        }
+
+        Usuario::create($data);
+
+        return redirect()
+            ->route('usuario.index')
+            ->with('success', 'Usuario registrado correctamente');
     }
-
-    Usuario::create($data);
-
-    return redirect()
-        ->route('usuario.index')
-        ->with('success', 'Usuario registrado correctamente');
-}
 
 
 
@@ -111,46 +118,48 @@ class UsuarioController extends Controller
     public function edit($id)
     {
         $usuario = Usuario::findOrfail($id);
-        return view('Usuarios.edit', compact('usuario'));
+        $municipios = Municipio::all();
+
+        return view('Usuarios.edit', compact('usuario', 'municipios'));
     }
 
     /**
      * Update the specified resource in storage.
      */
 
-public function update(UsuarioRequest $request, $id)
-{
-    $usuario = Usuario::findOrFail($id);
-    $data = $request->all();
+    public function update(UsuarioRequest $request, $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $data = $request->all();
 
-    // ✅ Si marcó eliminar imagen
-    if ($request->filled('eliminar_imagen') && $usuario->imagen) {
-        Storage::disk('public')->delete($usuario->imagen);
-        $data['imagen'] = null;
-    }
-
-    // ✅ Si subió nueva imagen
-    if ($request->hasFile('imagen')) {
-
-        // Eliminar la anterior si existe
-        if ($usuario->imagen) {
+        // ✅ Si marcó eliminar imagen
+        if ($request->filled('eliminar_imagen') && $usuario->imagen) {
             Storage::disk('public')->delete($usuario->imagen);
+            $data['imagen'] = null;
         }
 
-        $file = $request->file('imagen');
-        $name = time() . '_' . $file->getClientOriginalName();
+        // ✅ Si subió nueva imagen
+        if ($request->hasFile('imagen')) {
 
-        $path = $file->storeAs('usuarios', $name, 'public');
+            // Eliminar la anterior si existe
+            if ($usuario->imagen) {
+                Storage::disk('public')->delete($usuario->imagen);
+            }
 
-        $data['imagen'] = $path;
+            $file = $request->file('imagen');
+            $name = time() . '_' . $file->getClientOriginalName();
+
+            $path = $file->storeAs('usuarios', $name, 'public');
+
+            $data['imagen'] = $path;
+        }
+
+        $usuario->update($data);
+
+        return redirect()
+            ->route('usuario.index')
+            ->with('success', 'Usuario actualizado correctamente');
     }
-
-    $usuario->update($data);
-
-    return redirect()
-        ->route('usuario.index')
-        ->with('success', 'Usuario actualizado correctamente');
-}
 
 
 
@@ -176,105 +185,100 @@ public function update(UsuarioRequest $request, $id)
     }
 
     public function inmobiliariasVista(Request $request)
-{
-    $query = Usuario::where('tipoUsuario', 'inmobiliaria');
+    {
+        $query = Usuario::where('tipoUsuario', 'inmobiliaria');
 
-    if ($request->filled('q')) {
-        $t = $request->q;
+        if ($request->filled('q')) {
+            $t = $request->q;
 
-        $query->where(function ($q) use ($t) {
-            $q->where('nombreEmpresa', 'LIKE', "%{$t}%")
-                ->orWhere('nombre', 'LIKE', "%{$t}%")
-                ->orWhere('email', 'LIKE', "%{$t}%")
-                ->orWhere('telefono', 'LIKE', "%{$t}%");
+            $query->where(function ($q) use ($t) {
+                $q->where('nombreEmpresa', 'LIKE', "%{$t}%")
+                    ->orWhere('nombre', 'LIKE', "%{$t}%")
+                    ->orWhere('email', 'LIKE', "%{$t}%")
+                    ->orWhere('telefono', 'LIKE', "%{$t}%");
             });
+        }
+
+        $inmobiliarias = $query->get();
+
+        return view('inmobiliarias.vista', compact('inmobiliarias'));
     }
-
-    $inmobiliarias = $query->get();
-
-    return view('inmobiliarias.vista', compact('inmobiliarias'));
-}
 
 
     public function detallesInmobiliaria($id)
-{
-    $inm = Usuario::findOrFail($id);
+    {
+        $inm = Usuario::findOrFail($id);
 
-    return response()->json([
-        'id' => $inm->id,
-        'nombreEmpresa' => $inm->nombreEmpresa,
-        'nombre' => $inm->nombre,
-        'email' => $inm->email,
-        'telefono' => $inm->telefono,
-        'direccion' => $inm->direccion,
-        'imagen' => $inm->imagen
-            ? asset('storage/' . $inm->imagen)
-            : asset('storage/inmobiliarias/default.png'),
+        return response()->json([
+            'id' => $inm->id,
+            'nombreEmpresa' => $inm->nombreEmpresa,
+            'nombre' => $inm->nombre,
+            'email' => $inm->email,
+            'telefono' => $inm->telefono,
+            'direccion' => $inm->direccion,
+            'imagen' => $inm->imagen
+                ? asset('storage/' . $inm->imagen)
+                : asset('storage/inmobiliarias/default.png'),
 
-    ]);
-}
-
-
-public function detalles($id)
-{
-    $user = Usuario::findOrFail($id);
-
-    return response()->json([
-        'id' => $user->id,
-        'nombreEmpresa' => $user->nombreEmpresa,
-        'nombre' => $user->nombre,
-        'email' => $user->email,
-        'telefono' => $user->telefono,
-        'direccion' => $user->direccion,
-    ]);
-}
-
-public function verInmobiliaria($id)
-{
-    $inmobiliaria = Usuario::findOrFail($id);
-
-    return view('Inmobiliarias.detalle', compact('inmobiliaria'));
-}
-
-public function buscarInmuebles(Request $request)
-{
-    $tipo = $request->input('tipo');
-    $municipio = $request->input('municipio');
-
-    $inmuebles = Inmueble::query();
-
-    // Filtro por tipo
-    if ($tipo) {
-        $inmuebles->where('tipo', 'LIKE', "%{$tipo}%");
+        ]);
     }
 
-    // Filtro por municipio
-    if ($municipio) {
-        $inmuebles->where('municipio', 'LIKE', "%{$municipio}%");
+
+    public function detalles($id)
+    {
+        $user = Usuario::findOrFail($id);
+
+        return response()->json([
+            'id' => $user->id,
+            'nombreEmpresa' => $user->nombreEmpresa,
+            'nombre' => $user->nombre,
+            'email' => $user->email,
+            'telefono' => $user->telefono,
+            'direccion' => $user->direccion,
+        ]);
     }
-    
 
-    $inmuebles = $inmuebles->latest()->get();
+    public function verInmobiliaria($id)
+    {
+        $inmobiliaria = Usuario::findOrFail($id);
 
-    return view('buscador.resultados', compact('inmuebles'));
-}
+        return view('Inmobiliarias.detalle', compact('inmobiliaria'));
+    }
+
+    public function buscarInmuebles(Request $request)
+    {
+        $tipo = $request->input('tipo');
+        $municipio = $request->input('municipio');
+
+        $inmuebles = Inmueble::query();
+
+        // Filtro por tipo
+        if ($tipo) {
+            $inmuebles->where('tipo', 'LIKE', "%{$tipo}%");
+        }
+
+        // Filtro por municipio
+        if ($municipio) {
+            $inmuebles->where('municipio', 'LIKE', "%{$municipio}%");
+        }
+
+
+        $inmuebles = $inmuebles->latest()->get();
+
+        return view('buscador.resultados', compact('inmuebles'));
+    }
 
 
     public function inmuebles($id)
-{
-    $usuario = Usuario::with([
-        'inmuebles.municipio',
-        'inmuebles.barrio',
-        'inmuebles.tipoInmueble'
-    ])->findOrFail($id);
+    {
+        $usuario = Usuario::with([
+            'inmuebles.municipio',
+            'inmuebles.barrio',
+            'inmuebles.tipoInmueble'
+        ])->findOrFail($id);
 
-    $inmuebles = $usuario->inmuebles;
+        $inmuebles = $usuario->inmuebles;
 
-    return view('usuarios.inmuebles', compact('usuario', 'inmuebles'));
-}
-
-
-
-
-
+        return view('usuarios.inmuebles', compact('usuario', 'inmuebles'));
+    }
 }

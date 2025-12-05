@@ -11,9 +11,11 @@ class Usuario extends Model
         'nombre',
         'email',
         'telefono',
+        'direccion',
         'tipoUsuario',
         'nombreEmpresa',
         'imagen',
+        'idMunicipio',
         'fechaRegistro'
     ];
 
@@ -37,4 +39,8 @@ class Usuario extends Model
         return $this->hasMany(Interaccion::class);
     }
 
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class, 'idMunicipio');
+    }
 }

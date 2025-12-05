@@ -188,6 +188,7 @@ class UsuarioController extends Controller
     {
         $query = Usuario::where('tipoUsuario', 'inmobiliaria');
 
+        // 🔍 Filtro por texto
         if ($request->filled('q')) {
             $t = $request->q;
 
@@ -199,11 +200,18 @@ class UsuarioController extends Controller
             });
         }
 
+        //Filtro por municipio (CORREGIDO)
+        if ($request->filled('municipio')) {
+            $query->where('idMunicipio', $request->municipio);
+        }
+
         $inmobiliarias = $query->get();
 
-        return view('inmobiliarias.vista', compact('inmobiliarias'));
-    }
+        // Municipios para el select
+        $municipios = Municipio::all();
 
+        return view('inmobiliarias.vista', compact('inmobiliarias', 'municipios'));
+    }
 
     public function detallesInmobiliaria($id)
     {

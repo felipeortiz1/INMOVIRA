@@ -283,10 +283,23 @@
 
         {{-- BUSCADOR --}}
         <form class="filters" method="GET" action="{{ route('vista.inmobiliarias') }}">
+    
             <input type="search" name="q" placeholder="Buscar inmobiliaria..."
-                    value="{{ request('q') }}">
+                value="{{ request('q') }}">
+
+            {{-- ⭐ SELECT MUNICIPIOS --}}
+            <select name="municipio" style="padding:10px; border-radius:10px;">
+                <option value="">Todos los municipios</option>
+                @foreach($municipios as $m)
+                    <option value="{{ $m->id }}" {{ request('municipio') == $m->id ? 'selected' : '' }}>
+                        {{ $m->nombre }}
+                    </option>
+                @endforeach
+            </select>
+
             <button class="btn btn-primary">Buscar</button>
             <a href="{{ route('vista.inmobiliarias') }}" class="btn btn-ghost">Limpiar</a>
+
         </form>
 
         <div class="controls" style="margin-bottom:12px; display:flex; align-items:center; gap:10px;">

@@ -11,7 +11,7 @@
             --bg: #FAFCFF;
             --card: #ffffff;
             --muted: #7a7f8c;
-            --accent: #8CB4FF;
+            --accent: #98FB98;
             --accent-hover: #6EA1FF;
             --shadow: 0 4px 16px rgba(0,0,0,0.05);
         }

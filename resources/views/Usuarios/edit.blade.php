@@ -70,7 +70,7 @@
                         </select>
                     </div>
 
-                    {{-- SOLO INMOBILIARIA --}}
+                    {{-- SOLO INMOBILIARIA (NOMBRE DE LA EMPRESA) --}}
                     <div id="empresaContainer" style="display:none;">
 
                         <div class="mb-3">
@@ -79,32 +79,33 @@
                                 value="{{ $usuario->nombreEmpresa }}">
                         </div>
 
-                        {{-- IMAGEN ACTUAL --}}
-                        @if ($usuario->imagen)
-                            <div class="mb-3">
-                                <label class="form-label d-block">Imagen actual</label>
-                                <img src="{{ asset('storage/' . $usuario->imagen) }}"
-                                    style="max-height:120px;border-radius:10px;box-shadow:0 5px 10px rgba(0,0,0,0.15)">
-                            </div>
-
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="eliminar_imagen" id="eliminar_imagen"
-                                    value="1">
-                                <label class="form-check-label text-danger" for="eliminar_imagen">
-                                    Eliminar imagen actual
-                                </label>
-                            </div>
-                        @endif
-
-                        {{-- NUEVA IMAGEN --}}
-                        <div class="mb-3">
-                            <label class="form-label">Cambiar imagen</label>
-                            <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
-
-                            <img id="previewImagen"
-                                style="margin-top:10px;max-height:140px;border-radius:10px;display:none;">
-                        </div>
                     </div>
+
+                    {{-- IMAGEN ACTUAL (PERSONA O INMOBILIARIA) --}}
+                    @if ($usuario->imagen)
+                        <div class="mb-3">
+                            <label class="form-label d-block">Imagen actual</label>
+                            <img src="{{ asset('storage/' . $usuario->imagen) }}"
+                                style="max-height:120px;border-radius:10px;box-shadow:0 5px 10px rgba(0,0,0,0.15)">
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="eliminar_imagen" id="eliminar_imagen" value="1">
+                            <label class="form-check-label text-danger" for="eliminar_imagen">
+                                Eliminar imagen actual
+                            </label>
+                        </div>
+                    @endif
+
+                    {{-- CARGAR NUEVA IMAGEN --}}
+                    <div class="mb-3">
+                        <label class="form-label">Cambiar imagen</label>
+                        <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
+
+                        <img id="previewImagen"
+                            style="margin-top:10px;max-height:140px;border-radius:10px;display:none;">
+                    </div>
+
 
                     <div class="d-flex justify-content-end mt-4">
 

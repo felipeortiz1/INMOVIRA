@@ -481,6 +481,9 @@ h1 {
             <label><input type="checkbox" name="tipos[]" value="Lote"
                 {{ in_array('Lote', request('tipos', [])) ? 'checked' : '' }}> Lote</label>
 
+            <label><input type="checkbox" name="tipos[]" value="Local comercial"
+                {{ in_array('Local comercial', request('tipos', [])) ? 'checked' : '' }}> Local comercial</label>
+
             <button type="submit" class="filter-btn">Aplicar filtros</button>
 
             <a href="{{ route('buscador.inmuebles') }}"
@@ -497,22 +500,40 @@ h1 {
 
             @foreach ($inmuebles as $item)
         @php
-            $raw = json_decode($item->imagenes, true) ?: [];
+    $raw = [];
 
-            $images = array_map(function($p){
-                if(!$p) return null;
+    // Caso 1: viene como JSON válido
+    if (is_string($item->imagenes) && str_starts_with($item->imagenes, '[')) {
+        $raw = json_decode($item->imagenes, true) ?: [];
+    }
+    // Caso 2: viene separado por comas
+    elseif (is_string($item->imagenes) && str_contains($item->imagenes, ',')) {
+        $raw = array_map('trim', explode(',', $item->imagenes));
+    }
+    // Caso 3: viene como un solo archivo en string
+    elseif (is_string($item->imagenes)) {
+        $raw = [$item->imagenes];
+    }
+    // Caso 4: relación "imagens" desde tu CRUD
+    elseif (method_exists($item, 'imagens') && $item->imagens->count()) {
+        $raw = $item->imagens->pluck('ruta')->toArray();
+    }
 
-                // Si ya es URL completa, devolverla
-                if(Str::startsWith($p, ['http://','https://','/'])) {
-                    return $p;
-                }
+    // Convertir rutas a URL válidas
+    $images = array_map(function($p){
+        if (!$p) return null;
 
-                // Si es relativa, convertir a URL válida
-                return asset('storage/' . ltrim($p, '/'));
-            }, $raw);
+        // URL completa
+        if (Str::startsWith($p, ['http://', 'https://'])) {
+            return $p;
+        }
 
-            $images = array_values(array_filter($images));
-        @endphp
+        return asset('storage/' . ltrim($p, '/'));
+    }, $raw);
+
+    $images = array_values(array_filter($images));
+@endphp
+
 
         <div class="card">
 
@@ -526,9 +547,10 @@ h1 {
 
                 <h3>{{ $item->titulo }}</h3>
 
-                <button class="see-images-btn" type="button" onclick="abrirModal(@json($images), 0)">
-                    📷 Ver imágenes
+                <button class="see-images-btn" type="button" onclick="verImagen('{{ $images[0] ?? '' }}')">
+                📷 Ver imagen
                 </button>
+
 
                 <p><strong>Precio:</strong> ${{ number_format($item->precio) }}</p>
                 <p><strong>Ubicación:</strong> {{ $item->direccion }}</p>
@@ -639,6 +661,17 @@ h1 {
             document.getElementById('imgModalSrc').src = imagenesCarrusel[indexActual];
         }
 
+        function verImagen(src) {
+            if(!src) return;
+            document.getElementById('fullImgSrc').src = src;
+            document.getElementById('fullImgModal').style.display = 'block';
+        }
+
+        function cerrarImg() {
+            document.getElementById('fullImgModal').style.display = 'none';
+        }
+
+
         // Botones
         document.getElementById("prevBtn").addEventListener("click", () => {
             indexActual = (indexActual === 0) ?
@@ -665,6 +698,47 @@ h1 {
     </script>
     
 
+        <div id="fullImgModal" style="display:none;">
+    <div style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.85);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        z-index:99999;
+    ">
+        <div style="position:relative; text-align:center;">
+            
+            <img id="fullImgSrc" 
+                src="" 
+                style="
+                    width: 800px;
+                    height: 550px;
+                    object-fit: cover;
+                    border-radius:14px;
+                    box-shadow:0 0 20px #000;
+            ">
+
+
+            <!-- Botón Volver -->
+            <button onclick="cerrarImg()" 
+                style="
+                    margin-top:18px;
+                    background:white;
+                    padding:10px 22px;
+                    border:none;
+                    font-size:1rem;
+                    border-radius:10px;
+                    cursor:pointer;
+                    font-weight:600;
+                ">
+                ⬅ Volver
+            </button>
+
+        </div>
+    </div>
+</div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

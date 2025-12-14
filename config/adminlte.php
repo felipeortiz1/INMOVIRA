@@ -340,7 +340,7 @@ return [
         ],
         [
 
-            'text' => 'Imuebles',
+            'text' => 'Inmuebles',
             'url' => '/inmueble/index',
             'icon' => 'fa-solid fa-shop',
         ],

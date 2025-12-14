@@ -130,14 +130,14 @@
 
                                     {{-- IMAGEN --}}
                                     <td>
-                                        @if ($usuario->tipoUsuario == 'inmobiliaria' && $usuario->imagen)
-                                            <img src="{{ asset('storage/' . $usuario->imagen) }}" width="60"
-                                                height="60"
+                                        @if ($usuario->imagen)
+                                            <img src="{{ asset('storage/' . $usuario->imagen) }}" width="60" height="60"
                                                 style="object-fit:cover;border-radius:50%;border:2px solid #0d6efd;">
-                                        @else
-                                            <img src="{{ asset('img/usuarios/default.png') }}" width="60"
-                                                height="60" style="object-fit:cover;border-radius:50%;">
+                                        @elseif ($usuario->tipoUsuario == 'persona')
+                                            <img src="{{ asset('img/usuarios/default.png') }}" width="60" height="60"
+                                                style="object-fit:cover;border-radius:50%;">
                                         @endif
+
                                     </td>
 
                                     <td>{{ $usuario->nombre }}</td>

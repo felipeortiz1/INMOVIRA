@@ -392,7 +392,7 @@
                     </div>
 
                     <div class="multi-select-options" id="multiOptions">
-                        @foreach (['Casa', 'Apartamento', 'Local comercial', 'Lote', 'Finca'] as $tipo)
+                        @foreach (['Casa', 'Apartamento', 'Local comercial', 'Lote'] as $tipo)
                             <label class="multi-option">
                                 <input type="checkbox" name="tipos[]" value="{{ $tipo }}"
                                     {{ request('tipos') && in_array($tipo, request('tipos')) ? 'checked' : '' }}>

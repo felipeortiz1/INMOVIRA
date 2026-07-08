@@ -2,658 +2,586 @@
 <html lang="es">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados de la búsqueda</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-/* ===============================
-    VARIABLES GLOBALES PREMIUM
-    (Se añadieron más variables 
-    para micro-interacciones)
-================================ */
-:root {
-    --primary: #0057ff;
-    --primary-dark: #003ecb;
-    --primary-light: #4d8bff;
-    --accent: #00c2ff;
-    --accent-soft: #e0f6ff;
-    --success: #16a34a;
-    --danger: #dc2626;
-    --warning: #f59e0b;
-    --glass: rgba(255,255,255,0.75);
-    --glass-strong: rgba(255,255,255,0.9);
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --border: rgba(0,0,0,0.08);
-    --border-strong: rgba(0,0,0,0.15);
-    --bg: linear-gradient(180deg, #f8fafc, #eef2ff);
-    --radius-sm: 10px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
-    --radius-xl: 32px;
-    --shadow-sm: 0 4px 10px rgba(0,0,0,0.04);
-    --shadow-md: 0 12px 24px rgba(0,0,0,0.08);
-    --shadow-lg: 0 25px 60px rgba(0,0,0,0.12);
-    --shadow-xl: 0 30px 80px rgba(0,0,0,0.16);
-}
+        :root {
+            --primary: #0057ff;
+            --primary-dark: #003ecb;
+            --primary-light: #4d8bff;
+            --accent: #00c2ff;
+            --accent-soft: #e0f6ff;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-strong: rgba(255, 255, 255, 0.95);
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border: rgba(0, 0, 0, 0.06);
+            --bg: linear-gradient(180deg, #f8fafc, #eef2ff);
+            --shadow-sm: 0 4px 10px rgba(0,0,0,0.02);
+            --shadow-md: 0 12px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 25px 60px rgba(0,0,0,0.1);
+            --shadow-xl: 0 30px 80px rgba(0,0,0,0.14);
+        }
 
-/* ===============================
-    BODY + FONDO PREMIUM
-================================ */
-body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: var(--bg);
-    color: var(--text-dark);
-    min-height: 100vh;
-    background-attachment: fixed;
-}
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
 
-/* Fondo con ruido suave */
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 18px 18px;
-    pointer-events: none;
-    z-index: -1;
-}
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 18px 18px;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-/* ===============================
-    CONTENEDOR PRINCIPAL
-================================ */
-.container {
-    max-width: 1200px;
-    margin: 70px auto;
-    padding: 0 24px 50px;
-    position: relative;
-}
+        .container {
+            max-width: 1240px;
+            margin: 40px auto;
+            padding: 0 24px 50px;
+        }
 
-/* ===============================
-    BOTÓN VOLVER
-================================ */
-.back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 25px;
-    text-decoration: none;
-    color: white;
-    background: linear-gradient(135deg,var(--primary),var(--accent));
-    padding: 10px 22px;
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: .95rem;
-    transition: all .25s ease;
-    box-shadow: var(--shadow-md);
-    letter-spacing: .3px;
-}
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: .95rem;
+            transition: all .25s ease;
+            box-shadow: var(--shadow-md);
+        }
 
-.back:hover {
-    background: linear-gradient(135deg,var(--primary-dark),var(--primary));
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: var(--shadow-lg);
-}
+        .back:hover {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
 
-/* ===============================
-    TITULO + SUBTITULO
-================================ */
-h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 14px;
-    background: linear-gradient(to right, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.subtitle {
-    font-size: 1rem;
-    color: var(--text-light);
-    margin-bottom: 40px;
-    max-width: 600px;
-}
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
 
-/* ===============================
-    GRID DE RESULTADOS
-================================ */
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 32px;
-}
+        .main-content {
+            display: flex;
+            gap: 34px;
+            align-items: flex-start;
+        }
 
-/* ===============================
-    TARJETAS PRO
-================================ */
-.card {
-    position: relative;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    overflow: hidden;
-    backdrop-filter: blur(14px);
-    transition: all .4s cubic-bezier(.4,0,.2,1);
-    box-shadow: var(--shadow-md);
-}
+        .filters-wrapper {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+        }
 
-.card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent 60%, rgba(0,87,255,.04));
-    opacity: 0;
-    transition: .4s;
-}
+        .filters {
+            background: var(--glass);
+            padding: 26px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-md);
+        }
 
-.card:hover::before {
-    opacity: 1;
-}
+        .filters h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
 
-.card:hover {
-    transform: translateY(-10px) scale(1.015);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--primary);
-}
+        .filters label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .9rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
 
-/* ===============================
-    IMAGEN TARJETA
-================================ */
-.card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-    transition: .6s ease;
-}
+        .filters input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary);
+        }
 
-.card:hover img {
-    transform: scale(1.08);
-}
+        .filters input[type="text"], 
+        .filters input[type="number"], 
+        .filters select {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.08);
+            font-size: .9rem;
+            outline: none;
+            transition: .25s;
+            background: white;
+        }
 
-/* ===============================
-    BOTONES SOBRE IMAGEN
-================================ */
-.card button {
-    backdrop-filter: blur(8px);
-}
+        .filters input:focus, .filters select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.15);
+        }
 
-/* ===============================
-    CONTENIDO TARJETA
-================================ */
-.card-content {
-    padding: 22px 22px 26px;
-}
+        .filter-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
 
-/* ===============================
-    TAG DE TIPO
-================================ */
-.tag {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: #fff;
-    padding: 6px 16px;
-    border-radius: 100px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: .5px;
-}
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 87, 255, 0.3);
+        }
 
-/* ===============================
-    TITULO INMUEBLE
-================================ */
-.card h3 {
-    margin: 0 0 12px;
-    font-size: 1.15rem;
-    font-weight: 700;
-}
+        .results-wrapper {
+            flex: 1;
+        }
 
-/* ===============================
-    TEXTOS INFO
-================================ */
-.card p {
-    margin-bottom: 8px;
-    color: var(--text-light);
-    font-size: .93rem;
-    line-height: 1.6;
-}
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
 
+        .card {
+            position: relative;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(14px);
+            transition: all .4s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: var(--shadow-md);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(0, 87, 255, 0.3);
+        }
 
-/* ===============================
-    BOTONES SOBRE LA IMAGEN
-================================ */
-.fav {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    border: none;
-    background: var(--glass-strong);
-    font-size: 18px;
-    cursor: pointer;
-    transition: .3s;
-}
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
 
-.fav:hover {
-    background: var(--primary);
-    color: white;
-    transform: scale(1.15) rotate(5deg);
-}
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .6s ease;
+        }
 
+        .card:hover img {
+            transform: scale(1.06);
+        }
 
+        .fav {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--glass-strong);
+            color: #ef4444;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
+        }
 
-/* ===============================
-    MENSAJE SIN RESULTADOS
-================================ */
-.no-results {
-    background: linear-gradient(120deg, #fff7e6, #fff3cd);
-    border-left: 6px solid var(--warning);
-    padding: 24px;
-    border-radius: 18px;
-    max-width: 550px;
-    margin-top: 20px;
-    color: #7a6c00;
-    font-size: 0.95rem;
-    box-shadow: var(--shadow-md);
-}
+        .fav:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.1);
+        }
 
-/* ===============================
-    MODAL MEJORADO
-================================ */
-#imgModal .modal {
-    animation: zoomIn .35s ease;
-}
+        .card-content {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
 
-.see-images-btn {
-    width: 100%;
-    border: none;
-    background: var(--primary);
-    color: white;
-    padding: 10px;
-    border-radius: 12px;
-    font-size: .85rem;
-    margin: 10px 0 15px;
-    transition: .3s;
-}
+        .tag {
+            align-self: flex-start;
+            background: var(--accent-soft);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
 
-.see-images-btn:hover {
-    background: var(--primary-dark);
-}
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
 
+        .price-tag {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
 
-@keyframes zoomIn {
-    from { transform: scale(.7) translateY(40px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-}
+        .info-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: .9rem;
+            color: var(--text-light);
+        }
 
-/* Botones carrusel animados */
-#prevBtn,
-#nextBtn,
-#zoomBtn {
-    transition: all .25s ease;
-}
+        .info-line i {
+            color: var(--primary);
+            margin-top: 3px;
+            width: 16px;
+            text-align: center;
+        }
 
-#prevBtn:hover,
-#nextBtn:hover,
-#zoomBtn:hover {
-    transform: scale(1.08);
-    background: var(--primary-dark) !important;
-}
+        .contacto-inmueble {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0,0,0,0.08);
+        }
 
-/* ===============================
-    CONTENEDOR CON BARRA LATERAL
-================================ */
-.main-content{
-    display:flex;
-    gap:34px;
-}
+        .see-images-btn {
+            width: 100%;
+            border: none;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            padding: 11px;
+            border-radius: 12px;
+            font-size: .88rem;
+            font-weight: 600;
+            margin: 5px 0 15px;
+            transition: .25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-/* ===============================
-    COLUMNA IZQUIERDA - FILTROS
-================================ */
-.filters-wrapper{
-    width:300px;
-    flex-shrink:0;
-}
+        .see-images-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
 
-.filters{
-    background: var(--glass);
-    padding:24px;
-    border-radius:24px;
-    border:1px solid var(--border);
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-sm);
-}
+        .no-results {
+            background: white;
+            border-left: 6px solid var(--warning);
+            padding: 30px;
+            border-radius: 18px;
+            max-width: 600px;
+            margin: 40px auto;
+            color: #7a6c00;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        
+        .no-results i {
+            font-size: 2rem;
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
 
-.filters label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:.9rem;
-}
+        .modal-backdrop-custom {
+            position: fixed; 
+            inset: 0; 
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px); 
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            z-index: 9999;
+        }
 
-.filters input, .filters select{
-    padding:12px 14px;
-    border-radius:12px;
-    border:1px solid var(--border);
-    font-size:.9rem;
-    outline:none;
-    transition:.25s;
-}
+        .modal-custom {
+            background: white; 
+            padding: 24px; 
+            border-radius: 24px;
+            width: 90%; 
+            max-width: 780px; 
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            animation: zoomIn .3s cubic-bezier(.34, 1.56, 0.64, 1);
+        }
 
-.filters input:focus{
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(0,87,255,.1);
-}
+        @keyframes zoomIn {
+            from { transform: scale(.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
 
-/* Botón filtro */
-.filter-btn{
-    background: linear-gradient(135deg,var(--primary),var(--accent));
-    color: white;
-    border:none;
-    padding:12px;
-    border-radius:14px;
-    cursor:pointer;
-    transition:.3s;
-    font-weight:600;
-}
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .filters-wrapper {
+                width: 100%;
+                position: relative;
+                top: 0;
+            }
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-.filter-btn:hover{
-    background: linear-gradient(135deg,var(--primary-dark),var(--primary));
-    transform: translateY(-2px);
-}
-
-
-
-/* ===============================
-    COLUMNA DERECHA
-================================ */
-.results-wrapper{
-    flex:1;
-}
-
-/* Adaptar grid cuando hay barra lateral */
-.results-wrapper .results-grid{
-    grid-template-columns: repeat(2, 1fr);
-}
-
-/* ===============================
-    RESPONSIVE
-================================ */
-@media (max-width:900px){
-    .main-content{
-        flex-direction:column;
-    }
-
-    .filters-wrapper{
-        width:100%;
-    }
-
-    .results-wrapper .results-grid{
-        grid-template-columns:1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    h1 {
-        font-size: 1.65rem;
-    }
-
-    .card img {
-        height: 180px;
-    }
-}
-</style>
-
+        @media (max-width: 680px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="container">
 
-        <!-- Botón para volver al inicio -->
-        <a href="{{ url('/') }}" class="back"> Volver</a>
+        <a href="{{ url('/') }}" class="back"><i class="fa-solid fa-arrow-left"></i> Volver</a>
 
-        <!-- Título principal -->
         <h1>Resultados encontrados</h1>
-
-        <!-- Subtítulo explicativo -->
         <div class="subtitle">
-            Aquí están los inmuebles que coinciden con tu búsqueda.
+            Aquí están los inmuebles que coinciden con tu búsqueda actual.
         </div>
 
-        <!-- Verifica si existen inmuebles -->
         @if ($inmuebles->count() > 0)
+        <div class="main-content">
 
-<div class="main-content">
+            <div class="filters-wrapper">
+                <form class="filters" method="GET" action="{{ route('buscador.inmuebles') }}">
+                    
+                    <h5><i class="fa-solid fa-sliders"></i> Filtrar Búsqueda</h5>
 
-    <!-- FILTROS A LA IZQUIERDA -->
-    <div class="filters-wrapper">
-        <form class="filters" method="GET" action="{{ route('buscador.inmuebles') }}">
+                    <input type="text" name="q" placeholder="Título, barrio o municipio..." value="{{ request('q') }}">
 
-            <!-- Texto general de búsqueda -->
-            <input type="text" name="q" placeholder="Buscar por título, barrio o municipio..." value="{{ request('q') }}">
+                    <select name="municipio_id" id="municipioSelect">
+                        <option value="">Seleccionar municipio</option>
+                        @foreach($municipios as $municipio)
+                            <option value="{{ $municipio->id }}" {{ request('municipio_id') == $municipio->id ? 'selected' : '' }}>
+                                {{ $municipio->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
 
-            <!-- MUNICIPIO -->
-        <select name="municipio_id" id="municipioSelect">
-            <option value="">Seleccionar municipio</option>
-            @foreach($municipios as $municipio)
-                <option value="{{ $municipio->id }}"
-                    {{ request('municipio_id') == $municipio->id ? 'selected' : '' }}>
-                    {{ $municipio->nombre }}
-                </option>
-            @endforeach
-        </select>
+                    <div class="d-flex gap-2">
+                        <input type="number" name="precio_min" placeholder="Mínimo" min="0" value="{{ request('precio_min') }}" style="width:50%;">
+                        <input type="number" name="precio_max" placeholder="Máximo" min="0" value="{{ request('precio_max') }}" style="width:50%;">
+                    </div>
 
-                <!-- PRECIO MÍNIMO -->
-<input 
-    type="number" 
-    name="precio_min" 
-    placeholder="Precio mínimo" 
-    min="0" 
-    value="{{ request('precio_min') }}"
->
+                    <div class="d-flex flex-column gap-2 mt-2">
+                        <label><input type="checkbox" name="tipos[]" value="Casa" {{ in_array('Casa', request('tipos', [])) ? 'checked' : '' }}> Casa</label>
+                        <label><input type="checkbox" name="tipos[]" value="Apartamento" {{ in_array('Apartamento', request('tipos', [])) ? 'checked' : '' }}> Apartamento</label>
+                        <label><input type="checkbox" name="tipos[]" value="Lote" {{ in_array('Lote', request('tipos', [])) ? 'checked' : '' }}> Lote</label>
+                        <label><input type="checkbox" name="tipos[]" value="Local comercial" {{ in_array('Local comercial', request('tipos', [])) ? 'checked' : '' }}> Local comercial</label>
+                    </div>
 
-<!-- PRECIO MÁXIMO -->
-<input 
-    type="number" 
-    name="precio_max" 
-    placeholder="Precio máximo" 
-    min="0" 
-    value="{{ request('precio_max') }}"
+                    <button type="submit" class="filter-btn">Aplicar filtros</button>
 
-            <!-- Tipos de inmueble (deben ser ARRAY: tipos[]) -->
-            <label><input type="checkbox" name="tipos[]" value="Casa"
-                {{ in_array('Casa', request('tipos', [])) ? 'checked' : '' }}> Casa</label>
+                    <a href="{{ route('buscador.inmuebles') }}" style="text-align:center; font-size:0.85rem; color:var(--primary); text-decoration:none; font-weight:600;">
+                        Limpiar todos los filtros
+                    </a>
+                </form>
+            </div>
 
-            <label><input type="checkbox" name="tipos[]" value="Apartamento"
-                {{ in_array('Apartamento', request('tipos', [])) ? 'checked' : '' }}> Apartamento</label>
+            <div class="results-wrapper">
+                <div class="results-grid">
 
-            <label><input type="checkbox" name="tipos[]" value="Lote"
-                {{ in_array('Lote', request('tipos', [])) ? 'checked' : '' }}> Lote</label>
+                    @foreach ($inmuebles as $item)
+                        @php
+                            $raw = [];
+                            $imagenesStr = $item->imagenes ?? '';
+                            
+                            if (is_string($imagenesStr)) {
+                                if (str_starts_with($imagenesStr, '[')) {
+                                    $raw = json_decode($imagenesStr, true) ?: [];
+                                }
+                                if (!str_starts_with($imagenesStr, '[') && str_contains($imagenesStr, ',')) {
+                                    $raw = array_map('trim', explode(',', $imagenesStr));
+                                }
+                                if (!str_starts_with($imagenesStr, '[') && !str_contains($imagenesStr, ',') && strlen($imagenesStr) > 0) {
+                                    $raw = [$imagenesStr];
+                                }
+                            }
+                            
+                            if (empty($raw) && method_exists($item, 'imagens') && $item->imagens) {
+                                $raw = $item->imagens->pluck('ruta')->toArray() ?? [];
+                            }
 
-            <label><input type="checkbox" name="tipos[]" value="Local comercial"
-                {{ in_array('Local comercial', request('tipos', [])) ? 'checked' : '' }}> Local comercial</label>
+                            $images = [];
+                            foreach ($raw as $p) {
+                                if ($p) {
+                                    if (str_starts_with($p, 'http://') || str_starts_with($p, 'https://')) {
+                                        $images[] = $p;
+                                    }
+                                    if (!str_starts_with($p, 'http://') && !str_starts_with($p, 'https://')) {
+                                        $images[] = asset('storage/' . ltrim($p, '/'));
+                                    }
+                                }
+                            }
+                        @endphp
 
-            <button type="submit" class="filter-btn">Aplicar filtros</button>
+                        <div class="card">
+                            <button class="fav"><i class="fa-solid fa-heart"></i></button>
 
-            <a href="{{ route('buscador.inmuebles') }}"
-            style="text-align:center;font-size:0.85rem;color:var(--primary);text-decoration:none;">
-            Limpiar filtros
-            </a>
-        </form>
+                            <div class="img-container">
+                                <img src="{{ $images[0] ?? 'https://via.placeholder.com/400x250' }}" alt="Imagen inmueble">
+                            </div>
 
-    </div>
+                            <div class="card-content">
+                                <span class="tag">{{ $item->tipo }}</span>
+                                <h3>{{ $item->titulo }}</h3>
+                                
+                                <div class="price-tag">${{ number_format($item->precio) }}</div>
 
-    <!-- RESULTADOS A LA DERECHA -->
-    <div class="results-wrapper">
-        <div class="results-grid">
+                                <button class="see-images-btn" type="button" data-images="{{ json_encode($images) }}" onclick="abrirModal(JSON.parse(this.getAttribute('data-images')), 0)">
+                                    <i class="fa-solid fa-camera"></i> Ver galería ({{ count($images) }})
+                                </button>
 
-            @foreach ($inmuebles as $item)
-        @php
-    $raw = [];
+                                <div class="info-line">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span>{{ $item->direccion }}</span>
+                                </div>
 
-    // Caso 1: viene como JSON válido
-    if (is_string($item->imagenes) && str_starts_with($item->imagenes, '[')) {
-        $raw = json_decode($item->imagenes, true) ?: [];
-    }
-    // Caso 2: viene separado por comas
-    elseif (is_string($item->imagenes) && str_contains($item->imagenes, ',')) {
-        $raw = array_map('trim', explode(',', $item->imagenes));
-    }
-    // Caso 3: viene como un solo archivo en string
-    elseif (is_string($item->imagenes)) {
-        $raw = [$item->imagenes];
-    }
-    // Caso 4: relación "imagens" desde tu CRUD
-    elseif (method_exists($item, 'imagens') && $item->imagens->count()) {
-        $raw = $item->imagens->pluck('ruta')->toArray();
-    }
+                                <div class="info-line">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    <span>{{ $item->barrio->municipio->nombre ?? 'Sin municipio' }} - {{ $item->barrio->nombre ?? '' }}</span>
+                                </div>
 
-    // Convertir rutas a URL válidas
-    $images = array_map(function($p){
-        if (!$p) return null;
+                                @if($item->usuario)
+                                <div class="contacto-inmueble">
+                                    @if(!empty($item->usuario->telefono))
+                                        <div class="info-line" style="margin-bottom: 5px;">
+                                            <i class="fa-solid fa-phone"></i>
+                                            <strong>{{ $item->usuario->telefono }}</strong>
+                                        </div>
+                                    @endif
 
-        // URL completa
-        if (Str::startsWith($p, ['http://', 'https://'])) {
-            return $p;
-        }
-
-        return asset('storage/' . ltrim($p, '/'));
-    }, $raw);
-
-    $images = array_values(array_filter($images));
-@endphp
-
-
-        <div class="card">
-
-            <button class="fav">❤</button>
-
-
-            <img src="{{ $images[0] ?? 'https://via.placeholder.com/400x250' }}" alt="Imagen inmueble">
-
-            <div class="card-content">
-                <span class="tag">{{ $item->tipo }}</span>
-
-                <h3>{{ $item->titulo }}</h3>
-
-                <button class="see-images-btn" type="button" onclick="verImagen('{{ $images[0] ?? '' }}')">
-                📷 Ver imagen
-                </button>
-
-
-                <p><strong>Precio:</strong> ${{ number_format($item->precio) }}</p>
-                <p><strong>Ubicación:</strong> {{ $item->direccion }}</p>
-                <p class="location"><strong>Municipio:</strong>
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    {{ $item->barrio->municipio->nombre ?? 'Sin municipio' }} - {{ $item->barrio->nombre ?? '' }}
-                </p>
-                @if($item->usuario)
-                <div class="contacto-inmueble">
-
-                    @if(!empty($item->usuario->telefono))
-                        <p class="contact-info">
-                            <strong>Teléfono:</strong>
-                            <i class="fa-solid fa-phone"></i>
-                            {{ $item->usuario->telefono }}
-                        </p>
-                    @endif
-
-                    @if(!empty($item->usuario->email))
-                        <p class="contact-info">
-                            <strong>Correo:</strong>
-                            <i class="fa-solid fa-envelope"></i>
-                            {{ $item->usuario->email }}
-                        </p>
-                    @endif
-
+                                    @if(!empty($item->usuario->email))
+                                        <div class="info-line" style="font-size: 0.85rem;">
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <span>{{ $item->usuario->email }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
 
                 </div>
-                @endif
-
-
-
             </div>
 
         </div>
+        @endif
 
-@endforeach
-
+        @if ($inmuebles->count() == 0)
+        <div class="no-results">
+            <i class="fa-solid fa-house-crack"></i>
+            <h4>No se encontraron inmuebles</h4>
+            <p class="mb-3 text-muted">No hay propiedades disponibles que cumplan con los criterios seleccionados en este momento.</p>
+            <a href="{{ route('buscador.inmuebles') }}" class="btn btn-sm btn-primary px-3 rounded-pill">Ver todos los inmuebles</a>
         </div>
-    </div>
-
-</div>
-
-@endif
-
+        @endif
 
     </div>
 
-    <!-- ======================= -->
-    <!-- MODAL DE CARRUSEL       -->
-    <!-- ======================= -->
     <div id="imgModal" style="display:none;">
-        <div class="modal-backdrop"
-            style="position:fixed; inset:0; background:rgba(0,0,0,0.55);
-                backdrop-filter:blur(8px); display:flex; justify-content:center;
-                align-items:center; z-index:9999;">
+        <div class="modal-backdrop-custom">
+            <div class="modal-custom">
 
-            <div class="modal"
-                style="background:white; padding:15px; border-radius:15px;
-                    width:90%; max-width:760px; position:relative;">
+                <button id="closeModal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color: var(--text-dark); z-index: 10;">✕</button>
 
-                <!-- Botón Cerrar -->
-                <button id="closeModal"
-                    style="position:absolute; top:10px; right:10px; background:none;
-                        border:none; font-size:26px; cursor:pointer;">✕</button>
+                <div style="width:100%; height:400px; background: #f8fafc; border-radius:16px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                    <img id="imgModalSrc" src="" style="max-width:100%; max-height:100%; object-fit:contain;">
+                </div>
 
-                <!-- Imagen -->
-                <img id="imgModalSrc" src=""
-                    style="width:100%; height:420px; object-fit:contain; border-radius:10px;">
-
-                <!-- Controles del carrusel -->
-                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                    <button id="prevBtn"
-                        style="background:#0d6efd; padding:6px 14px; border:none;
-                            color:white; border-radius:8px; cursor:pointer;">⬅
-                        Anterior</button>
-
-                    <button id="zoomBtn"
-                        style="background:#6c757d; padding:6px 14px; border:none;
-                            color:white; border-radius:8px; cursor:pointer;">🔍
-                        Zoom</button>
-
-                    <button id="nextBtn"
-                        style="background:#0d6efd; padding:6px 14px; border:none;
-                            color:white; border-radius:8px; cursor:pointer;">Siguiente
-                        ➡</button>
+                <div style="display:flex; justify-content:space-between; margin-top:20px; gap:10px;">
+                    <button id="prevBtn" class="btn btn-outline-primary px-4 rounded-pill"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+                    <button id="zoomBtn" class="btn btn-light px-4 rounded-pill"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver completo</button>
+                    <button id="nextBtn" class="btn btn-outline-primary px-4 rounded-pill">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
                 </div>
 
             </div>
         </div>
     </div>
-
 
     <script>
         let imagenesCarrusel = [];
         let indexActual = 0;
 
         function abrirModal(listaImagenes, indexInicial = 0) {
-            imagenesCarrusel = listaImagenes;
+            if(!listaImagenes || listaImagenes.length === 0) {
+                imagenesCarrusel = ['https://via.placeholder.com/400x250'];
+            } else {
+                imagenesCarrusel = listaImagenes;
+            }
+            
             indexActual = indexInicial;
-
             actualizarImagen();
-
             document.getElementById('imgModal').style.display = "block";
         }
 
@@ -661,85 +589,30 @@ h1 {
             document.getElementById('imgModalSrc').src = imagenesCarrusel[indexActual];
         }
 
-        function verImagen(src) {
-            if(!src) return;
-            document.getElementById('fullImgSrc').src = src;
-            document.getElementById('fullImgModal').style.display = 'block';
-        }
-
-        function cerrarImg() {
-            document.getElementById('fullImgModal').style.display = 'none';
-        }
-
-
-        // Botones
         document.getElementById("prevBtn").addEventListener("click", () => {
-            indexActual = (indexActual === 0) ?
-                imagenesCarrusel.length - 1 :
-                indexActual - 1;
+            indexActual = (indexActual === 0) ? imagenesCarrusel.length - 1 : indexActual - 1;
             actualizarImagen();
         });
 
         document.getElementById("nextBtn").addEventListener("click", () => {
-            indexActual = (indexActual === imagenesCarrusel.length - 1) ?
-                0 :
-                indexActual + 1;
+            indexActual = (indexActual === imagenesCarrusel.length - 1) ? 0 : indexActual + 1;
             actualizarImagen();
         });
 
         document.getElementById("zoomBtn").addEventListener("click", () => {
-            const zoom = window.open("", "_blank");
-            zoom.document.write(`<img src="${imagenesCarrusel[indexActual]}" style="width:100%">`);
+            window.open(imagenesCarrusel[indexActual], "_blank");
         });
 
         document.getElementById("closeModal").addEventListener("click", () => {
             document.getElementById('imgModal').style.display = "none";
         });
+        
+        document.querySelector('.modal-backdrop-custom').addEventListener('click', (e) => {
+            if(e.target === e.currentTarget) {
+                document.getElementById('imgModal').style.display = "none";
+            }
+        });
     </script>
-    
-
-        <div id="fullImgModal" style="display:none;">
-    <div style="
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,0.85);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:99999;
-    ">
-        <div style="position:relative; text-align:center;">
-            
-            <img id="fullImgSrc" 
-                src="" 
-                style="
-                    width: 800px;
-                    height: 550px;
-                    object-fit: cover;
-                    border-radius:14px;
-                    box-shadow:0 0 20px #000;
-            ">
-
-
-            <!-- Botón Volver -->
-            <button onclick="cerrarImg()" 
-                style="
-                    margin-top:18px;
-                    background:white;
-                    padding:10px 22px;
-                    border:none;
-                    font-size:1rem;
-                    border-radius:10px;
-                    cursor:pointer;
-                    font-weight:600;
-                ">
-                ⬅ Volver
-            </button>
-
-        </div>
-    </div>
-</div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>

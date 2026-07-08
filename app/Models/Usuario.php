@@ -33,12 +33,7 @@ class Usuario extends Model
     {
         return $this->hasMany(Inmueble::class, 'idUsuario');
     }
-
-    public function interacciones()
-    {
-        return $this->hasMany(Interaccion::class);
-    }
-
+    
     public function municipio()
     {
         return $this->belongsTo(Municipio::class, 'idMunicipio');

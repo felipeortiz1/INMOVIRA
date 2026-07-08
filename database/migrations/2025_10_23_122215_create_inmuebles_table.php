@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('nHabitaciones')->nullable();
             $table->integer('nBaños')->nullable();
             $table->integer('nParqueaderos')->nullable();
-            $table->integer('nPiso')->nullable();   
+            $table->integer('nPiso')->nullable();
             $table->integer('pisoNumero')->nullable();
             $table->text('descripcion')->nullable();
             $table->timestamp('fechaPublicacion')->useCurrent();

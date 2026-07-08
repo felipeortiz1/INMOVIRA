@@ -13,6 +13,7 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class InmuebleController extends Controller
 {
     // Lista de inmuebles con filtros avanzados y paginación.
@@ -211,7 +212,7 @@ class InmuebleController extends Controller
                 ]);
             }
         }
-
+                    
         return redirect()
             ->route('inmuebles.index')
             ->with('success', 'Inmueble actualizado correctamente.');
@@ -365,7 +366,8 @@ class InmuebleController extends Controller
                 $q2->where('nombreEmpresa', 'LIKE', "%{$term}%")
                     ->orWhere('nombre', 'LIKE', "%{$term}%")
                     ->orWhere('email', 'LIKE', "%{$term}%")
-                    ->orWhere('telefono', 'LIKE', "%{$term}%");
+                    ->orWhere('telefono', 'LIKE', "%{$term}%")
+                    ->orWhere('municipio', 'LIKE', "%{$term}%");
             });
         }
 

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'InmobiRovira',
+    'title' => 'Inmobira',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<a href="/pagina-principal" style="color: #fff; font-weight:600; text-decoration:none;"><b>Inmobi</b>Rovira</a>',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<a href="/pagina-principal" style="color: #fff; font-weight:600; text-decoration:none;"><b>Inmobira</b></a>',
+    'logo_img' => 'img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'Inmobira logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'img/auth-logo.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -113,8 +113,8 @@ return [
         'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'img/preloader.png',
+            'alt' => 'Inmobira Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,

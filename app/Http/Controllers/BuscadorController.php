@@ -18,9 +18,7 @@ class BuscadorController extends Controller
         $precio_min   = $request->input('precio_min');
         $precio_max   = $request->input('precio_max');
 
-
         $inmuebles = Inmueble::query()
-
 
             // ✅ FILTRO POR TIPOS
             ->when(!empty($tipos), function ($query) use ($tipos) {
@@ -29,14 +27,14 @@ class BuscadorController extends Controller
                 });
             })
 
-            // ✅ FILTRO POR MUNICIPIO (SELECT)
+            // ✅ FILTRO POR MUNICIPIO (Buscando directamente por idMunicipio en la tabla barrios)
             ->when($municipio_id, function ($query) use ($municipio_id) {
-                $query->whereHas('barrio.municipio', function ($m) use ($municipio_id) {
-                    $m->where('id', $municipio_id);
+                $query->whereHas('barrio', function ($b) use ($municipio_id) {
+                    $b->where('idMunicipio', $municipio_id);
                 });
             })
 
-            // ✅ FILTRO POR BARRIO (SELECT)
+            // ✅ FILTRO POR BARRIO
             ->when($barrio_id, function ($query) use ($barrio_id) {
                 $query->where('barrio_id', $barrio_id);
             })
@@ -51,19 +49,16 @@ class BuscadorController extends Controller
                 $query->where('precio', '<=', $precio_max);
             })
 
-
-            // ✅ FILTRO POR TEXTO (BUSCADOR)
+            // ✅ FILTRO POR TEXTO (BUSCADOR GENERAL)
             ->when($q, function ($query) use ($q) {
-
                 $qMinus = mb_strtolower($q);
 
                 $query->where(function ($sub) use ($q, $qMinus) {
-
                     $sub->where('titulo', 'LIKE', "%$q%")
                         ->orWhere('direccion', 'LIKE', "%$q%")
                         ->orWhere('descripcion', 'LIKE', "%$q%")
 
-                        // BUSCAR MUNICIPIO POR TEXTO (con tildes)
+                        // BUSCAR MUNICIPIO POR TEXTO
                         ->orWhereHas('barrio.municipio', function ($m) use ($qMinus) {
                             $m->whereRaw("
                                 LOWER(
@@ -92,12 +87,12 @@ class BuscadorController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        // ✅ MUNICIPIOS
+        // ✅ MUNICIPIOS PARA EL SELECT
         $municipios = Municipio::orderBy('nombre')->get();
 
-        // ✅ BARRIOS filtrados según municipio
-        $barrios = Barrio::when($municipio_id, function ($q) use ($municipio_id) {
-            $q->where('municipio_id', $municipio_id);
+        // ✅ BARRIOS FILTRADOS (Corregido 'municipio_id' por 'idMunicipio' para evitar error 1054)
+        $barrios = Barrio::when($municipio_id, function ($query) use ($municipio_id) {
+            $query->where('idMunicipio', $municipio_id);
         })
         ->orderBy('nombre')
         ->get();
@@ -112,4 +107,4 @@ class BuscadorController extends Controller
             'barrio_id'
         ));
     }
-}
+}   

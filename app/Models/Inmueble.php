@@ -51,11 +51,6 @@ class Inmueble extends Model
         return $this->hasMany(Imagen::class, 'idInmueble');
     }
 
-    public function interacciones()
-    {
-        return $this->hasMany(Interaccion::class);
-    }
-
     public function municipio()
     {
         return $this->belongsTo(Municipio::class, 'idMunicipio');

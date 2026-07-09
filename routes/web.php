@@ -13,6 +13,8 @@ use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\UserController;
 use App\Models\Barrio;
 use App\Models\Municipio;
+use App\Http\Controllers\PasswordResetController;
+
 
 // Ruta inicial -> redirige siempre al login
 Route::get('/', function () {
@@ -131,3 +133,22 @@ Route::delete('/perfil/eliminar-avatar', [UserController::class, 'deleteAvatar']
 
 Route::get('/admin/usuarios/{id}/inmuebles', [UsuarioController::class, 'inmuebles'])
     ->name('usuarios.inmuebles');
+
+
+
+    //Rutas del apartado de Olvide la contraseña
+Route::get('/olvide-mi-contrasena', [PasswordResetController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/olvide-mi-contrasena', [PasswordResetController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/restablecer-contrasena/{token}', [PasswordResetController::class, 'edit'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/restablecer-contrasena', [PasswordResetController::class, 'update'])
+    ->middleware('guest')
+    ->name('password.update');

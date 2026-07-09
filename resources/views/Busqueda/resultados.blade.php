@@ -393,6 +393,14 @@
             h1 {
                 font-size: 1.8rem;
             }
+
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            #backFromFullBtn:hover { background: rgba(255,255,255,0.3) !important; transform: translateX(-2px); }
+            #closeFullModal:hover { opacity: 1; transform: scale(1.1); }
+
         }
     </style>
 </head>
@@ -569,6 +577,14 @@
         </div>
     </div>
 
+    <div id="fullScreenModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10000; flex-direction:column; justify-content:center; align-items:center; backdrop-filter: blur(10px); animation: fadeIn 0.2s ease;">
+        <button id="closeFullModal" style="position:absolute; top:20px; right:25px; background:none; border:none; font-size:32px; cursor:pointer; color: white; opacity:0.8; transition:0.2s; z-index: 10001;">✕</button>
+        
+        <div style="width:90%; height:80vh; display:flex; align-items:center; justify-content:center;">
+            <img id="fullScreenImgSrc" src="" style="max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        </div>
+    </div>
+
     <script>
         let imagenesCarrusel = [];
         let indexActual = 0;
@@ -600,7 +616,10 @@
         });
 
         document.getElementById("zoomBtn").addEventListener("click", () => {
-            window.open(imagenesCarrusel[indexActual], "_blank");
+            // Al presionar 'Ver completo', cargamos la imagen actual en el modal de pantalla completa
+            document.getElementById("fullScreenImgSrc").src = imagenesCarrusel[indexActual];
+            // Mostramos el modal de pantalla completa usando flex
+            document.getElementById("fullScreenModal").style.display = "flex";
         });
 
         document.getElementById("closeModal").addEventListener("click", () => {
@@ -612,9 +631,30 @@
                 document.getElementById('imgModal').style.display = "none";
             }
         });
+
+
+        const fullModal = document.getElementById("fullScreenModal");
+
+        document.getElementById("closeFullModal").addEventListener("click", () => {
+            fullModal.style.display = "none";
+        });
+
+        document.getElementById("backFromFullBtn").addEventListener("click", (e) => {
+            e.preventDefault();
+            fullModal.style.display = "none";
+        });
+
+        fullModal.addEventListener('click', (e) => {
+            if(e.target === e.currentTarget) {
+                fullModal.style.display = "none";
+            }
+    });
+
     </script>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

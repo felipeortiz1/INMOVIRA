@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.onload = e => {
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.classList.add('rounded','shadow','p-1');
+                img.classList.add('rounded','shadow','p-2');
                 img.style.width='120px';
                 preview.appendChild(img);
             };

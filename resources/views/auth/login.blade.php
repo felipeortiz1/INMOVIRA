@@ -398,6 +398,11 @@
                                 Mantener sesión iniciada
                             </label>
                         </div>
+
+                        <a href="{{ route('password.request') }}" class="text-link" style="font-size: 0.9rem;">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                        
                     </div>
 
                     <div class="fade-in-up delay-4">

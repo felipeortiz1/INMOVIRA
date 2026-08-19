@@ -781,7 +781,7 @@
 
     <header id="header">
         <div class="nav-container">
-            <a href="{{ route('pagina.principal') }}" class="logo">
+            <a class="logo">
                 <i class="fa-solid fa-house-chimney"></i> <span>Inmobira</span>
             </a>
             

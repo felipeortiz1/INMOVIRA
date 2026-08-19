@@ -5,161 +5,199 @@
 @section('titleContent', 'Administrar Localidades')
 
 @section('content')
-    <div class="container mt-4 animate-fade">
-        <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
-                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-mountain-city"></i> Lista de Municipios</h5>
-            </div>
+    <div class="container-fluid px-4 py-4 animate-fade">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
 
-            {{-- FILTROS --}}
-            <div class="mt-4 mb-4 p-4 border rounded bg-light shadow-sm">
-
-                <form id="formFiltros" action="{{ route('municipios.index') }}" method="GET" class="row g-3">
-
-                    {{-- BUSCAR --}}
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Buscar (municipio o Codigo Postal)</label>
-                        <input type="text" id="buscador" name="buscar" class="form-control" autocomplete="off"
-                            placeholder="Escribe para buscar...">
-                        <div id="sugerencias" class="list-group position-absolute w-100 mt-1"
-                            style="z-index: 1000; display: none;"></div>
+            <!-- Card Header Principal -->
+            <div class="card-header bg-gradient-dark text-white p-4 border-0">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="header-icon-box bg-primary text-white rounded-3 p-3 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-mountain-city fa-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 fw-bold text-white">Lista de Municipios</h4>
+                            <p class="mb-0 text-white-50 fs-7">Gestiona las localidades y sus códigos postales dentro del sistema</p>
+                        </div>
                     </div>
-
-                    {{-- BOTONES --}}
-                    <div class="col-md-12 d-flex justify-content-end">
-                        <button class="btn btn-primary me-3 px-4">
-                            <i class="fas fa-filter"></i> Filtrar
-                        </button>
-
-                        <a href="{{ route('municipios.index') }}" class="btn btn-secondary px-4">
-                            Limpiar filtros
-                        </a>
-                    </div>
-
-                </form>
-
+                </div>
             </div>
 
             <div class="card-body p-4">
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="{{ route('municipios.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                        <i class="fas fa-plus-circle"></i> Crear Municipio
-                    </a>
+                <!-- PANEL DE FILTROS -->
+                <div class="filter-panel p-4 rounded-4 mb-4 border bg-light-subtle">
+                    <div class="d-flex align-items-center mb-3 gap-2 border-bottom pb-2">
+                        <i class="fas fa-sliders text-primary"></i>
+                        <h6 class="fw-bold mb-0 text-dark">Filtros de Búsqueda Avanzada</h6>
+                    </div>
 
-                    {{-- Botón filtro ID Asc - Desc --}}
-                    @php
-                        $currentDirection = request('direction') === 'desc' ? 'desc' : 'asc';
-                        $nextDirection = $currentDirection === 'asc' ? 'desc' : 'asc';
+                    <form id="formFiltros" action="{{ route('municipios.index') }}" method="GET" class="row g-3">
 
-                        $toggleParams = array_merge(request()->all(), [
-                            'sort' => 'id',
-                            'direction' => $nextDirection
-                        ]);
+                        {{-- BUSCAR --}}
+                        <div class="col-md-12 position-relative">
+                            <label class="form-label text-muted small fw-semibold">Buscar (municipio o Código Postal)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                                <input type="text" id="buscador" name="buscar" class="form-control border-start-0 ps-0" autocomplete="off"
+                                    placeholder="Escribe para buscar..." value="{{ request('buscar') }}">
+                            </div>
+                            <div id="sugerencias" class="list-group position-absolute w-100 mt-1 shadow-lg rounded-3"
+                                style="z-index: 1000; display: none;"></div>
+                        </div>
 
-                        $buttonText = $currentDirection === 'asc'
-                            ? 'Ordenar por ID ↓ Descendente'
-                            : 'Ordenar por ID ↑ Ascendente';
-                    @endphp
-                    <a href="{{ route('municipios.index', $toggleParams) }}" class="btn btn-secondary rounded-pill px-4 shadow-sm mb-3">
-                        {{ $buttonText }}
-                    </a>
+                        {{-- BOTONES --}}
+                        <div class="col-md-12 d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+                            <a href="{{ route('municipios.index') }}" class="btn btn-light rounded-pill px-4 fw-semibold border">
+                                <i class="fas fa-rotate-left me-1"></i> Limpiar filtros
+                            </a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                                <i class="fas fa-filter me-1"></i> Filtrar
+                            </button>
+                        </div>
 
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-                        <i class="fas fa-arrow-left"></i> Volver
-                    </a>
+                    </form>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle text-center shadow-sm">
-                        <thead class="table-primary">
+                <!-- BARRA DE ACCIONES SUPERIORES -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                    <a href="{{ route('municipios.create') }}" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-semibold">
+                        <i class="fas fa-plus-circle me-1"></i> Crear Municipio
+                    </a>
+
+                    <div class="d-flex align-items-center gap-2">
+                        @php
+                            $currentDirection = request('direction') === 'desc' ? 'desc' : 'asc';
+                            $nextDirection = $currentDirection === 'asc' ? 'desc' : 'asc';
+
+                            $toggleParams = array_merge(request()->all(), [
+                                'sort' => 'id',
+                                'direction' => $nextDirection
+                            ]);
+
+                            $buttonText = $currentDirection === 'asc'
+                                ? 'Ordenar por ID ↓ Descendente'
+                                : 'Ordenar por ID ↑ Ascendente';
+                        @endphp
+                        <a href="{{ route('municipios.index', $toggleParams) }}" class="btn btn-outline-secondary rounded-pill px-3 py-2 text-dark border fw-medium bg-white shadow-sm">
+                            <i class="fas fa-sort me-1 text-primary"></i> {{ $buttonText }}
+                        </a>
+
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
+                            <i class="fas fa-arrow-left me-1"></i> Volver
+                        </a>
+                    </div>
+                </div>
+
+                <!-- TABLA DE MUNICIPIOS -->
+                <div class="table-responsive rounded-3 border">
+                    <table class="table table-hover align-middle mb-0 text-center custom-table">
+                        <thead class="bg-light border-bottom">
                             <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Código Postal</th>
-                                <th>Acciones</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3" style="width: 100px;">ID</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3 text-start ps-4">Nombre</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3">Código Postal</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @forelse($municipios as $municipio)
                                 <tr>
-                                    <td class="fw-semibold text-secondary">{{ $municipio->id }}</td>
-                                    <td>{{ $municipio->nombre }}</td>
-                                    <td><span
-                                            class="badge bg-light text-dark px-3 py-2">{{ $municipio->codigoPostal }}</span>
+                                    <td class="fw-bold text-muted">#{{ $municipio->id }}</td>
+                                    <td class="text-start ps-4 fw-bold text-dark">{{ $municipio->nombre }}</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal">
+                                            <i class="fas fa-mail-bulk me-1 text-primary"></i>{{ $municipio->codigoPostal }}
+                                        </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('municipios.edit', $municipio->id) }}"
-                                            class="btn btn-sm btn-warning rounded-pill shadow-sm me-1">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
-                                        <form action="{{ route('municipios.destroy', $municipio->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-danger rounded-pill shadow-sm"
-                                                onclick="confirmarEliminacion(event)">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                        </form>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <a href="{{ route('municipios.edit', $municipio->id) }}"
+                                                class="btn btn-sm btn-outline-warning rounded-circle action-btn"
+                                                title="Editar">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+
+                                            <form action="{{ route('municipios.destroy', $municipio->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle action-btn"
+                                                    onclick="confirmarEliminacion(event)" title="Eliminar">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-muted py-3">No hay municipios registrados aún.</td>
+                                    <td colspan="4" class="text-muted py-5">
+                                        <div class="py-3">
+                                            <i class="fas fa-inbox display-6 text-light-gray d-block mb-3"></i>
+                                            <span class="fw-medium">No hay municipios registrados aún.</span>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
-                    {{-- Paginación --}}
-                    <div class="d-flex justify-content-center mt-3">{{ $municipios->links('pagination::bootstrap-5') }}
-                    </div>
                 </div>
+
+                {{-- PAGINACIÓN --}}
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $municipios->links('pagination::bootstrap-5') }}
+                </div>
+
             </div>
         </div>
     </div>
 
+    {{-- ESTILOS EXCLUSIVOS DE LA VISTA --}}
     <style>
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        .fs-7 { font-size: 0.8rem; }
+
+        .filter-panel {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0 !important;
         }
 
-        table thead tr {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .custom-table tbody tr {
+            transition: all 0.2s ease;
         }
 
-        table tbody tr:hover {
-            background-color: #f9fafc;
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
         }
 
-        th,
-        td {
-            padding: 1rem 1.2rem !important;
-            vertical-align: middle !important;
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-outline-warning:hover {
-            background-color: #ffc107;
-            color: white;
+        .text-light-gray { color: #cbd5e1; }
+
+        .animate-fade {
+            animation: fadeIn 0.4s ease-in-out;
         }
 
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-outline-warning,
-        .btn-outline-danger {
-            border-radius: 30px;
-            font-weight: 500;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 
@@ -200,7 +238,7 @@
             const input = document.getElementById('buscador');
             const box = document.getElementById('sugerencias');
 
-            input.addEventListener('keyup', function() {
+            input?.addEventListener('keyup', function() {
                 const query = this.value.trim();
 
                 if (query.length < 1) {
@@ -224,9 +262,9 @@
                             item.type = "button";
                             item.classList.add('list-group-item', 'list-group-item-action');
                             item.innerHTML = `
-                        <strong>${municipios.nombre}</strong><br>
-                        <small>${municipios.codigoPostal}</small>
-                    `;
+                                <strong>${municipios.nombre}</strong><br>
+                                <small>${municipios.codigoPostal}</small>
+                            `;
 
                             // Al hacer clic se llena el input
                             item.addEventListener('click', function() {
@@ -244,8 +282,8 @@
 
             // Cerrar menú si se hace clic fuera
             document.addEventListener('click', function(e) {
-                if (!input.contains(e.target) && !box.contains(e.target)) {
-                    box.style.display = 'none';
+                if (!input?.contains(e.target) && !box?.contains(e.target)) {
+                    if (box) box.style.display = 'none';
                 }
             });
         });

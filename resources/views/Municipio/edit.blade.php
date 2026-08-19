@@ -3,133 +3,149 @@
 @section('titulo', 'Editar Municipio')
 
 @section('content')
-    <div class="container mt-4 animate-fade">
-        <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #ffc107, #e0a800);">
-                <h5 class="mb-0 fw-bold">
-                    <i class="fa-solid fa-mountain-city"></i> Editar Municipio
-                </h5>
-            </div>
+    <div class="container-fluid px-4 py-4 animate-fade">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
 
-            {{-- Mostrar errores del Request --}}
-            @if ($errors->any())
-                <div class="alert alert-danger mt-3">
-                    <strong>Por favor corrige los siguientes errores:</strong>
-                    <ul class="mt-2 mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    <!-- Card Header Principal -->
+                    <div class="card-header bg-gradient-dark text-white p-4 border-0">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="header-icon-box bg-warning text-dark rounded-3 p-3 d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-mountain-city fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-1 fw-bold text-white">Editar Municipio</h4>
+                                <p class="mb-0 text-white-50 fs-7">Actualiza la información del municipio registrado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+
+                        {{-- Mostrar errores del Request --}}
+                        @if ($errors->any())
+                            <div class="alert alert-danger rounded-3 border-0 shadow-sm mb-4">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-exclamation-triangle text-danger"></i>
+                                    <strong class="text-danger">Por favor corrige los siguientes errores:</strong>
+                                </div>
+                                <ul class="mb-0 ps-3 small">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('municipios.update', $municipio->id) }}" method="POST" class="needs-validation" novalidate>
+                            @csrf
+                            @method('PUT')
+
+                            {{-- Campo Nombre del Municipio --}}
+                            <div class="mb-4">
+                                <label for="nombre" class="form-label text-muted small fw-semibold">Nombre del Municipio</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-city"></i></span>
+                                    <input type="text"
+                                        class="form-control border-start-0 ps-0 @error('nombre') is-invalid @enderror"
+                                        id="nombre" name="nombre" value="{{ old('nombre', $municipio->nombre) }}"
+                                        placeholder="Ingrese el nombre del municipio">
+                                </div>
+                                @error('nombre')
+                                    <span class="invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Campo Código Postal --}}
+                            <div class="mb-4">
+                                <label for="codigoPostal" class="form-label text-muted small fw-semibold">Código Postal</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-mail-bulk"></i></span>
+                                    <input type="text"
+                                        class="form-control border-start-0 ps-0 @error('codigoPostal') is-invalid @enderror"
+                                        id="codigoPostal" name="codigoPostal" value="{{ old('codigoPostal', $municipio->codigoPostal) }}"
+                                        placeholder="Ej: 050001">
+                                </div>
+                                @error('codigoPostal')
+                                    <span class="invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Botones de Acción --}}
+                            <div class="d-flex justify-content-end align-items-center gap-2 mt-5 pt-3 border-top">
+                                <a href="{{ route('municipios.index') }}"
+                                    class="btn btn-outline-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
+                                    <i class="fas fa-arrow-left me-1"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-warning rounded-pill px-4 py-2 fw-semibold shadow-sm text-dark">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            @endif
-
-            <div class="card-body p-4">
-                <form action="{{ route('municipios.update', $municipio->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mb-4">
-                        <label for="nombre" class="form-label fw-semibold">Nombre del Municipio</label>
-                        <input type="text" class="form-control form-control-lg border-primary-subtle shadow-sm @error('nombre') is-invalid @enderror"
-                            id="nombre" name="nombre" value="{{ $municipio->nombre }}"
-                            placeholder="Ingrese el nombre del municipio">
-                        @error('nombre')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="codigoPostal" class="form-label fw-semibold">Código Postal</label>
-                        <input type="text" class="form-control form-control-lg border-primary-subtle shadow-sm @error('codigoPostal') is-invalid @enderror"
-                            id="codigoPostal" name="codigoPostal" value="{{ $municipio->codigoPostal }}"
-                            placeholder="Ej: 050001">
-                        @error('codigoPostal')
-                        <span class="invalid-feedback d-block">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-4">
-                        <a href="{{ route('municipios.index') }}"
-                            class="btn btn-outline-secondary rounded-pill px-4 me-2 shadow-sm">
-                            <i class="fas fa-arrow-left"></i> Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-warning rounded-pill px-4 shadow-sm">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
 
+    {{-- Estilos personalizados --}}
     <style>
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        .fs-7 { font-size: 0.8rem; }
+
+        .header-icon-box {
+            width: 48px;
+            height: 48px;
+        }
+
+        .input-group-text {
+            border-color: #dee2e6;
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
-            border-color: #198754;
+            border-color: #ffc107;
+            box-shadow: none;
         }
 
-        .btn-success,
-        .btn-outline-secondary {
-            font-weight: 500;
-            border-radius: 30px;
-            transition: all 0.3s ease;
+        .input-group:focus-within .input-group-text {
+            border-color: #ffc107;
+            color: #d97706 !important;
         }
 
-        .btn-success:hover {
-            background-color: #157347;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            color: #fff;
-            transform: translateY(-2px);
+        .animate-fade {
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        .animate-fade {
-            animation: fadeIn 0.5s ease-in-out;
-        }
     </style>
 
-
-    {{-- Opcional: Validación visual con Bootstrap --}}
+    {{-- Validación visual con Bootstrap --}}
     <script>
-        (function() {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
+                        event.preventDefault();
+                        event.stopPropagation();
                     }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
     </script>
 @endsection

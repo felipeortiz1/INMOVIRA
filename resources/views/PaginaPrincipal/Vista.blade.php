@@ -792,7 +792,7 @@
             </nav>
 
             <a href="{{ route('login') }}" class="btn-login">
-                Acceder
+                Iniciar sesion
             </a>
         </div>
     </header>
@@ -941,7 +941,6 @@
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://www.instagram.com/felipe_ortzzz" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.instagram.com/dreyan90" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
@@ -969,10 +968,9 @@
             <div class="footer-col">
                 <h4>Contáctanos</h4>
                 <ul class="footer-links" style="line-height: 2.2;">
-                    <li>Edificio Tech, Piso 8</li>
-                    <li>+57 322 217 5412</li>
-                    <li>+57 313 341 8457</li>
-                    <li>soporte@inmobira.com</li>
+                    <p>Edificio Tech, Piso 8</p>
+                    <p>+57 322 217 5412</p>
+                    <p>soporte@inmobira.com</p>
                 </ul>
             </div>
         </div>
@@ -1085,7 +1083,7 @@
             }
 
             // 6. Efecto Typing Dinámico
-            const words = ["encontrar.", "soñar.", "invertir.", "vivir."];
+            const words = ["encontrar."];
             let i = 0;
             let j = 0;
             let currentWord = "";
@@ -1094,13 +1092,10 @@
 
             function typeEffect() {
                 currentWord = words[i];
-                if (isDeleting) {
-                    typingElement.textContent = currentWord.substring(0, j - 1);
-                    j--;
-                } else {
-                    typingElement.textContent = currentWord.substring(0, j + 1);
-                    j++;
-                }
+                    {
+                        typingElement.textContent = currentWord.substring(0, j + 1);
+                        j++;
+                    }
 
                 let typeSpeed = isDeleting ? 80 : 150;
 

@@ -8,7 +8,6 @@
 
     <div class="row">
 
-        <!-- COLUMNA IZQUIERDA: FOTO Y RESUMEN -->
         <div class="col-md-4">
 
             <div class="card card-primary card-outline">
@@ -46,7 +45,6 @@
 
         </div>
 
-        <!-- COLUMNA DERECHA: INFORMACIÓN GENERAL -->
         <div class="col-md-8">
 
             <div class="card card-primary shadow-sm">
@@ -72,7 +70,6 @@
 
                     <hr>
 
-                    <!-- Botón para ir a Editar Perfil -->
                     <a href="{{ route('perfil.edit') }}" class="btn btn-primary">
                         <i class="fas fa-user-edit"></i> Editar Perfil
                     </a>
@@ -88,16 +85,15 @@
 
 <style>
     .avatar-circle {
-        width: 150px;          /* Ajusta si quieres más grande o más pequeño */
+        width: 150px;          
         height: 150px;
-        object-fit: cover;     /* Recorta la imagen uniformemente */
-        border-radius: 50%;    /* Mantiene el círculo perfecto */
-        border: 3px solid #ddd; /* Opcional: borde suave */
+        object-fit: cover;     
+        border-radius: 50%;    
+        border: 3px solid #ddd; 
     }
 </style>
 
 
-<!-- Modal: Ver Avatar en Grande -->
 <div class="modal fade" id="modalAvatarView" tabindex="-1" aria-labelledby="modalAvatarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

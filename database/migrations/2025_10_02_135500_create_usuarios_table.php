@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('idMunicipio')->references('id')->on('municipios')->restrictOnDelete();
 
             $table->timestamp('fechaRegistro')->useCurrent();
-            $table->timestamps(); // created_at, updated_at
+            $table->timestamps(); 
 
         });
     }

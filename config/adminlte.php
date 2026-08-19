@@ -13,7 +13,6 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
-
     'title' => 'Inmobira',
     'title_prefix' => '',
     'title_postfix' => '',
@@ -63,7 +62,7 @@ return [
     |
     */
 
-    'logo' => '<a href="/pagina-principal" style="color: #fff; font-weight:600; text-decoration:none;"><b>Inmobira</b></a>',
+    'logo' => '<b>Inmobira</b>',
     'logo_img' => 'img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -154,7 +153,7 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
@@ -257,7 +256,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'pagina-principal',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',

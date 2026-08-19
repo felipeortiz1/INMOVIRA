@@ -5,62 +5,80 @@
 @section('titleContent', 'Administrar Tipos de Inmuebles')
 
 @section('content')
-    <div class="container mt-4 animate-fade">
-        <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-header text-white rounded-top-4"
-                style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
-                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-warehouse"></i> Lista de Tipos de Inmuebles</h5>
+    <div class="container-fluid px-4 py-4 animate-fade">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+
+            <!-- Card Header Principal -->
+            <div class="card-header bg-gradient-dark text-white p-4 border-0">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="header-icon-box bg-primary text-white rounded-3 p-3 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-warehouse fa-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 fw-bold text-white">Lista de Tipos de Inmuebles</h4>
+                            <p class="mb-0 text-white-50 fs-7">Administra las categorías y clasificaciones de propiedades en el sistema</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card-body p-4">
 
-                {{-- Botones superiores --}}
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="{{ route('tipoInmueble.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                        <i class="fas fa-plus-circle"></i> Crear Tipo de Inmueble
+                <!-- BARRA DE ACCIONES SUPERIORES -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                    <a href="{{ route('tipoInmueble.create') }}" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-semibold">
+                        <i class="fas fa-plus-circle me-1"></i> Crear Tipo de Inmueble
                     </a>
 
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-                        <i class="fas fa-arrow-left"></i> Volver
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
+                        <i class="fas fa-arrow-left me-1"></i> Volver
                     </a>
                 </div>
 
-                {{-- Tabla de tipos de inmuebles --}}
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle text-center shadow-sm">
-                        <thead class="table-primary">
+                <!-- TABLA DE TIPOS DE INMUEBLE -->
+                <div class="table-responsive rounded-3 border">
+                    <table class="table table-hover align-middle mb-0 text-center custom-table">
+                        <thead class="bg-light border-bottom">
                             <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Acciones</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3" style="width: 100px;">ID</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3 text-start ps-4">Nombre</th>
+                                <th class="text-secondary text-uppercase fs-7 fw-bold py-3" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @forelse($tipoInmuebles as $tipoInmueble)
                                 <tr>
-                                    <td class="fw-semibold text-secondary">{{ $tipoInmueble->id }}</td>
-                                    <td>{{ $tipoInmueble->nombre }}</td>
+                                    <td class="fw-bold text-muted">#{{ $tipoInmueble->id }}</td>
+                                    <td class="text-start ps-4 fw-bold text-dark">{{ $tipoInmueble->nombre }}</td>
                                     <td>
-                                        <a href="{{ route('tipoInmueble.edit', $tipoInmueble->id) }}"
-                                            class="btn btn-sm btn-warning rounded-pill shadow-sm me-1">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <a href="{{ route('tipoInmueble.edit', $tipoInmueble->id) }}"
+                                                class="btn btn-sm btn-outline-warning rounded-circle action-btn"
+                                                title="Editar">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
 
-                                        <form action="{{ route('tipoInmueble.destroy', $tipoInmueble->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger rounded-pill shadow-sm"
-                                                onclick="confirmarEliminacion(event)">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                        </form>
+                                            <form action="{{ route('tipoInmueble.destroy', $tipoInmueble->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle action-btn"
+                                                    onclick="confirmarEliminacion(event)" title="Eliminar">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-muted py-3">
-                                        <i class="fas fa-inbox fs-5"></i> No hay tipos de inmuebles registrados aún.
+                                    <td colspan="3" class="text-muted py-5">
+                                        <div class="py-3">
+                                            <i class="fas fa-inbox display-6 text-light-gray d-block mb-3"></i>
+                                            <span class="fw-medium">No hay tipos de inmuebles registrados aún.</span>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -72,49 +90,46 @@
         </div>
     </div>
 
-    {{-- Estilos personalizados --}}
+    {{-- ESTILOS EXCLUSIVOS DE LA VISTA --}}
     <style>
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        .fs-7 { font-size: 0.8rem; }
+
+        .custom-table tbody tr {
+            transition: all 0.2s ease;
         }
 
-        table thead tr {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
         }
 
-        table tbody tr:hover {
-            background-color: #f9fafc;
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        th,
-        td {
-            padding: 1rem 1.2rem !important;
-            vertical-align: middle !important;
+        .text-light-gray { color: #cbd5e1; }
+
+        .animate-fade {
+            animation: fadeIn 0.4s ease-in-out;
         }
 
-        .btn-outline-warning:hover {
-            background-color: #ffc107;
-            color: white;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-outline-warning,
-        .btn-outline-danger {
-            border-radius: 30px;
-            font-weight: 500;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 

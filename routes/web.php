@@ -16,23 +16,19 @@ use App\Models\Municipio;
 use App\Http\Controllers\PasswordResetController;
 
 
-// Ruta inicial -> redirige siempre al login
 Route::get('/', function () {
-    return redirect()->route('pagina.principal');
+return redirect()->route('pagina.principal');
 });
 
-// Rutas públicas (sin autenticación)
 Route::get('/login', [AuthController::class, 'verlogin'])->name('login');
 Route::post('/loginsubmit', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Registro de usuarios
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
-// Dashboard (pantalla principal después del login)
 Route::get('/dashboard', function () {
-    return view('welcome');
+return view('welcome');
 })->name('dashboard');
 
 // Municipios
@@ -49,7 +45,7 @@ Route::get('/tipoInmueble/index', [TipoInmuebleController::class, 'index'])->nam
 Route::get('/tipoInmueble/create', [TipoInmuebleController::class, 'create'])->name('tipoInmueble.create');
 Route::post('/tipoInmueble/store', [TipoInmuebleController::class, 'store'])->name('tipoInmueble.store');
 Route::get('/tipoInmueble/edit/{id}', [TipoInmuebleController::class, 'edit'])->name('tipoInmueble.edit');
-Route::post('/tipoInmueble/update/{id}', [TipoInmuebleController::class, 'update'])->name('tipoInmueble.update');
+Route::put('/tipoInmueble/update/{id}', [TipoInmuebleController::class, 'update'])->name('tipoInmueble.update');
 Route::delete('/tipoInmueble/destroy/{id}', [TipoInmuebleController::class, 'destroy'])->name('tipoInmueble.destroy');
 
 // Usuarios
@@ -85,43 +81,41 @@ Route::get('/inmueble/{id}/detalles', [InmuebleController::class, 'obtenerDetall
 
 // Obtener barrios por municipio (select dependiente)
 Route::get('/barrios-por-municipio/{id}', function ($id) {
-    return Barrio::where('idMunicipio', $id)->get();
+return Barrio::where('idMunicipio', $id)->get();
 })->name('barrios.porMunicipio');
 
-// ruta para la vista principal
 
 Route::get('/pagina-principal', function () {
-    return view('PaginaPrincipal.Vista');
+return view('PaginaPrincipal.Vista');
 })->name('pagina.principal');
 
 
-// Página pública: Arriendo
 Route::get('/arriendo', [InmuebleController::class, 'vistaArriendoPublic'])
-    ->name('vista.arriendo');
+->name('vista.arriendo');
 
 Route::get('/venta', [InmuebleController::class, 'vistaVentaPublic'])
-    ->name('vista.venta');
+->name('vista.venta');
 
 
 // Página pública: Inmobiliarias 
 Route::get('/inmobiliarias', [UsuarioController::class, 'inmobiliariasVista'])
-    ->name('vista.inmobiliarias');
+->name('vista.inmobiliarias');
 
 Route::get('/inmobiliaria/{id}/detalles', [UsuarioController::class, 'detalles'])
-    ->name('inmobiliarias.detalles');
+->name('inmobiliarias.detalles');
 
 Route::get('/inmobiliaria/{id}', [UsuarioController::class, 'verInmobiliaria'])
-    ->name('inmobiliaria.detalle');
+->name('inmobiliaria.detalle');
 
 Route::get('/inmobiliaria/{id}', [UsuarioController::class, 'verInmobiliaria'])
-    ->name('inmobiliaria.ver');
+->name('inmobiliaria.ver');
 
 
 
 
 //Ruta para filtros
 Route::get('/buscar', [BuscadorController::class, 'buscar'])
-    ->name('buscador.inmuebles');
+->name('buscador.inmuebles');
 
 // Ruta para el perfil de Administrador
 Route::get('/adminPerfil', [UserController::class, 'profile'])->name('perfil');
@@ -131,24 +125,18 @@ Route::delete('/perfil/eliminar-avatar', [UserController::class, 'deleteAvatar']
 
 //Ruta para ver los inmuebles que ha publicado un usuario
 
-Route::get('/admin/usuarios/{id}/inmuebles', [UsuarioController::class, 'inmuebles'])
-    ->name('usuarios.inmuebles');
+Route::get('/admin/usuarios/{id}/inmuebles', [UsuarioController::class, 'inmuebles'])->name('usuarios.inmuebles');
 
 
 
-    //Rutas del apartado de Olvide la contraseña
-Route::get('/olvide-mi-contrasena', [PasswordResetController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.request');
+//Rutas del apartado de Olvide la contraseña
+Route::get('/olvide-mi-contrasena', [PasswordResetController::class, 'create'])->middleware('guest')->name('password.request');
 
-Route::post('/olvide-mi-contrasena', [PasswordResetController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+Route::post('/olvide-mi-contrasena', [PasswordResetController::class, 'store'])->middleware('guest')->name('password.email');
 
 Route::get('/restablecer-contrasena/{token}', [PasswordResetController::class, 'edit'])
-    ->middleware('guest')
-    ->name('password.reset');
+->middleware('guest')
+->name('password.reset');
 
 Route::post('/restablecer-contrasena', [PasswordResetController::class, 'update'])
-    ->middleware('guest')
-    ->name('password.update');
+->middleware('guest')->name('password.update');
